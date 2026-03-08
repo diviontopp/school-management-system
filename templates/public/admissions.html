@@ -1,0 +1,1034 @@
+{% extends "public/base.html" %}
+
+{% block title %}Admissions - DBX Egmore{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        padding: 12rem 0 6rem;
+        background-color: var(--clr-navy);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .page-header .text-title,
+    .page-header .text-body-large {
+        color: white;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 800px;
+        height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(210, 255, 40, 0.12) 0%, transparent 70%);
+    }
+
+    .page-header .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Timeline / Process */
+    .timeline-section {
+        padding: 8rem 0;
+        background-color: var(--clr-offwhite);
+    }
+
+    /* Premium Vertical Timeline */
+    .premium-timeline-wrapper {
+        position: relative;
+        max-width: 900px;
+        margin: 4rem auto 0;
+        padding-left: 2rem;
+    }
+
+    .premium-timeline-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 3rem;
+        width: 3px;
+        height: 100%;
+        background: linear-gradient(180deg, var(--clr-gold) 0%, var(--clr-lime) 50%, var(--clr-navy) 100%);
+        border-radius: 10px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-left: 5rem;
+        margin-bottom: 4rem;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .timeline-item.in-view {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .timeline-marker {
+        position: absolute;
+        top: 0;
+        left: -18px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: 4px solid var(--clr-navy);
+        box-shadow: 0 0 0 6px rgba(0, 51, 102, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--clr-navy);
+        z-index: 2;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .timeline-item:hover .timeline-marker {
+        transform: scale(1.15);
+        box-shadow: 0 0 0 10px rgba(0, 51, 102, 0.15);
+    }
+
+    .timeline-item:nth-child(2) .timeline-marker {
+        border-color: var(--clr-gold);
+        color: var(--clr-gold);
+        box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.1);
+    }
+
+    .timeline-item:nth-child(2):hover .timeline-marker {
+        box-shadow: 0 0 0 10px rgba(212, 175, 55, 0.15);
+    }
+
+    .timeline-item:nth-child(3) .timeline-marker {
+        border-color: var(--clr-lime);
+        color: var(--clr-navy);
+        box-shadow: 0 0 0 6px rgba(182, 222, 65, 0.2);
+    }
+
+    .timeline-item:nth-child(3):hover .timeline-marker {
+        box-shadow: 0 0 0 10px rgba(182, 222, 65, 0.3);
+    }
+
+    .timeline-content {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        position: relative;
+        transition: var(--transition-smooth);
+    }
+
+    .timeline-content::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: -12px;
+        width: 24px;
+        height: 24px;
+        background: white;
+        transform: rotate(45deg);
+        border-left: 1px solid rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .timeline-content:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+        transform: translateX(8px);
+    }
+
+    .timeline-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .timeline-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: var(--clr-neutral);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: var(--clr-navy);
+    }
+
+    .timeline-content h3 {
+        font-size: 1.5rem;
+        font-family: var(--font-serif);
+        color: var(--clr-navy);
+        margin: 0;
+    }
+
+    .timeline-content p {
+        color: var(--clr-text-muted);
+        line-height: 1.7;
+        font-size: 1.05rem;
+    }
+
+    /* Premium Interactive Calendar */
+    .calendar-section {
+        padding: 8rem 0;
+        background: var(--clr-navy);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .calendar-section::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        left: -10%;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+    .calendar-container {
+        max-width: 1000px;
+        margin: 4rem auto 0;
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .calendar-month {
+        font-family: var(--font-serif);
+        font-size: 2rem;
+        color: white;
+        margin: 0;
+    }
+
+    .calendar-controls button {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        margin-left: 0.5rem;
+    }
+
+    .calendar-controls button:hover {
+        background: var(--clr-gold);
+        color: var(--clr-navy);
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.5rem;
+    }
+
+    .calendar-day-header {
+        text-align: center;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.5);
+        padding-bottom: 1rem;
+        font-weight: 500;
+    }
+
+    .calendar-day {
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition-smooth);
+        position: relative;
+        cursor: default;
+    }
+
+    .calendar-day:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .calendar-day.empty {
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .day-number {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: auto;
+    }
+
+    /* Event Indicators inside Calendar Day */
+    .event-indicator {
+        width: 100%;
+        height: 4px;
+        border-radius: 2px;
+        margin-top: 2px;
+    }
+
+    .event-holiday {
+        background: #ff4d4d;
+    }
+
+    .event-exam {
+        background: var(--clr-gold);
+    }
+
+    .event-ptm {
+        background: var(--clr-lime);
+    }
+
+    /* Tooltip */
+    .calendar-day .day-tooltip {
+        position: absolute;
+        bottom: 110%;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        background: white;
+        color: var(--clr-navy);
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        width: max-content;
+        max-width: 200px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition-smooth);
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .calendar-day .day-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -6px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: white transparent transparent transparent;
+    }
+
+    .calendar-day:hover .day-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* Legend */
+    .calendar-legend {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    /* Requirements */
+    .requirements-section {
+        padding: 6rem 0;
+        background: var(--clr-offwhite);
+    }
+
+    .requirements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+    }
+
+    .req-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        transition: var(--transition-smooth);
+    }
+
+    .req-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        border-color: rgba(0, 51, 102, 0.1);
+    }
+
+    .req-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        background: rgba(0, 51, 102, 0.05);
+        color: var(--clr-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .req-card h4 {
+        font-size: 1.2rem;
+        font-family: var(--font-serif);
+        color: var(--clr-navy);
+        margin-bottom: 0.75rem;
+    }
+
+    .req-card p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--clr-text-muted);
+    }
+
+    /* FAQ */
+    .faq-section {
+        padding: 6rem 0;
+        background: var(--clr-offwhite);
+    }
+
+    .faq-list {
+        margin-top: 3rem;
+        max-width: 860px;
+        margin-inline: auto;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 1.5rem 0;
+    }
+
+    .faq-question {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--clr-navy);
+        gap: 1rem;
+    }
+
+    .faq-question .faq-icon {
+        font-size: 1.3rem;
+        color: var(--clr-gold);
+        flex-shrink: 0;
+        transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-icon {
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        color: var(--clr-text-muted);
+        padding-right: 2rem;
+    }
+
+    .faq-answer p {
+        padding-top: 1rem;
+    }
+
+    .faq-item.open .faq-answer {
+        max-height: 200px;
+    }
+
+    /* Apply Card */
+    .apply-card {
+        background: var(--clr-navy);
+        color: white;
+        padding: 5rem 4rem;
+        border-radius: 32px;
+        text-align: center;
+        margin: 0 0 8rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .apply-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -20%;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(210, 255, 40, 0.12) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .apply-card h2 {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .apply-card p {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 2.5rem;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin-inline: auto;
+    }
+
+    .minimal-form {
+        max-width: 560px;
+        margin: 0 auto;
+        text-align: left;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.07);
+        color: white;
+        font-family: var(--font-sans);
+        transition: var(--transition-smooth);
+        box-sizing: border-box;
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--clr-lime);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .minimal-form select option {
+        color: #333;
+        background: white;
+    }
+
+    @media (max-width: 768px) {
+
+        .process-grid,
+        .minimal-form {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .alert-success {
+        border-left: 6px solid var(--clr-lime);
+        color: var(--clr-navy);
+    }
+
+    .alert-error {
+        border-left: 6px solid #ff4d4d;
+        color: var(--clr-navy);
+    }
+
+    .alert-icon-success {
+        font-size: 1.2rem;
+        color: var(--clr-lime);
+    }
+
+    .alert-icon-error {
+        font-size: 1.2rem;
+        color: #ff4d4d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-header" style="background: var(--clr-navy); padding: 12rem 0 8rem; text-align: center;">
+    <div class="container">
+        <span class="badge"
+            style="background: var(--clr-gold); color: white; padding: 0.75rem 2rem; border-radius: 100px; font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; display: inline-block;">
+            Admissions 2026–27 Open
+        </span>
+    </div>
+</section>
+
+<!-- Feedback Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="container" style="margin-top: 2rem;">
+    {% for category, message in messages %}
+    <div class="glass-panel alert-{{ category }}"
+        style="padding: 1.25rem 2rem; margin-bottom: 2rem; font-weight: 500; display: flex; align-items: center; gap: 1rem;">
+        <i
+            class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} alert-icon-{{ category }}"></i>
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- PROCESS -->
+<section class="timeline-section">
+    <div class="container">
+        <div style="text-align:center; margin-bottom: 1rem;">
+            <h2 class="text-title">The Admissions Journey</h2>
+            <p class="text-body-large" style="max-width:600px; margin:1rem auto 0;">A simple, transparent
+                process designed so families can feel confident every step of the way.</p>
+        </div>
+        <div class="premium-timeline-wrapper">
+
+            <div class="timeline-item timeline-animate">
+                <div class="timeline-marker">1</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div class="timeline-icon" style="background: rgba(0, 51, 102, 0.05);"><i
+                                class="fas fa-file-alt" style="color: var(--clr-navy);"></i></div>
+                        <h3>Online Registration</h3>
+                    </div>
+                    <p>Submit the registration form online via our official portal or in-person at the admissions
+                        office. A non-refundable registration fee applies. Applicable for LKG admissions 2026–27.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item timeline-animate">
+                <div class="timeline-marker">2</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div class="timeline-icon" style="background: rgba(212, 175, 55, 0.1);"><i
+                                class="fas fa-comments" style="color: var(--clr-gold);"></i></div>
+                        <h3>Family Interaction</h3>
+                    </div>
+                    <p>Shortlisted applicants are invited for a warm, conversational interaction with the school's
+                        leadership to understand the child's interests, strengths, and readiness for the Salesian
+                        environment.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item timeline-animate">
+                <div class="timeline-marker">3</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div class="timeline-icon" style="background: rgba(182, 222, 65, 0.2);"><i
+                                class="fas fa-folder-open" style="color: var(--clr-navy);"></i></div>
+                        <h3>Document Submission</h3>
+                    </div>
+                    <p>Submit all required documents including the child's birth certificate, Aadhaar card, previous
+                        academic records, and passport-sized photographs as specified by the admissions team.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item timeline-animate">
+                <div class="timeline-marker">4</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div class="timeline-icon" style="background: rgba(0, 51, 102, 0.05);"><i
+                                class="fas fa-check-double" style="color: var(--clr-navy);"></i></div>
+                        <h3>Enrolment & Fee Payment</h3>
+                    </div>
+                    <p>Upon confirmation of admission, complete the enrolment formalities and pay the fees as per the
+                        schedule provided. Welcome to the DBX Egmore family!</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="margin-top: 4rem; text-align: center;">
+            <div
+                style="display: inline-flex; align-items: center; gap: 1.5rem; padding: 1.5rem 3rem; background: white; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02);">
+                <div
+                    style="flex-shrink: 0; width: 60px; height: 60px; border-radius: 50%; background: var(--clr-navy); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div style="text-align: left;">
+                    <h4 style="margin: 0; font-size: 1.1rem; font-family: var(--font-serif); color: var(--clr-navy);">
+                        Admissions Helpline</h4>
+                    <p style="margin: 0; color: var(--clr-text-muted); font-size: 0.95rem;">+91 044-28190099
+                        &nbsp;|&nbsp; dbxegmore@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INTERACTIVE CALENDAR -->
+<section class="calendar-section">
+    <div class="container">
+        <div style="text-align:center;">
+            <h2 class="text-title" style="color: white;">Academic Calendar</h2>
+            <p style="color:rgba(255,255,255,0.7); margin-top:0.8rem; max-width: 600px; margin-inline: auto;">
+                Plan ahead with our interactive monthly view outlining holidays, examinations, and critical community
+                events.
+            </p>
+        </div>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h3 class="calendar-month">October 2026</h3>
+                <div class="calendar-controls">
+                    <button><i class="fas fa-chevron-left"></i></button>
+                    <button><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <div class="calendar-grid">
+                <!-- Days of week -->
+                <div class="calendar-day-header">Sun</div>
+                <div class="calendar-day-header">Mon</div>
+                <div class="calendar-day-header">Tue</div>
+                <div class="calendar-day-header">Wed</div>
+                <div class="calendar-day-header">Thu</div>
+                <div class="calendar-day-header">Fri</div>
+                <div class="calendar-day-header">Sat</div>
+
+                <!-- Empty slots for alignment (October 1st is Thursday) -->
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+
+                <!-- Day 1 -->
+                <div class="calendar-day">
+                    <span class="day-number">1</span>
+                </div>
+                <!-- Day 2 (Gandhi Jayanti) -->
+                <div class="calendar-day">
+                    <span class="day-number">2</span>
+                    <div class="event-indicator event-holiday"></div>
+                    <div class="day-tooltip"><b>Gandhi Jayanti</b><br>National Holiday</div>
+                </div>
+                <!-- 3 to 11 -->
+                <div class="calendar-day"><span class="day-number">3</span></div>
+                <div class="calendar-day"><span class="day-number">4</span></div>
+                <div class="calendar-day"><span class="day-number">5</span></div>
+                <div class="calendar-day"><span class="day-number">6</span></div>
+                <div class="calendar-day"><span class="day-number">7</span></div>
+                <div class="calendar-day"><span class="day-number">8</span></div>
+                <div class="calendar-day"><span class="day-number">9</span></div>
+                <div class="calendar-day"><span class="day-number">10</span></div>
+                <div class="calendar-day"><span class="day-number">11</span></div>
+
+                <!-- Day 12 to 16: Half Yearly Exams -->
+                <div class="calendar-day">
+                    <span class="day-number">12</span>
+                    <div class="event-indicator event-exam"></div>
+                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
+                </div>
+                <div class="calendar-day">
+                    <span class="day-number">13</span>
+                    <div class="event-indicator event-exam"></div>
+                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
+                </div>
+                <div class="calendar-day">
+                    <span class="day-number">14</span>
+                    <div class="event-indicator event-exam"></div>
+                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
+                </div>
+                <div class="calendar-day">
+                    <span class="day-number">15</span>
+                    <div class="event-indicator event-exam"></div>
+                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
+                </div>
+                <div class="calendar-day">
+                    <span class="day-number">16</span>
+                    <div class="event-indicator event-exam"></div>
+                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
+                </div>
+
+                <!-- 17 to 23 -->
+                <div class="calendar-day"><span class="day-number">17</span></div>
+                <div class="calendar-day"><span class="day-number">18</span></div>
+                <div class="calendar-day"><span class="day-number">19</span></div>
+                <div class="calendar-day"><span class="day-number">20</span></div>
+                <div class="calendar-day"><span class="day-number">21</span></div>
+                <div class="calendar-day"><span class="day-number">22</span></div>
+                <div class="calendar-day"><span class="day-number">23</span></div>
+
+                <!-- 24 PTM -->
+                <div class="calendar-day">
+                    <span class="day-number">24</span>
+                    <div class="event-indicator event-ptm"></div>
+                    <div class="day-tooltip"><b>Parent Teacher Meeting</b><br>Term I Results Review</div>
+                </div>
+
+                <!-- 25 to 31 -->
+                <div class="calendar-day"><span class="day-number">25</span></div>
+                <div class="calendar-day"><span class="day-number">26</span></div>
+                <div class="calendar-day"><span class="day-number">27</span></div>
+                <div class="calendar-day"><span class="day-number">28</span></div>
+                <div class="calendar-day"><span class="day-number">29</span></div>
+                <div class="calendar-day"><span class="day-number">30</span></div>
+                <div class="calendar-day"><span class="day-number">31</span></div>
+            </div>
+
+            <!-- Legend -->
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <div class="legend-dot event-holiday"></div> Public Holidays
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot event-exam"></div> Examination Dates
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot event-ptm"></div> Parent Teacher Meetings
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- REQUIREMENTS -->
+<section class="requirements-section">
+    <div class="container">
+        <div style="text-align:center;">
+            <h2 class="text-title" style="color: var(--clr-navy);">Documents Required</h2>
+            <p class="text-body-large" style="margin-top:1rem; max-width:600px; margin-inline:auto;">Please keep these
+                ready to ensure a smooth admission process.</p>
+        </div>
+        <div class="requirements-grid">
+            <div class="req-card">
+                <div class="req-icon"><i class="fas fa-baby"></i></div>
+                <h4>Birth Certificate</h4>
+                <p>Original and photocopy of the child's birth certificate issued by the Municipal Corporation.</p>
+            </div>
+            <div class="req-card">
+                <div class="req-icon"><i class="fas fa-id-card"></i></div>
+                <h4>Aadhaar Card</h4>
+                <p>Aadhaar card of both the child and parent/guardian for identity verification.</p>
+            </div>
+            <div class="req-card">
+                <div class="req-icon"><i class="fas fa-home"></i></div>
+                <h4>Proof of Residence</h4>
+                <p>Current address proof such as utility bill, rental agreement, or bank statement.</p>
+            </div>
+            <div class="req-card">
+                <div class="req-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h4>Previous Records</h4>
+                <p>Progress report or Transfer Certificate from the previously attended school (if applicable).</p>
+            </div>
+            <div class="req-card">
+                <div class="req-icon"><i class="fas fa-camera"></i></div>
+                <h4>Passport Photos</h4>
+                <p>Four recent passport-size photographs of the student on a white background.</p>
+            </div>
+            <div class="req-card">
+                <div class="req-icon"><i class="fas fa-file-medical"></i></div>
+                <h4>Health Records</h4>
+                <p>Immunisation records and health certificate from a certified medical practitioner.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+    <div class="container">
+        <div style="text-align:center;">
+            <h2 class="text-title ">Frequently Asked Questions</h2>
+            <p class="" style="margin-top:0.75rem; color:var(--clr-text-muted);">Have a question? We've got you
+                covered.</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item ">
+                <div class="faq-question">
+                    <span>Is DBX Egmore affiliated to CBSE or State Board?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Don Bosco School of Excellence, Egmore is affiliated to the Central Board of Secondary Education
+                        (CBSE), Delhi, and follows the CBSE curriculum from LKG to Grade 12.</p>
+                </div>
+            </div>
+            <div class="faq-item ">
+                <div class="faq-question">
+                    <span>What is the age criterion for LKG admission?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>For LKG admission, the child should have completed 3.5 years of age as on June 1st of the year of
+                        admission. Children born between November 1 – October 31 of the previous year are eligible.</p>
+                </div>
+            </div>
+            <div class="faq-item ">
+                <div class="faq-question">
+                    <span>Are there mid-term lateral admissions available?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Lateral admissions are subject to seat availability in the specific grade. Please contact the
+                        admissions office directly. A Transfer Certificate from the previous school is mandatory.</p>
+                </div>
+            </div>
+            <div class="faq-item ">
+                <div class="faq-question">
+                    <span>Does the school have a transport facility?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, the school provides bus service covering various parts of Chennai. Routes and fee details
+                        are shared upon enrolment. Contact the school office for the latest route map.</p>
+                </div>
+            </div>
+            <div class="faq-item ">
+                <div class="faq-question">
+                    <span>Is there a scholarship or fee concession available?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The school considers fee concessions on a case-by-case basis for economically weaker sections.
+                        Please speak directly with the Principal's office for merit or need-based scholarship inquiries.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- APPLY FORM -->
+<section class="container" style="margin-top: 6rem;">
+    <div class="apply-card ">
+        <h2>Begin Your Application</h2>
+        <p>Fill in your details below and our admissions team will reach out to you within 2 working days.</p>
+
+        <form action="{{ url_for('public.submit_enquiry') }}" method="POST" class="minimal-form">
+            <div class="form-group">
+                <label class="form-label">Parent / Guardian Name</label>
+                <input type="text" name="parent_name" class="form-control" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Student Name</label>
+                <input type="text" name="student_name" class="form-control" placeholder="Child's Name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Grade Applying For</label>
+                <select name="grade" class="form-control" style="background: rgba(255,255,255,0.07); appearance:none;"
+                    required>
+                    <option value="" disabled selected>Select Grade</option>
+                    <option value="LKG">LKG</option>
+                    <option value="UKG">UKG</option>
+                    <option value="Grade 1">Grade 1</option>
+                    <option value="Grade 2">Grade 2</option>
+                    <option value="Grade 3">Grade 3</option>
+                    <option value="Grade 4">Grade 4</option>
+                    <option value="Grade 5">Grade 5</option>
+                    <option value="Grade 6">Grade 6</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                    <option value="Grade 10">Grade 10</option>
+                    <option value="Grade 11">Grade 11</option>
+                    <option value="Grade 12">Grade 12</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Child's Date of Birth</label>
+                <input type="text" name="dob" class="form-control" placeholder="DD/MM/YYYY" required>
+            </div>
+            <div class="form-group full-width" style="text-align: center; margin-top: 0.5rem;">
+                <button type="submit" class="btn btn-accent"
+                    style="min-width: 260px; padding: 1.1rem 2rem; font-size: 1rem;">
+                    Submit Enquiry <i class="fas fa-paper-plane" style="margin-left:10px;"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Admissions Timeline Animation
+        const timelineItems = gsap.utils.toArray('.timeline-animate');
+        timelineItems.forEach((item, i) => {
+            gsap.to(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 80%",
+                    toggleClass: "in-view",
+                    once: true
+                }
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.closest('.faq-item');
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+            });
+        });
+    });
+</script>
+{% endblock %}

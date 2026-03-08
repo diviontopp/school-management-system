@@ -1,0 +1,883 @@
+{% extends "public/base.html" %}
+
+{% block title %}DBX Egmore - Don Bosco School of Excellence{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/hg.css') }}">
+<style>
+    /* ===== HERO SECTION ===== */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 10rem 0 6rem;
+        overflow: hidden;
+        background-color: var(--clr-navy);
+    }
+
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .hero-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+        opacity: 0.85;
+    }
+
+    .hero-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg,
+                rgba(0, 33, 71, 0.95) 0%,
+                rgba(0, 33, 71, 0.7) 35%,
+                rgba(0, 0, 0, 0.2) 100%);
+        z-index: 1;
+    }
+
+    .hero-decorative-text {
+        position: absolute;
+        bottom: -5%;
+        right: -2%;
+        font-family: var(--font-sans);
+        font-weight: 900;
+        font-size: min(18vw, 300px);
+        color: rgba(255, 255, 255, 0.03);
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 2;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .hero-content {
+        max-width: 700px;
+        position: relative;
+        z-index: 10;
+        color: var(--clr-white);
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 1.8rem;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 100px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--clr-gold);
+        margin-bottom: 2rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .hero-title {
+        margin-bottom: 2.5rem;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 200;
+        line-height: 1;
+        color: var(--clr-white);
+        font-size: clamp(3rem, 10vw, 7.5rem);
+        position: relative;
+        letter-spacing: -0.02em;
+        text-transform: none;
+    }
+
+    .hero-title .outline-text {
+        font-family: 'Great Vibes', cursive;
+        -webkit-text-stroke: 0;
+        color: var(--clr-gold);
+        display: block;
+        margin-bottom: -1rem;
+        font-style: normal;
+        text-transform: none;
+        letter-spacing: 0;
+        opacity: 1;
+        line-height: 1;
+        text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.6);
+        font-size: 1.25em;
+    }
+
+    .hero-title span.solid-text {
+        display: block;
+        color: var(--clr-white);
+        font-weight: 500;
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        margin-top: -0.5rem;
+        position: relative;
+        z-index: 2;
+        letter-spacing: -0.01em;
+    }
+
+    .hero-subtitle {
+        margin-bottom: 3.5rem;
+        max-width: 600px;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.8;
+        font-size: 1.1rem;
+        font-weight: 300;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+
+    /* CBSE Badge */
+    .cbse-badge {
+        position: absolute;
+        bottom: 4rem;
+        right: 5%;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0;
+    }
+
+    .cbse-badge-inner {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 1.5rem 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    .cbse-badge-inner .code {
+        font-size: 2rem;
+        font-weight: 800;
+        font-family: var(--font-sans);
+        color: var(--clr-gold);
+        line-height: 1;
+    }
+
+    .cbse-badge-inner .label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        opacity: 0.7;
+        margin-top: 0.3rem;
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about-section {
+        padding: 10rem 0;
+        background: var(--clr-white);
+        position: relative;
+    }
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 6rem;
+        align-items: center;
+    }
+
+    .about-img-wrapper {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.15);
+    }
+
+    .about-img-wrapper img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .about-img-accent {
+        position: absolute;
+        top: -30px;
+        left: -30px;
+        width: 120px;
+        height: 120px;
+        background: var(--clr-gold);
+        border-radius: 24px;
+        z-index: -1;
+    }
+
+    /* ===== FACILITIES SECTION ===== */
+    .facilities-section {
+        padding: 10rem 0;
+        background: var(--clr-offwhite);
+    }
+
+    .facilities-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 4rem;
+    }
+
+    .facility-card {
+        background: var(--clr-white);
+        border-radius: 20px;
+        padding: 2.5rem;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: var(--transition-smooth);
+        text-align: center;
+    }
+
+    .facility-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.1);
+        border-color: var(--clr-gold);
+    }
+
+    .facility-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--clr-navy);
+        color: var(--clr-gold);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 1.5rem;
+    }
+
+    .facility-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .facility-card p {
+        color: var(--clr-text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+
+
+    /* ===== STATS SECTION - Premium ===== */
+    .stats {
+        background: var(--clr-navy);
+        color: var(--clr-white);
+        padding: 8rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats::before {
+        content: 'DBX';
+        position: absolute;
+        right: -5%;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20rem;
+        font-weight: 900;
+        font-family: var(--font-sans);
+        color: rgba(255, 255, 255, 0.02);
+        pointer-events: none;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .stat-item h3 {
+        font-size: 4.5rem;
+        color: var(--clr-gold);
+        margin-bottom: 0.5rem;
+        font-family: var(--font-sans);
+        font-weight: 800;
+    }
+
+    .stat-item p {
+        font-size: 1rem;
+        font-weight: 500;
+        opacity: 0.7;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--clr-white);
+    }
+
+    /* ===== ADMISSIONS PREVIEW ===== */
+    .home-admissions {
+        background-color: var(--clr-white);
+        padding: 10rem 0;
+        position: relative;
+    }
+
+    .admission-step-preview {
+        padding: 3rem;
+        background: var(--clr-offwhite);
+        border-radius: 24px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        text-align: center;
+        transition: var(--transition-smooth);
+    }
+
+    .admission-step-preview:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.1);
+        border-color: var(--clr-lime);
+    }
+
+    .admission-step-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--clr-navy);
+        color: var(--clr-white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 1.4rem;
+    }
+
+    /* ===== GALLERY PREVIEW ===== */
+    .home-gallery {
+        background-color: var(--clr-offwhite);
+        padding: 10rem 0;
+    }
+
+    .home-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 280px;
+        gap: 1.25rem;
+    }
+
+    .home-gallery-item {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .home-gallery-item:nth-child(1) {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .home-gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .home-gallery-item:hover img {
+        transform: scale(1.08);
+    }
+
+    .gallery-hover-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 33, 71, 0.7) 0%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: flex;
+        align-items: flex-end;
+        padding: 1.5rem;
+    }
+
+    .home-gallery-item:hover .gallery-hover-overlay {
+        opacity: 1;
+    }
+
+    .gallery-hover-overlay span {
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    /* ===== LEADERSHIP SECTION ===== */
+    .leadership-section {
+        padding: 10rem 0;
+        background: var(--clr-white);
+    }
+
+    .leader-card {
+        text-align: center;
+    }
+
+    .leader-card img {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        border: 4px solid var(--clr-offwhite);
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .leader-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .leader-card p {
+        color: var(--clr-text-muted);
+        font-size: 0.9rem;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+        padding: 10rem 0;
+        background: var(--clr-navy);
+        color: var(--clr-white);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section h2 {
+        color: var(--clr-white);
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -20%;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(210, 255, 40, 0.08) 0%, transparent 70%);
+    }
+
+    .cta-section::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 992px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .facilities-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .home-gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .cbse-badge {
+            display: none;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .facilities-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .home-gallery-grid {
+            grid-template-columns: 1fr;
+            grid-auto-rows: 220px;
+        }
+
+        .home-gallery-item:nth-child(1) {
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="hero-bg" id="heroImage">
+        <img src="{{ url_for('static', filename='images/dbx/img_4.jpg') }}" alt="Don Bosco School of Excellence Campus">
+    </div>
+    <div class="hero-gradient"></div>
+    <div class="hero-decorative-text" id="floatingText">EXCELLENCE</div>
+
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge" id="heroBadge">
+                <i class="fas fa-crown"></i> Legacy of Excellence
+            </div>
+            <h1 class="text-hero hero-title" id="heroTitle" style="line-height: 1.1;">
+                <span class="outline-text" style="display: block;">Define</span>
+                <span class="outline-text" style="display: block; white-space: nowrap;">Your Own</span>
+                <span class="solid-text" style="display: block;">Legacy.</span>
+            </h1>
+            <p class="text-body-large hero-subtitle" id="heroSubtitle">
+                Empowering the next generation of global innovators. Through the prestigious Don Bosco legacy, we sculpt
+                visionary minds to lead, inspire, and transform the world of 2040 and beyond.
+            </p>
+            <div class="hero-actions" id="heroActions">
+                <a href="{{ url_for('public.admissions') }}" class="btn btn-accent"
+                    style="padding: 1.25rem 2.5rem; font-size: 1.1rem;">Discover DBX</a>
+                <a href="{{ url_for('public.contact') }}" class="btn btn-outline"
+                    style="border-color: rgba(255,255,255,0.3); color: white; padding: 1.25rem 2.5rem; font-size: 1.1rem; backdrop-filter: blur(10px);">Schedule
+                    a Tour</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="cbse-badge" id="cbseBadge">
+        <div class="cbse-badge-inner">
+            <div class="code">CBSE</div>
+            <div class="label">Affiliated to CBSE, Delhi</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== VIEW TIMELINE SHOWCASE ===== -->
+<div class="hg-scroll-container">
+    <section class="hg-section">
+        <div class="hg-content fade-up">
+            <div class="title">61 Years of Excellence</div>
+            <div class="desc">With a rich experience in moulding the young generation, the Salesians of Don Bosco have
+                established a next-generation school in Egmore, adopting the CBSE syllabus. We blend tradition with
+                modern innovation to build an unparalleled educational foundation.</div>
+        </div>
+        <div class="img-box">
+            <img src="{{ url_for('static', filename='images/dbx/img_2.jpg') }}" alt="DBX Excellence">
+        </div>
+    </section>
+
+    <section class="hg-section">
+        <div class="hg-content fade-up">
+            <div class="title">Holistic Education</div>
+            <div class="desc">We provide quality education of international standard with modern technology and
+                state-of-the-art facilities designed for experiential learning. Our curriculum stretches beyond the
+                classroom, ensuring students grow emotionally, physically, and spiritually.</div>
+        </div>
+        <div class="img-box">
+            <img src="{{ url_for('static', filename='images/dbx/img_3.jpg') }}" alt="Holistic Education">
+        </div>
+    </section>
+
+    <section class="hg-section">
+        <div class="hg-content fade-up">
+            <div class="title">Inspiring Leadership</div>
+            <div class="desc">Our aim is to groom young children into responsible citizens and leaders with a
+                difference, guided by the Salesian spirit of St. John Bosco. Through mentorship and peer collaboration,
+                every child is nurtured into a confident trailblazer.</div>
+        </div>
+        <div class="img-box">
+            <img src="{{ url_for('static', filename='images/dbx/img_13.jpg') }}" alt="Inspiring Leadership">
+        </div>
+    </section>
+
+    <section class="hg-section">
+        <div class="hg-content fade-up">
+            <div class="title">Vibrant Campus</div>
+            <div class="desc">From our modern laboratories to expansive sports grounds, every corner of DBX is dedicated
+                to nurturing the next generation. The energy on campus is palpable, fueled by student passion and
+                educator dedication.</div>
+        </div>
+        <div class="img-box">
+            <img src="{{ url_for('static', filename='images/dbx/img_6.jpg') }}" alt="Vibrant Campus">
+        </div>
+    </section>
+</div>
+
+
+<!-- ===== FACILITIES ===== -->
+<section class="facilities-section">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 class="text-title fade-up">World-Class Facilities</h2>
+            <p class="text-body-large fade-up" style="max-width: 600px; margin: 1rem auto 0;">
+                Every corner of DBX is designed to inspire learning, creativity, and holistic growth.
+            </p>
+        </div>
+
+        <div class="facilities-grid">
+            <div class="facility-card fade-up">
+                <div class="facility-icon" style="background: var(--clr-gold); color: var(--clr-navy);"><i
+                        class="fas fa-flask"></i></div>
+                <h3>Science Labs</h3>
+                <p>Fully equipped modern workspaces for Physics, Chemistry, and Biology to foster hands-on experiential
+                    science learning.</p>
+            </div>
+            <div class="facility-card fade-up">
+                <div class="facility-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Computer Labs</h3>
+                <p>Two state-of-the-art computer labs with the latest hardware for digital literacy and coding.</p>
+            </div>
+            <div class="facility-card fade-up">
+                <div class="facility-icon" style="background: var(--clr-lime); color: var(--clr-navy);"><i
+                        class="fas fa-book-open"></i></div>
+                <h3>Library</h3>
+                <p>A vast collection of books, journals, and digital resources for curious minds.</p>
+            </div>
+            <div class="facility-card fade-up">
+                <div class="facility-icon" style="background: var(--clr-navy); color: var(--clr-white);"><i
+                        class="fas fa-futbol"></i></div>
+                <h3>Turf - Thomas Block</h3>
+                <p>Spacious sports grounds designed for physical education and athletic excellence.</p>
+            </div>
+            <div class="facility-card fade-up">
+                <div class="facility-icon" style="background: var(--clr-gold); color: var(--clr-navy);"><i
+                        class="fas fa-heartbeat"></i></div>
+                <h3>Health Station</h3>
+                <p>On-campus wellness center prioritizing the health and safety of our students.</p>
+            </div>
+            <div class="facility-card fade-up">
+                <div class="facility-icon" style="background: var(--clr-lime); color: var(--clr-navy);"><i
+                        class="fas fa-theater-masks"></i></div>
+                <h3>Auditorium & AV Hall</h3>
+                <p>Professional venues for cultural events, assemblies, performances, and multimedia learning.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats" style="background: var(--clr-navy); color: white;">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item fade-up">
+                <h3 class="counter" data-target="100">0</h3>
+                <p>Percent Commitment</p>
+            </div>
+            <div class="stat-item fade-up">
+                <h3 class="counter" data-target="13">0</h3>
+                <p>Years of Excellence</p>
+            </div>
+            <div class="stat-item fade-up">
+                <h3 class="counter" data-target="3000">0</h3>
+                <p>Students Strong</p>
+            </div>
+            <div class="stat-item fade-up">
+                <h3 class="counter" data-target="150">0</h3>
+                <p>Expert Faculty</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== LEADERSHIP ===== -->
+<section class="leadership-section">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h2 class="text-title fade-up">Our Leadership</h2>
+            <p class="text-body-large fade-up" style="max-width: 500px; margin: 1rem auto 0;">
+                Guided by the Salesian spirit of St. John Bosco.
+            </p>
+        </div>
+        <div
+            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin: 0 auto; max-width: 1000px;">
+            <div class="leader-card fade-up">
+                <img src="{{ url_for('static', filename='images/dbx/img_13.jpg') }}" alt="Saint John Bosco"
+                    style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; display: block;">
+                <h3>Saint John Bosco</h3>
+                <p>Founder</p>
+            </div>
+            <div class="leader-card fade-up">
+                <img src="{{ url_for('static', filename='images/dbx/img_12.jpg') }}" alt="Rev. Fr. Xavier Packiam SDB"
+                    style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; display: block;">
+                <h3>Rev. Fr. Xavier Packiam, SDB</h3>
+                <p>Rector & Correspondent</p>
+            </div>
+            <div class="leader-card fade-up">
+                <img src="{{ url_for('static', filename='images/dbx/img_11.jpg') }}" alt="Rev. Fr. Mathias SDB"
+                    style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; display: block;">
+                <h3>Rev. Fr. Mathias, SDB</h3>
+                <p>Principal</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ADMISSIONS PREVIEW ===== -->
+<section class="home-admissions" style="background: var(--clr-lime); color: var(--clr-navy);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h2 class="text-title fade-up">Join the Salesian Legacy</h2>
+            <p class="text-body-large fade-up" style="max-width: 700px; margin: 1rem auto 0;">
+                Admissions open for the academic year 2026–27. Begin the process today.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;">
+            <div class="admission-step-preview fade-up">
+                <div class="admission-step-icon"><i class="fas fa-file-signature"></i></div>
+                <h3>Apply Online</h3>
+                <p class="text-muted">Visit dbxegmore.in or dbschoolofexcellence.in to register.</p>
+            </div>
+            <div class="admission-step-preview fade-up">
+                <div class="admission-step-icon" style="background: var(--clr-gold); color: #000;"><i
+                        class="fas fa-handshake"></i></div>
+                <h3>Interaction</h3>
+                <p class="text-muted">A conversational discussion to assess the student's readiness.</p>
+            </div>
+            <div class="admission-step-preview fade-up">
+                <div class="admission-step-icon" style="background: var(--clr-lime); color: #000;"><i
+                        class="fas fa-check-double"></i></div>
+                <h3>Enrolment</h3>
+                <p class="text-muted">Submit documents and join the DBX Egmore family.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;" class="fade-up">
+            <a href="{{ url_for('public.admissions') }}" class="btn btn-primary">
+                Full Admission Details <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== GALLERY PREVIEW ===== -->
+<section class="home-gallery">
+    <div class="container">
+        <div
+            style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h2 class="text-title fade-up">Campus Life at DBX</h2>
+                <p class="text-body-large fade-up" style="margin-top: 0.5rem;">Real glimpses of our campus.</p>
+            </div>
+            <a href="{{ url_for('public.gallery') }}" class="btn btn-outline fade-up">View Full Gallery</a>
+        </div>
+
+        <div class="home-gallery-grid">
+            <div class="home-gallery-item fade-up">
+                <img src="{{ url_for('static', filename='images/dbx/img_4.jpg') }}" alt="DBX Main Building">
+                <div class="gallery-hover-overlay"><span>Main Campus</span></div>
+            </div>
+            <div class="home-gallery-item fade-up">
+                <img src="{{ url_for('static', filename='images/dbx_gallery/gallery_img_15.jpg') }}" alt="DBX Students">
+                <div class="gallery-hover-overlay"><span>Students</span></div>
+            </div>
+            <div class="home-gallery-item fade-up">
+                <img src="{{ url_for('static', filename='images/dbx/img_5.jpg') }}" alt="DBX School Signage">
+                <div class="gallery-hover-overlay"><span>School of Excellence</span></div>
+            </div>
+            <div class="home-gallery-item fade-up">
+                <img src="{{ url_for('static', filename='images/dbx_gallery/gallery_img_2.jpg') }}" alt="DBX Assembly">
+                <div class="gallery-hover-overlay"><span>Assembly</span></div>
+            </div>
+            <div class="home-gallery-item fade-up">
+                <img src="{{ url_for('static', filename='images/dbx/img_3.jpg') }}" alt="DBX Rua Block">
+                <div class="gallery-hover-overlay"><span>Rua Block</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+    <div class="container" style="position: relative; z-index: 1;">
+        <h2 class="text-title fade-up" style="margin-bottom: 1.5rem;">Ready to give your child the best?</h2>
+        <p class="text-body-large fade-up" style="color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto 3rem;">
+            Experience the vibrant atmosphere and Salesian values that define Don Bosco School of Excellence, Egmore.
+        </p>
+        <div class="fade-up">
+            <a href="{{ url_for('public.contact') }}" class="btn btn-accent">Schedule a Visit Today</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- 1. HERO ANIMATIONS (Clean, no bounce) ---
+        const heroTl = gsap.timeline({ delay: 0.2 });
+        heroTl.to('#heroBadge', { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' })
+            .to('#heroTitle', { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.3')
+            .to('#heroSubtitle', { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+            .to('#heroActions', { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+            .to('#cbseBadge', { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+
+        // Subtle parallax for decorative text
+        gsap.to('#floatingText', {
+            yPercent: -20,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // --- 2. STATS counter ---
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            ScrollTrigger.create({
+                trigger: statsSection,
+                start: "top 80%",
+                onEnter: () => {
+                    document.querySelectorAll('.counter').forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        gsap.to(counter, {
+                            innerHTML: target,
+                            duration: 2,
+                            snap: { innerHTML: 1 },
+                            ease: "power2.out",
+                            onUpdate: function () {
+                                if (target > 100 && this.progress() === 1) {
+                                    counter.innerHTML = target + '+';
+                                } else if (target === 100 && this.progress() === 1) {
+                                    counter.innerHTML = target + '%';
+                                }
+                            }
+                        });
+                    });
+                },
+                once: true
+            });
+        }
+
+        // --- 3. Generic fade-up animations ---
+        gsap.utils.toArray('.fade-up').forEach(el => {
+            gsap.to(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 88%',
+                    toggleActions: 'play none none none'
+                },
+                y: 0,
+                opacity: 1,
+                duration: 0.7,
+                ease: 'power2.out'
+            });
+        });
+    });
+</script>
+{% endblock %}

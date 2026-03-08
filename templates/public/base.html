@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Don Bosco School of Excellence, Egmore{% endblock %}</title>
+
+    <!-- Meta tags for SEO & Theme -->
+    <meta name="description" content="A premium institution dedicated to excellence in education.">
+
+    <!-- Google Fonts: Inter (sans) & Playfair Display (serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&family=Syne:wght@700;800&family=Bebas+Neue&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Public Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+
+    {% block extra_css %}{% endblock %}
+    <style>
+        /* ===== CINEMATIC PRELOADER ===== */
+        .global-preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #fafafa;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        .global-preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Subtle background grid */
+        .preloader-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridShift 8s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(60px, 60px);
+            }
+        }
+
+        /* Logo container */
+        .preloader-core {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo-orbit {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .preloader-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Orbiting rings */
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+
+        .orbit-ring-1 {
+            width: 130px;
+            height: 130px;
+            border-top-color: var(--clr-gold);
+            border-right-color: var(--clr-gold);
+            animation: orbit1 2.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        .orbit-ring-2 {
+            width: 155px;
+            height: 155px;
+            border-bottom-color: var(--clr-navy);
+            border-left-color: var(--clr-navy);
+            animation: orbit2 3s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        @keyframes orbit1 {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes orbit2 {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            100% {
+                transform: rotate(-360deg)
+            }
+        }
+
+        /* School name */
+        .preloader-brand {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--clr-navy);
+            letter-spacing: 0.05em;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeUp 1s 0.5s ease forwards;
+        }
+
+        .preloader-brand span {
+            color: var(--clr-gold);
+        }
+
+        /* Tagline */
+        .preloader-tagline {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: #999;
+            opacity: 0;
+            animation: fadeUp 1s 1s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress bar */
+        .preloader-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #eee;
+        }
+
+        .preloader-progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--clr-gold), var(--clr-navy));
+            transition: width 0.3s ease;
+        }
+
+        /* Counter */
+        .preloader-counter {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-family: var(--font-sans);
+            font-size: 3.5rem;
+            font-weight: 200;
+            color: var(--clr-navy);
+            opacity: 0.15;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cinematic Preloader -->
+    <div class="global-preloader" id="globalPreloader">
+        <div class="preloader-bg"></div>
+        <div class="preloader-core">
+            <div class="logo-orbit">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <img src="{{ url_for('static', filename='images/icon.jpg') }}" alt="Loading..." class="preloader-icon">
+            </div>
+            <div class="preloader-brand">DBX <span>Egmore</span>.</div>
+            <div class="preloader-tagline">Igniting Minds · Inspiring Excellence</div>
+        </div>
+        <div class="preloader-counter" id="preloaderCounter">0</div>
+        <div class="preloader-progress">
+            <div class="preloader-progress-bar" id="preloaderBar"></div>
+        </div>
+    </div>
+
+    <!-- Subtle Noise Texture Overlay for premium feel -->
+    <div class="noise-overlay"></div>
+
+    <!-- Portal Sidebar -->
+    <div class="portal-sidebar">
+        <a href="{{ url_for('student.dashboard') }}" class="sidebar-item">
+            <i class="fas fa-user-graduate"></i>
+            <span class="sidebar-tooltip">Student Portal</span>
+        </a>
+        <a href="{{ url_for('teacher.dashboard') }}" class="sidebar-item">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span class="sidebar-tooltip">Teacher Portal</span>
+        </a>
+        <a href="{{ url_for('library.catalogue') }}" class="sidebar-item">
+            <i class="fas fa-book-reader"></i>
+            <span class="sidebar-tooltip">Digital Library</span>
+        </a>
+        <a href="{{ url_for('admin.dashboard') }}" class="sidebar-item">
+            <i class="fas fa-user-shield"></i>
+            <span class="sidebar-tooltip">Admin Panel</span>
+        </a>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{{ url_for('public.index') }}" class="nav-brand">DBX Egmore.</a>
+
+            <ul class="nav-links">
+                <li><a href="{{ url_for('public.index') }}">Home</a></li>
+                <li><a href="{{ url_for('public.admissions') }}">Admissions</a></li>
+                <li><a href="{{ url_for('public.gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('public.contact') }}">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Portal Login</a>
+                <a href="{{ url_for('public.admissions') }}" class="btn btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+        <div class="main-content">
+            {% block content %}
+            <!-- Page specific content goes here -->
+            {% endblock %}
+        </div>
+
+        <!-- Premium Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <h3>DBX Egmore.</h3>
+                        <p><i>Virtus in Arduis</i> — Virtue lies in Hardship. Fostering excellence and innovation in
+                            education.</p>
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="#" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
+                                    class="fab fa-twitter"></i></a>
+                            <a href="#" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href="#" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
+                                    class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Explore</h4>
+                        <ul>
+                            <li><a href="{{ url_for('public.index') }}">About Us</a></li>
+                            <li><a href="{{ url_for('public.admissions') }}">Admissions</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="{{ url_for('public.gallery') }}">Campus Gallery</a></li>
+                            <li><a href="#">Academic Calendar</a></li>
+                            <li><a href="{{ url_for('auth.login') }}">Student Portal</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li><a href="{{ url_for('public.contact') }}">Get in Touch</a></li>
+                            <li style="color: rgba(255,255,255,0.8);">53, Pantheon Road<br>Egmore, Chennai 600008</li>
+                            <li><a href="mailto:info@dbxegmore.in">info@dbxegmore.in</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Don Bosco School of Excellence, Egmore. All rights reserved.</p>
+                    <div style="display: flex; gap: 2rem;">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- External Libraries: GSAP, ScrollTrigger, Lenis for smooth scrolling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+    <!-- Main Public JS -->
+    <script src="{{ url_for('static', filename='js/public.js') }}"></script>
+
+    {% block extra_js %}{% endblock %}
+
+    <script>
+        // Cinematic preloader logic with minimum 5-second duration on first load
+        (function () {
+            const preloader = document.getElementById('globalPreloader');
+            const counter = document.getElementById('preloaderCounter');
+            const bar = document.getElementById('preloaderBar');
+
+            let isGallery = window.location.pathname.includes('/gallery');
+            let minDuration = isGallery ? 5000 : 2000;
+            let maxSimulatedTime = minDuration - 100;
+
+            // Check if user has visited in this session - ONLY if NOT on gallery
+            // (Gallery ALWAYS gets 5s as per request)
+            if (!isGallery && sessionStorage.getItem('dbx_preloader_seen')) {
+                minDuration = 800; // Snap load for returning users on non-gallery pages
+                maxSimulatedTime = 700;
+            } else {
+                sessionStorage.setItem('dbx_preloader_seen', 'true');
+            }
+
+            const startTime = Date.now();
+
+            let isLoaded = false;
+            let currentProgress = 0;
+            let animationFrameId;
+
+            // Prevent scrolling during load
+            document.body.style.overflow = 'hidden';
+
+            function updateProgress() {
+                if (!preloader) return;
+
+                const elapsed = Date.now() - startTime;
+                let targetProgress = 0;
+
+                if (isLoaded) {
+                    // If loaded, jump to 100% when minimum duration is met
+                    if (elapsed >= minDuration) {
+                        targetProgress = 100;
+                    } else {
+                        // Keep easing towards 99% until time is up
+                        targetProgress = Math.min(99, (elapsed / maxSimulatedTime) * 100);
+                    }
+                } else {
+                    // Simulate loading up to 90% if the actual window load hasn't fired yet
+                    targetProgress = Math.min(90, (elapsed / maxSimulatedTime) * 100);
+                }
+
+                // Smooth ease towards target
+                currentProgress += (targetProgress - currentProgress) * 0.1;
+
+                // Snap to 100 if we are close and allowed to finish
+                if (isLoaded && elapsed >= minDuration && targetProgress === 100 && currentProgress > 99) {
+                    currentProgress = 100;
+                }
+
+                // Update UI
+                if (counter) counter.innerText = Math.round(currentProgress);
+                if (bar) bar.style.width = currentProgress + '%';
+
+                // Check termination condition
+                if (currentProgress < 100) {
+                    animationFrameId = requestAnimationFrame(updateProgress);
+                } else {
+                    // Finish animation
+                    if (counter) counter.innerText = "100";
+                    if (bar) bar.style.width = "100%";
+
+                    // Add slight delay before fading out to show 100%
+                    setTimeout(() => {
+                        preloader.classList.add('fade-out');
+                        document.body.style.overflow = '';
+                    }, 400);
+                }
+            }
+
+            // Start animation loop
+            animationFrameId = requestAnimationFrame(updateProgress);
+
+            function markLoaded() {
+                isLoaded = true;
+            }
+
+            window.addEventListener('load', function () {
+                if (!window.holdPreloader) {
+                    markLoaded();
+                }
+            });
+
+            // Global accessor for JS integrations
+            window.dismissPreloader = markLoaded;
+        })();
+    </script>
+</body>
+
+</html>

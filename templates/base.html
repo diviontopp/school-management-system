@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School Portal{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon"></div>
+                <span>Academia</span>
+            </div>
+
+            <nav class="nav-links">
+                {% block sidebar_links %}
+                <!-- Default sidebar items, overridden by specific portals -->
+                <a href="/" class="nav-item">🏠 Home</a>
+                <a href="/login" class="nav-item">🔑 Login</a>
+                {% endblock %}
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    {% block header_title %}Welcome{% endblock %}
+                </div>
+
+                <div class="header-actions">
+                    <input type="text" class="search-bar" placeholder="Search...">
+                    <div class="user-profile">
+                        <div class="avatar"></div>
+                        <span>Guest</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="content-area">
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,216 @@
+{% extends "public/base.html" %}
+
+{% block title %}Contact - SchoolName{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-section {
+        padding: 8rem 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background-color: var(--clr-offwhite);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .contact-section::after {
+        content: '';
+        position: absolute;
+        bottom: -20%;
+        left: -10%;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(248, 249, 250, 0) 70%);
+        z-index: 0;
+    }
+
+    .contact-container {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 6rem;
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .contact-info h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--clr-navy);
+    }
+
+    .contact-info p {
+        color: var(--clr-text-muted);
+        font-size: 1.125rem;
+        margin-bottom: 3rem;
+        max-width: 400px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--clr-white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--clr-navy);
+        font-size: 1.25rem;
+        box-shadow: var(--shadow-soft);
+        flex-shrink: 0;
+    }
+
+    .info-content h4 {
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-content p {
+        margin-bottom: 0;
+        font-size: 1rem;
+        color: var(--clr-text-muted);
+    }
+
+    .contact-form-wrapper {
+        background: var(--clr-white);
+        padding: 3rem;
+        border-radius: 24px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--clr-navy);
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: var(--clr-offwhite);
+        color: var(--clr-text-main);
+        font-family: var(--font-sans);
+        transition: var(--transition-smooth);
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--clr-navy);
+        background: var(--clr-white);
+        box-shadow: 0 0 0 4px rgba(10, 17, 40, 0.05);
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    @media (max-width: 992px) {
+        .contact-container {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="container contact-container">
+        <div class="contact-info fade-up">
+            <h1>Let's start a conversation.</h1>
+            <p>Whether you're a prospective parent, seeking partnership, or just have a question, we're here to help.
+            </p>
+
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="info-content">
+                    <h4>Visit Campus</h4>
+                    <p>13, Casa Major Road, Egmore,<br>Chennai - 600008</p>
+                </div>
+            </div>
+
+            <div class="info-item" style="transition-delay: 0.1s;">
+                <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                <div class="info-content">
+                    <h4>Call Us</h4>
+                    <p>+91 44 2819 1274<br>Mon-Sat, 8:30am-4:30pm</p>
+                </div>
+            </div>
+
+            <div class="info-item" style="transition-delay: 0.2s;">
+                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-content">
+                    <h4>Email Us</h4>
+                    <p>info@dbxegmore.in</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rapid Render Form -->
+        <div class="contact-form-wrapper fade-up" style="transition-delay: 0s;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}"
+                style="margin-bottom: 2rem; padding: 1rem; border-radius: 8px; font-weight: 600; text-align: center; border: 1px solid rgba(0,0,0,0.1); background: #e0f2f1; color: #004d40;">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('public.submit_contact') }}" method="POST">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="parent_name" class="form-control" placeholder="Jane Doe" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="jane@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" name="phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <select class="form-control" name="subject">
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Admissions">Admissions</option>
+                        <option value="Schedule a Tour">Schedule a Tour</option>
+                        <option value="Careers">Careers / Faculty</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" name="message" placeholder="How can we help you?"
+                        required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
