@@ -1,5 +1,6 @@
 import os
-print("--- APP STARTUP SEQUENCE INITIATED ---")
+import sys
+print("--- APP STARTUP SEQUENCE INITIATED ---", flush=True)
 from flask import Flask, render_template
 from config import Config
 from flask_talisman import Talisman
