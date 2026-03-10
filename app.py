@@ -3,7 +3,7 @@ import sys
 from flask import Flask, render_template
 from config import Config
 from flask_talisman import Talisman
-from init_db_railway import initialize_database
+from database.connection import initialize_database
 
 def create_app():
     # ── Database Initialization ────────────────────────────────

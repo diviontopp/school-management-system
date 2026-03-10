@@ -106,3 +106,36 @@ def execute_script(sql_script):
         cursor.close()
     finally:
         conn.close()
+
+
+def initialize_database():
+    """Run schema.sql and seed_data.sql if INIT_DB=True."""
+    print(f"--- DATABASE INITIALIZATION TRIGGERED ---", flush=True)
+    
+    # We use absolute paths to ensure it works in any environment
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    schema_path = os.path.join(base_dir, 'database', 'schema.sql')
+    seed_path = os.path.join(base_dir, 'database', 'seed_data.sql')
+    
+    try:
+        # 1. Execute Schema
+        if os.path.exists(schema_path):
+            print(f"Executing schema from {schema_path}...", flush=True)
+            with open(schema_path, 'r', encoding='utf-8') as f:
+                schema_sql = f.read()
+                execute_script(schema_sql)
+            print("✓ Schema initialized successfully.", flush=True)
+        else:
+            print(f"✗ schema.sql not found at {schema_path}!", flush=True)
+
+        # 2. Execute Seed Data (defaulting to True if initializing)
+        if os.getenv("SEED_DB", "True") == "True" and os.path.exists(seed_path):
+            print(f"Executing seed data from {seed_path}...", flush=True)
+            with open(seed_path, 'r', encoding='utf-8') as f:
+                seed_sql = f.read()
+                execute_script(seed_sql)
+            print("✓ Seed data loaded successfully.", flush=True)
+
+        print("--- DATABASE INITIALIZATION COMPLETED ---", flush=True)
+    except Exception as e:
+        print(f"✗ ERROR during initialization: {e}", flush=True)
