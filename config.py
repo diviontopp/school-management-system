@@ -1,9 +1,15 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv() # Load .env first as a base
 
 class Config:
+    @staticmethod
+    def get_env(key, default=None):
+        """Helper to get env var with priority for Railway's naming (no underscores)"""
+        # Priority: Railway naming > Standard naming > Default
+        railway_key = key.replace("_", "")
+        return os.getenv(key) or os.getenv(railway_key) or default
     # ── Flask ─────────────────────────────────────────────
     SECRET_KEY = os.getenv("SECRET_KEY", "school-portal-dev-secret-key-2026") # In prod, this must be a heavy random string
     DEBUG = os.getenv("DEBUG", "True") == "True"
@@ -14,8 +20,9 @@ class Config:
     SESSION_COOKIE_SAMESITE = 'Lax'
 
     # ── MySQL ─────────────────────────────────────────────
-    # Standard connection string fallback (e.g. for Render + Aiven URL)
-    DATABASE_URL = os.getenv("DATABASE_URL")
+    # Railway-style URL priorities
+    DATABASE_URL = os.getenv("MYSQL_PRIVATE_URL") or os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("DATABASE_URL")
+    
     if DATABASE_URL and DATABASE_URL.startswith("mysql"):
         import urllib.parse
         url = urllib.parse.urlparse(DATABASE_URL)
@@ -23,17 +30,17 @@ class Config:
         MYSQL_PORT = url.port or 3306
         MYSQL_USER = url.username
         MYSQL_PASSWORD = url.password
-        MYSQL_DATABASE = url.path[1:] if url.path else "defaultdb"
+        MYSQL_DATABASE = url.path[1:] if (url.path and len(url.path) > 1) else "school_portal"
         MYSQL_SSL_DISABLED = False
     else:
-        # No DATABASE_URL set — leave host empty so connection.py fails fast
-        # instead of trying localhost (which hangs the gunicorn worker)
-        MYSQL_HOST = os.getenv("MYSQL_HOST", "")  # Empty = no DB configured
-        MYSQL_PORT = int(os.getenv("MYSQL_PORT", "3306"))
-        MYSQL_USER = os.getenv("MYSQL_USER", "root")
-        MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
-        MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "school_portal")
-        MYSQL_SSL_DISABLED = True
+        # Using the helper to ensure Railway variables (MYSQLHOST) override .env (MYSQL_HOST)
+        MYSQL_HOST = os.getenv("MYSQLHOST") or os.getenv("MYSQL_HOST") or ""
+        MYSQL_PORT = int(os.getenv("MYSQLPORT") or os.getenv("MYSQL_PORT") or "3306")
+        MYSQL_USER = os.getenv("MYSQLUSER") or os.getenv("MYSQL_USER") or "root"
+        MYSQL_PASSWORD = os.getenv("MYSQLPASSWORD") or os.getenv("MYSQL_PASSWORD") or ""
+        MYSQL_DATABASE = os.getenv("MYSQLDATABASE") or os.getenv("MYSQL_DATABASE") or "school_portal"
+        # In cloud environments like Railway/HuggingFace, we usually want SSL enabled
+        MYSQL_SSL_DISABLED = os.getenv("FLASK_ENV") != "production" and not os.getenv("RAILWAY_ENVIRONMENT")
 
     # ── File Uploads ────────────────────────────────────────
     UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static", "uploads")
