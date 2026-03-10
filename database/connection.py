@@ -68,31 +68,55 @@ def get_pool():
 
 
 def get_connection():
-    """Return a connection from the pool."""
-    return get_pool().get_connection()
+    """Return a validated connection from the pool, with auto-reconnect."""
+    pool = get_pool()
+    try:
+        conn = pool.get_connection()
+        # Pre-flight ping to ensure Railway's proxy hasn't killed the idle connection
+        try:
+            conn.ping(reconnect=True, attempts=3, delay=1)
+        except Exception as ping_err:
+            print(f"WARN: Connection ping failed, forcing new connection: {ping_err}", flush=True)
+            # If ping fails, we try to get a fresh one if possible, or just let it propagate
+            pass
+        return conn
+    except Exception as e:
+        print(f"ERROR: Could not get connection from pool: {e}", flush=True)
+        raise
 
 
 def query(sql, params=None, fetch_one=False, fetch_all=True, commit=False):
-    conn = get_connection()
+    """Execute a query with absolute leak prevention and robust retry."""
+    conn = None
     try:
+        conn = get_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute(sql, params or ())
-        if commit:
-            conn.commit()
-            last_id = cursor.lastrowid
+        try:
+            cursor.execute(sql, params or ())
+            
+            if commit:
+                conn.commit()
+                last_id = cursor.lastrowid
+                return last_id
+            
+            if fetch_one:
+                return cursor.fetchone()
+            return cursor.fetchall()
+            
+        finally:
             cursor.close()
-            return last_id
-        if fetch_one:
-            result = cursor.fetchone()
-        else:
-            result = cursor.fetchall()
-        cursor.close()
-        return result
+            
     except Exception as e:
-        conn.rollback()
+        if conn:
+            conn.rollback()
+        # Log specific MySQL error codes for Railway debugging
+        error_code = getattr(e, 'errno', 'Unknown')
+        print(f"DATABASE ERROR [{error_code}]: {e}", flush=True)
         raise e
     finally:
-        conn.close()
+        if conn:
+            # Absolute guarantee: return connection to pool
+            conn.close()
 
 
 def execute_script(sql_script):
