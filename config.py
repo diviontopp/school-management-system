@@ -21,7 +21,8 @@ class Config:
 
     # ── MySQL ─────────────────────────────────────────────
     # Railway-style URL priorities
-    DATABASE_URL = os.getenv("MYSQL_PRIVATE_URL") or os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("DATABASE_URL")
+    # We add MYSQL_PUBLIC_URL as a top priority to bypass internal DNS issues if they occur
+    DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL") or os.getenv("MYSQL_PRIVATE_URL") or os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("DATABASE_URL")
     
     if DATABASE_URL and DATABASE_URL.startswith("mysql"):
         import urllib.parse
