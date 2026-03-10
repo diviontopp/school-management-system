@@ -1,11 +1,16 @@
 import os
 import sys
-print("--- APP STARTUP SEQUENCE INITIATED ---", flush=True)
 from flask import Flask, render_template
 from config import Config
 from flask_talisman import Talisman
+from init_db_railway import initialize_database
 
 def create_app():
+    # ── Database Initialization ────────────────────────────────
+    # Run one-time initialization if INIT_DB environment variable is set
+    if os.getenv("INIT_DB", "False") == "True":
+        initialize_database()
+
     base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Flask(__name__, 
                 template_folder=os.path.join(base_dir, 'templates'),
