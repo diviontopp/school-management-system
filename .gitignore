@@ -7,6 +7,7 @@
 !/utils/
 !/app.py
 !/config.py
+!/init_db_railway.py
 !/requirements.txt
 !/Dockerfile
 !/README.md
