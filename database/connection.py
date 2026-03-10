@@ -58,7 +58,9 @@ def get_pool():
                 kwargs['ssl_verify_identity'] = False
                 kwargs['ssl_verify_cert'] = False
 
+        print(f"DEBUG: Connecting to {kwargs['host']} port {kwargs['port']} database {kwargs['database']}...", flush=True)
         _pool = pooling.MySQLConnectionPool(**kwargs)
+        print(f"✓ Connection pool created for {kwargs['database']}!", flush=True)
         return _pool
     except Exception as e:
         _pool_error = e
