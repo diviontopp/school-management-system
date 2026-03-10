@@ -5,6 +5,8 @@ from config import Config
 from flask_talisman import Talisman
 from database.connection import initialize_database
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 def create_app():
     # ── Database Initialization ────────────────────────────────
     # Run one-time initialization if INIT_DB environment variable is set
@@ -15,6 +17,11 @@ def create_app():
     app = Flask(__name__, 
                 template_folder=os.path.join(base_dir, 'templates'),
                 static_folder=os.path.join(base_dir, 'static'))
+    
+    # Apply ProxyFix for Railway/HuggingFace reverse proxies
+    # x_for=1, x_host=1, x_proto=1, x_port=1, x_prefix=1
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+    
     app.config.from_object(Config)
 
     # Initialize Security Headers
