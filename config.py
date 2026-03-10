@@ -20,9 +20,9 @@ class Config:
     SESSION_COOKIE_SAMESITE = 'Lax'
 
     # ── MySQL ─────────────────────────────────────────────
-    # Railway-style URL priorities
-    # We add MYSQL_PUBLIC_URL as a top priority to bypass internal DNS issues if they occur
-    DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL") or os.getenv("MYSQL_PRIVATE_URL") or os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("DATABASE_URL")
+    # Railway provides MYSQL_URL automatically if the services are in the same project.
+    # This URL contains the correct host, user, password, AND database name.
+    DATABASE_URL = os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("MYSQL_PRIVATE_URL") or os.getenv("DATABASE_URL")
     
     if DATABASE_URL and DATABASE_URL.startswith("mysql"):
         import urllib.parse
@@ -31,16 +31,18 @@ class Config:
         MYSQL_PORT = url.port or 3306
         MYSQL_USER = url.username
         MYSQL_PASSWORD = url.password
-        MYSQL_DATABASE = url.path[1:] if (url.path and len(url.path) > 1) else "school_portal"
+        # Priority: Railway URL path > Local env > default
+        MYSQL_DATABASE = url.path[1:] if (url.path and len(url.path) > 1) else os.getenv("MYSQLDATABASE", "school_portal")
         MYSQL_SSL_DISABLED = False
     else:
-        # Using the helper to ensure Railway variables (MYSQLHOST) override .env (MYSQL_HOST)
+        # Fallback to individual variables
+        # We prioritize the "Clean" Railway names (no underscores)
         MYSQL_HOST = os.getenv("MYSQLHOST") or os.getenv("MYSQL_HOST") or ""
         MYSQL_PORT = int(os.getenv("MYSQLPORT") or os.getenv("MYSQL_PORT") or "3306")
         MYSQL_USER = os.getenv("MYSQLUSER") or os.getenv("MYSQL_USER") or "root"
         MYSQL_PASSWORD = os.getenv("MYSQLPASSWORD") or os.getenv("MYSQL_PASSWORD") or ""
         MYSQL_DATABASE = os.getenv("MYSQLDATABASE") or os.getenv("MYSQL_DATABASE") or "school_portal"
-        # In cloud environments like Railway/HuggingFace, we usually want SSL enabled
+        # Only disable SSL if strictly not in production
         MYSQL_SSL_DISABLED = os.getenv("FLASK_ENV") != "production" and not os.getenv("RAILWAY_ENVIRONMENT")
 
     # ── File Uploads ────────────────────────────────────────
