@@ -22,7 +22,7 @@ class Config:
     # ── MySQL ─────────────────────────────────────────────
     # Railway provides MYSQL_URL automatically if the services are in the same project.
     # This URL contains the correct host, user, password, AND database name.
-    DATABASE_URL = os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("MYSQL_PRIVATE_URL") or os.getenv("DATABASE_URL")
+    DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL") or os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("MYSQL_PRIVATE_URL") or os.getenv("DATABASE_URL")
     
     if DATABASE_URL and DATABASE_URL.startswith("mysql"):
         import urllib.parse
