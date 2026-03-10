@@ -96,14 +96,16 @@ def query(sql, params=None, fetch_one=False, fetch_all=True, commit=False):
 
 
 def execute_script(sql_script):
-    """Run a multi-statement SQL script (used for schema setup)."""
+    """Run a multi-statement SQL script using native multi-execution."""
     conn = get_connection()
     try:
         cursor = conn.cursor()
-        for statement in sql_script.split(";"):
-            statement = statement.strip()
-            if statement:
-                cursor.execute(statement)
+        # multi=True returns an iterator of results for each statement
+        results = cursor.execute(sql_script, multi=True)
+        for result in results:
+            # We must consume the results to avoid "Unread result" errors
+            if result.with_rows:
+                result.fetchall()
         conn.commit()
         cursor.close()
     finally:
@@ -125,26 +127,43 @@ def initialize_database():
 
         print(f"Executing {label} from {file_path}...", flush=True)
         with open(file_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
+            content = f.read()
             
-        # Strip CREATE DATABASE and USE commands to ensure it uses the Railway DB
-        cleaned_lines = []
-        for line in lines:
-            trimmed = line.strip().upper()
-            if trimmed.startswith("CREATE DATABASE") or trimmed.startswith("USE "):
-                print(f"  [Skipping DB Command]: {line.strip()}", flush=True)
-                continue
-            cleaned_lines.append(line)
+        # Robustly remove database-level boilerplate that fails on Railway
+        import re
+        # Removes: CREATE DATABASE ... ; (case-insensitive, multi-line)
+        content = re.sub(r'(?i)CREATE DATABASE.*?;', '-- [Removed Create DB]', content, flags=re.DOTALL)
+        # Removes: USE ... ;
+        content = re.sub(r'(?i)USE .*?;', '-- [Removed USE DB]', content)
         
         try:
-            execute_script("".join(cleaned_lines))
+            execute_script(content)
             print(f"✓ {label} initialized successfully.", flush=True)
+            return True
         except Exception as e:
             print(f"✗ ERROR executing {label}: {e}", flush=True)
+            return False
 
     try:
-        # 1. Execute Schema
-        process_and_execute(schema_path, "Schema")
+        # 0. Emergency creation of enquiries table (First priority)
+        print("Ensuring 'enquiries' table exists...", flush=True)
+        enquiry_sql = """
+        CREATE TABLE IF NOT EXISTS enquiries (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            parent_name VARCHAR(100) NOT NULL,
+            email VARCHAR(100) NOT NULL,
+            phone VARCHAR(15),
+            child_grade VARCHAR(20),
+            message TEXT,
+            status ENUM('New','Contacted','Enrolled','Closed') DEFAULT 'New',
+            submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """
+        execute_script(enquiry_sql)
+        print("✓ 'enquiries' table verified/created.", flush=True)
+
+        # 1. Execute full Schema
+        process_and_execute(schema_path, "Full Schema")
 
         # 2. Execute Seed Data
         if os.getenv("SEED_DB", "True") == "True":
