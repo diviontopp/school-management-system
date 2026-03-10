@@ -112,30 +112,42 @@ def initialize_database():
     """Run schema.sql and seed_data.sql if INIT_DB=True."""
     print(f"--- DATABASE INITIALIZATION TRIGGERED ---", flush=True)
     
-    # We use absolute paths to ensure it works in any environment
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     schema_path = os.path.join(base_dir, 'database', 'schema.sql')
     seed_path = os.path.join(base_dir, 'database', 'seed_data.sql')
     
+    def process_and_execute(file_path, label):
+        if not os.path.exists(file_path):
+            print(f"✗ {label} not found at {file_path}!", flush=True)
+            return
+
+        print(f"Executing {label} from {file_path}...", flush=True)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            
+        # Strip CREATE DATABASE and USE commands to ensure it uses the Railway DB
+        cleaned_lines = []
+        for line in lines:
+            trimmed = line.strip().upper()
+            if trimmed.startswith("CREATE DATABASE") or trimmed.startswith("USE "):
+                print(f"  [Skipping DB Command]: {line.strip()}", flush=True)
+                continue
+            cleaned_lines.append(line)
+        
+        try:
+            execute_script("".join(cleaned_lines))
+            print(f"✓ {label} initialized successfully.", flush=True)
+        except Exception as e:
+            print(f"✗ ERROR executing {label}: {e}", flush=True)
+
     try:
         # 1. Execute Schema
-        if os.path.exists(schema_path):
-            print(f"Executing schema from {schema_path}...", flush=True)
-            with open(schema_path, 'r', encoding='utf-8') as f:
-                schema_sql = f.read()
-                execute_script(schema_sql)
-            print("✓ Schema initialized successfully.", flush=True)
-        else:
-            print(f"✗ schema.sql not found at {schema_path}!", flush=True)
+        process_and_execute(schema_path, "Schema")
 
-        # 2. Execute Seed Data (defaulting to True if initializing)
-        if os.getenv("SEED_DB", "True") == "True" and os.path.exists(seed_path):
-            print(f"Executing seed data from {seed_path}...", flush=True)
-            with open(seed_path, 'r', encoding='utf-8') as f:
-                seed_sql = f.read()
-                execute_script(seed_sql)
-            print("✓ Seed data loaded successfully.", flush=True)
+        # 2. Execute Seed Data
+        if os.getenv("SEED_DB", "True") == "True":
+            process_and_execute(seed_path, "Seed Data")
 
         print("--- DATABASE INITIALIZATION COMPLETED ---", flush=True)
     except Exception as e:
-        print(f"✗ ERROR during initialization: {e}", flush=True)
+        print(f"✗ CRITICAL ERROR during initialization: {e}", flush=True)
