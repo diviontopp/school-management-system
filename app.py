@@ -16,7 +16,8 @@ def create_app():
     base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Flask(__name__, 
                 template_folder=os.path.join(base_dir, 'templates'),
-                static_folder=os.path.join(base_dir, 'static'))
+                static_folder=os.path.join(base_dir, 'static'),
+                static_url_path='/static')
     
     # Apply ProxyFix for Railway/HuggingFace reverse proxies
     # x_for=1, x_host=1, x_proto=1, x_port=1, x_prefix=1
@@ -24,7 +25,7 @@ def create_app():
     
     # Enable WhiteNoise for robust static file serving on Railway
     from whitenoise import WhiteNoise
-    app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.join(base_dir, 'static/'), prefix='static/')
+    app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.join(base_dir, 'static/'), prefix='/static/')
 
     app.config.from_object(Config)
 
