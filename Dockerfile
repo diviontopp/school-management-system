@@ -14,9 +14,7 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY . .
 
-# ENV PORT=8080 (Removed to let Railway provide the dynamic port)
-EXPOSE 8080
-
-# Run initialization script then start gunicorn
-# Removed --preload to ensure each worker initializes its own DB pool locally
-CMD python init_db.py && gunicorn -b 0.0.0.0:${PORT:-8080} --timeout 120 --workers 2 --access-logfile - --error-logfile - --forwarded-allow-ips "*" "app:app"
+# Removed EXPOSE to allow Railway to automate port detection
+# Sequential startup: Init DB then run Gunicorn
+# Using gthread worker-class for better concurrency during DB cold starts
+CMD python init_db.py && gunicorn app:app --bind 0.0.0.0:${PORT} --worker-class gthread --threads 4 --timeout 120 --access-logfile - --error-logfile - --forwarded-allow-ips "*"

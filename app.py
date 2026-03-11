@@ -19,8 +19,8 @@ def create_app():
                 static_url_path='/static')
     
     # ── Middleware ──────────────────────────────────────────
-    # Simple ProxyFix for Railway
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
+    # Trust one layer of Railway Edge Proxy
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     
     # WhiteNoise for static files
     from whitenoise import WhiteNoise
@@ -54,7 +54,7 @@ def create_app():
     def health():
         return {"status": "ok"}, 200
 
-    # Ensure upload folder exists
+    # ── Initialization ────────────────────────────────────
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
     # Register blueprints
