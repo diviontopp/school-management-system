@@ -1,7 +1,9 @@
+print(">>> BOOT: app.py is starting imports...", flush=True)
 import os
 import sys
 from flask import Flask, render_template, request
 from config import Config
+print(f">>> BOOT: Config loaded. MYSQL_HOST={'set' if Config.MYSQL_HOST else 'None'}...", flush=True)
 from flask_talisman import Talisman
 from database.connection import initialize_database
 

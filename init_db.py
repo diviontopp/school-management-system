@@ -1,6 +1,9 @@
 import os
 import sys
 
+# DEBUG: Force immediate flushing of all output
+print(">>> BOOT: init_db.py is starting...", flush=True)
+
 # Ensure current directory is in path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
