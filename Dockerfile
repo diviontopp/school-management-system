@@ -18,4 +18,5 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8080
 
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "--timeout", "120", "--workers", "2", "--access-logfile", "-", "--error-logfile", "-", "--forwarded-allow-ips", "*", "app:app"]
+# Using shell form for CMD to allow environment variable expansion
+CMD gunicorn -b 0.0.0.0:${PORT:-8080} --timeout 120 --workers 2 --preload --access-logfile - --error-logfile - --forwarded-allow-ips "*" "app:app"
