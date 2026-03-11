@@ -19,8 +19,8 @@ def create_app():
                 static_url_path='/static')
     
     # ── Middleware ──────────────────────────────────────────
-    # Trust one layer of Railway Edge Proxy
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+    # Trust Railway Proxy (standard 1 layer)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
     
     # WhiteNoise for static files
     from whitenoise import WhiteNoise
@@ -46,13 +46,38 @@ def create_app():
         print(f">>> REQUEST: {request.method} {request.path}", flush=True)
 
     # ── Routes ────────────────────────────────────────────
+    @app.route('/')
+    def home():
+        # This satisfies the strict checklist item 4
+        return "School Portal Server is running", 200
+
     @app.route('/ping')
     def ping():
         return "pong", 200
 
     @app.route('/health')
     def health():
-        return {"status": "ok"}, 200
+        db_status = "untested"
+        try:
+            from database.connection import query
+            query("SELECT 1", fetch_one=True)
+            db_status = "connected"
+        except Exception as e:
+            db_status = f"error: {str(e)}"
+        
+        return {
+            "status": "ok",
+            "database": db_status,
+            "port": os.getenv("PORT", "unknown")
+        }, 200
+
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        # Log the full traceback to Railway console
+        import traceback
+        print(f">>> ERROR: {str(e)}", flush=True)
+        traceback.print_exc()
+        return "Internal Server Error", 500
 
     # ── Initialization ────────────────────────────────────
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)

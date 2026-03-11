@@ -14,6 +14,14 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY . .
 
-# Removed EXPOSE to allow Railway to automate port detection
 # Sequential startup: Init DB then run Gunicorn on Railway's dynamic $PORT
-CMD python init_db.py && gunicorn app:app --bind 0.0.0.0:$PORT --worker-class gthread --threads 4 --timeout 120
+# Added explicit access/error logging and proxy trust flags
+CMD python init_db.py && gunicorn app:app \
+    --bind 0.0.0.0:$PORT \
+    --worker-class gthread \
+    --threads 4 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile - \
+    --forwarded-allow-ips "*" \
+    --log-level debug
