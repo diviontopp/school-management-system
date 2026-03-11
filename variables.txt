@@ -1,0 +1,52 @@
+#Variables for web app service hosted on railway
+MYSQL_PUBLIC_URL="${{MySQL.MYSQL_PUBLIC_URL}}"
+MYSQLDATABASE="${{MySQL.MYSQLDATABASE}}"
+INIT_DB="True"
+FLASK_ENV="production"
+SECRET_KEY="school-portal-super-secret-key-2026"
+ACCESS_KEY_ID="${{school-images.ACCESS_KEY_ID}}"
+BUCKET="${{school-images.BUCKET}}"
+BUCKET_ENDPOINT="${{school-images.ENDPOINT}}"
+BUCKET_NAME="${{school-images.BUCKET}}"
+ENDPOINT="${{school-images.ENDPOINT}}"
+REGION="${{school-images.REGION}}"
+SECRET_ACCESS_KEY="${{school-images.SECRET_ACCESS_KEY}}"
+USE_BUCKET="true"
+#Variables for mysql database in railway
+MYSQL_DATABASE="railway"
+MYSQL_PUBLIC_URL="mysql://${{MYSQLUSER}}:${{MYSQL_ROOT_PASSWORD}}@${{RAILWAY_TCP_PROXY_DOMAIN}}:${{RAILWAY_TCP_PROXY_PORT}}/${{MYSQL_DATABASE}}"
+MYSQL_ROOT_PASSWORD="SeaewpvcphHtYBdXRiMLlOygeVrgTIVs"
+MYSQL_URL="mysql://${{MYSQLUSER}}:${{MYSQL_ROOT_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:3306/${{MYSQL_DATABASE}}"
+MYSQLDATABASE="${{MYSQL_DATABASE}}"
+MYSQLHOST="${{RAILWAY_PRIVATE_DOMAIN}}"
+MYSQLPASSWORD="${{MYSQL_ROOT_PASSWORD}}"
+MYSQLPORT="3306"
+MYSQLUSER="root"
+#variables for bucket.
+S3-compatible Credentials
+
+
+Add to Service
+Endpoint URL
+
+https://t3.storageapi.dev
+
+
+Region
+
+auto
+
+
+Bucket Name
+
+school-images-vyhmayai4sv
+
+
+Access Key ID
+
+tid_KkmuqiXpUZZEOguvHKcdGvhywCaqeJtmiQsrOBvThilHreHykD
+
+
+Secret Access Key
+
+tsec_ohwvYrnTKeeXukdjxtlVhfBtbdokCVqzAZd_5pO9zi3wXNqITlSzStVSOoxzyOChxNg3zQ

@@ -52,9 +52,9 @@ class Config:
     # ── S3 / Railway Bucket ───────────────────────────────────
     S3_KEY = os.getenv("AWS_ACCESS_KEY_ID") or os.getenv("ACCESS_KEY_ID") or os.getenv("S3_KEY")
     S3_SECRET = os.getenv("AWS_SECRET_ACCESS_KEY") or os.getenv("SECRET_ACCESS_KEY") or os.getenv("S3_SECRET")
-    S3_BUCKET = os.getenv("AWS_BUCKET_NAME") or os.getenv("BUCKET_NAME") or os.getenv("BUCKET") or "school-images"
-    S3_REGION = os.getenv("AWS_REGION") or os.getenv("REGION") or "auto"
-    S3_ENDPOINT = os.getenv("AWS_ENDPOINT_URL_S3") or os.getenv("ENDPOINT") or os.getenv("BUCKET_ENDPOINT")
+    S3_BUCKET = os.getenv("AWS_S3_BUCKET_NAME") or os.getenv("S3_BUCKET_NAME") or os.getenv("AWS_BUCKET_NAME") or os.getenv("BUCKET_NAME") or os.getenv("BUCKET") or "school-images"
+    S3_REGION = os.getenv("AWS_DEFAULT_REGION") or os.getenv("AWS_REGION") or os.getenv("REGION") or "auto"
+    S3_ENDPOINT = os.getenv("AWS_ENDPOINT_URL") or os.getenv("AWS_ENDPOINT_URL_S3") or os.getenv("ENDPOINT") or os.getenv("BUCKET_ENDPOINT")
     
     _use_bucket = os.getenv("USE_BUCKET", "false").lower() == "true"
     STORAGE_TYPE = "s3" if _use_bucket else os.getenv("STORAGE_TYPE", "local")

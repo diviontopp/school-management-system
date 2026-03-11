@@ -10,18 +10,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./requirements.txt /code/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
+WORKDIR /code
 COPY . .
 
-# Sequential startup: Init DB then run Gunicorn on Railway's dynamic $PORT
-# Added explicit access/error logging and proxy trust flags
-CMD python init_db.py && gunicorn app:app \
-    --bind 0.0.0.0:$PORT \
-    --worker-class gthread \
-    --threads 4 \
-    --timeout 120 \
-    --access-logfile - \
-    --error-logfile - \
-    --forwarded-allow-ips "*" \
-    --log-level debug
+# Expose 8080 as a hint for Railway, though start.sh binds to $PORT
+EXPOSE 8080
+
+# Ensure start script is executable
+RUN chmod +x start.sh
+
+# Start the application using our robust durable script
+CMD ["./start.sh"]
