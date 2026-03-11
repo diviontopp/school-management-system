@@ -16,7 +16,8 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 
+# Expose the port (Railway typically uses PORT env var)
 EXPOSE 8080
 
-# Using shell form for CMD to allow environment variable expansion
-CMD gunicorn -b 0.0.0.0:${PORT:-8080} --timeout 120 --workers 2 --preload --access-logfile - --error-logfile - --forwarded-allow-ips "*" "app:app"
+# Run initialization script then start gunicorn
+CMD python init_db.py && gunicorn -b 0.0.0.0:${PORT:-8080} --timeout 120 --workers 2 --access-logfile - --error-logfile - --forwarded-allow-ips "*" "app:app"

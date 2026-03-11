@@ -18,7 +18,7 @@ def get_pool():
 
     # Only attempt connection if host is configured
     if not Config.MYSQL_HOST:
-        _pool_error = Exception("DATABASE_URL is not configured. Please set it in Hugging Face Space secrets.")
+        _pool_error = Exception("DATABASE_URL is not configured. Please check your environment variables.")
         raise _pool_error
 
     try:
