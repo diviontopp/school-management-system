@@ -2,7 +2,7 @@
 !/database/
 !/models/
 !/routes/
-!/static/
+
 !/templates/
 !/utils/
 !/app.py
