@@ -42,6 +42,7 @@ def create_app():
     # ── Logging ───────────────────────────────────────────
     @app.before_request
     def log_request_info():
+        # Flush ensures we see logs in Railway immediately
         print(f">>> REQUEST: {request.method} {request.path}", flush=True)
 
     # ── Routes ────────────────────────────────────────────
