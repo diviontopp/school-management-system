@@ -78,6 +78,12 @@ def create_app():
     def favicon():
         return "", 204
 
+    # Register context processors
+    from utils.storage import get_storage_url
+    @app.context_processor
+    def inject_storage():
+        return dict(storage_url=get_storage_url)
+
     return app
 
 app = create_app()

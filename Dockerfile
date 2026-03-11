@@ -14,19 +14,8 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY . .
 
-# Set up user permissions for Hugging Face Spaces (UID 1000)
-RUN chmod -R 777 /code
-RUN useradd -m -u 1000 user
-USER user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH \
-    PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1
 
-WORKDIR /code
+EXPOSE 8080
 
-# Hugging Face Spaces route traffic to port 7860
-EXPOSE 7860
-
-# 1 worker prevents OOM kills in HF's constrained environment
-# 120s timeout prevents gunicorn from killing long-running DB init
-CMD ["gunicorn", "-b", "0.0.0.0:7860", "--timeout", "120", "--workers", "1", "--access-logfile", "-", "--error-logfile", "-", "--forwarded-allow-ips", "*", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "--timeout", "120", "--workers", "2", "--access-logfile", "-", "--error-logfile", "-", "--forwarded-allow-ips", "*", "app:app"]

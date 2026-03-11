@@ -1,19 +1,43 @@
-﻿/*
-!/database/
-!/models/
-!/routes/
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
 
-!/templates/
-!/utils/
-!/app.py
-!/config.py
-!/init_db_railway.py
-!/requirements.txt
-!/Dockerfile
-!/README.md
-!/.gitignore
-!/.github/
-!/.gitattributes
-**/__pycache__/
-**/*.pyc
-**/.DS_Store
+# Virtual environment
+venv/
+.venv/
+env/
+.env.local
+
+# Environment variables (keep .env.example for reference)
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Static uploads (user-generated content, not tracked)
+static/uploads/
+
+# AI/Agent tools (not part of the project)
+.gemini/
+.gsd/
+skills/
+scripts/ralph/
+AGENTS.md

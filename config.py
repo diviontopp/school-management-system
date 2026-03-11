@@ -32,7 +32,7 @@ class Config:
         MYSQL_USER = url.username
         MYSQL_PASSWORD = url.password
         # Priority: Railway URL path > Local env > default
-        MYSQL_DATABASE = url.path[1:] if (url.path and len(url.path) > 1) else os.getenv("MYSQLDATABASE", "school_portal")
+        MYSQL_DATABASE = url.path.lstrip('/') if (url.path and len(url.path) > 1) else os.getenv("MYSQLDATABASE", "school_portal")
         MYSQL_SSL_DISABLED = False
     else:
         # Fallback to individual variables
@@ -49,3 +49,17 @@ class Config:
     UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static", "uploads")
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024   # 16 MB limit
     ALLOWED_EXTENSIONS = {"pdf", "doc", "docx", "txt", "png", "jpg", "jpeg", "gif"}
+
+    # ── S3 / Railway Bucket ───────────────────────────────────
+    # These are typically provided by Railway if you use an S3 service
+    S3_KEY = os.getenv("AWS_ACCESS_KEY_ID") or os.getenv("ACCESS_KEY_ID") or os.getenv("S3_KEY")
+    S3_SECRET = os.getenv("AWS_SECRET_ACCESS_KEY") or os.getenv("SECRET_ACCESS_KEY") or os.getenv("S3_SECRET")
+    S3_BUCKET = os.getenv("AWS_BUCKET_NAME") or os.getenv("BUCKET_NAME") or os.getenv("BUCKET") or "school-images"
+    S3_REGION = os.getenv("AWS_REGION") or os.getenv("REGION") or "auto"
+    # Endpoints are necessary for Railway's Minio or other S3-compatible services
+    S3_ENDPOINT = os.getenv("AWS_ENDPOINT_URL_S3") or os.getenv("ENDPOINT") or os.getenv("BUCKET_ENDPOINT")
+    
+    # Custom flag to enable/disable S3 storage. 
+    # Fallback to checking the user's USE_BUCKET variable if STORAGE_TYPE isn't specifically 's3'.
+    _use_bucket = os.getenv("USE_BUCKET", "false").lower() == "true"
+    STORAGE_TYPE = "s3" if _use_bucket else os.getenv("STORAGE_TYPE", "local")
