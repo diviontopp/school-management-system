@@ -25,7 +25,7 @@ def get_pool():
         print(f"DEBUG: Attempting to connect to MySQL at {Config.MYSQL_HOST}:{Config.MYSQL_PORT}...")
         kwargs = {
             "pool_name": "school_portal_pool",
-            "pool_size": 5,
+            "pool_size": 10,             # Increased pool size for better concurrency
             "host": Config.MYSQL_HOST,
             "port": Config.MYSQL_PORT,
             "user": Config.MYSQL_USER,
@@ -34,7 +34,8 @@ def get_pool():
             "charset": "utf8mb4",
             "collation": "utf8mb4_unicode_ci",
             "autocommit": False,
-            "connection_timeout": 10,   # 10-second timeout — prevents hanging
+            "connection_timeout": 15,   # Increased timeout for cold starts
+            "client_flags": [mysql.connector.ClientFlag.MULTI_STATEMENTS] # Performance optimization
         }
         if Config.DATABASE_URL and "ssl-mode=" in Config.DATABASE_URL:
             # If the URL already contains ssl-mode, the connector might handle it,

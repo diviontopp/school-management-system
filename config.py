@@ -10,8 +10,9 @@ class Config:
         # Priority: Railway naming > Standard naming > Default
         railway_key = key.replace("_", "")
         return os.getenv(key) or os.getenv(railway_key) or default
+    
     # ── Flask ─────────────────────────────────────────────
-    SECRET_KEY = os.getenv("SECRET_KEY", "school-portal-dev-secret-key-2026") # In prod, this must be a heavy random string
+    SECRET_KEY = os.getenv("SECRET_KEY", "school-portal-dev-secret-key-2026")
     DEBUG = os.getenv("DEBUG", "True") == "True"
     
     # Secure Cookies
@@ -20,8 +21,7 @@ class Config:
     SESSION_COOKIE_SAMESITE = 'Lax'
 
     # ── MySQL ─────────────────────────────────────────────
-    # Railway provides MYSQL_URL automatically if the services are in the same project.
-    # This URL contains the correct host, user, password, AND database name.
+    # Priority: MYSQL_URL > individual vars
     DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL") or os.getenv("MYSQL_URL") or os.getenv("MYSQLURL") or os.getenv("MYSQL_PRIVATE_URL") or os.getenv("DATABASE_URL")
     
     if DATABASE_URL and DATABASE_URL.startswith("mysql"):
@@ -31,18 +31,17 @@ class Config:
         MYSQL_PORT = url.port or 3306
         MYSQL_USER = url.username
         MYSQL_PASSWORD = url.password
-        # Priority: Railway URL path > Local env > default
         MYSQL_DATABASE = url.path.lstrip('/') if (url.path and len(url.path) > 1) else os.getenv("MYSQLDATABASE", "school_portal")
         MYSQL_SSL_DISABLED = False
     else:
-        # Fallback to individual variables
-        # We prioritize the "Clean" Railway names (no underscores)
         MYSQL_HOST = os.getenv("MYSQLHOST") or os.getenv("MYSQL_HOST") or ""
-        MYSQL_PORT = int(os.getenv("MYSQLPORT") or os.getenv("MYSQL_PORT") or "3306")
+        try:
+            MYSQL_PORT = int(os.getenv("MYSQLPORT") or os.getenv("MYSQL_PORT") or "3306")
+        except (ValueError, TypeError):
+            MYSQL_PORT = 3306
         MYSQL_USER = os.getenv("MYSQLUSER") or os.getenv("MYSQL_USER") or "root"
         MYSQL_PASSWORD = os.getenv("MYSQLPASSWORD") or os.getenv("MYSQL_PASSWORD") or ""
         MYSQL_DATABASE = os.getenv("MYSQLDATABASE") or os.getenv("MYSQL_DATABASE") or "school_portal"
-        # Only disable SSL if strictly not in production
         MYSQL_SSL_DISABLED = os.getenv("FLASK_ENV") != "production" and not os.getenv("RAILWAY_ENVIRONMENT")
 
     # ── File Uploads ────────────────────────────────────────
@@ -51,15 +50,11 @@ class Config:
     ALLOWED_EXTENSIONS = {"pdf", "doc", "docx", "txt", "png", "jpg", "jpeg", "gif"}
 
     # ── S3 / Railway Bucket ───────────────────────────────────
-    # These are typically provided by Railway if you use an S3 service
     S3_KEY = os.getenv("AWS_ACCESS_KEY_ID") or os.getenv("ACCESS_KEY_ID") or os.getenv("S3_KEY")
     S3_SECRET = os.getenv("AWS_SECRET_ACCESS_KEY") or os.getenv("SECRET_ACCESS_KEY") or os.getenv("S3_SECRET")
     S3_BUCKET = os.getenv("AWS_BUCKET_NAME") or os.getenv("BUCKET_NAME") or os.getenv("BUCKET") or "school-images"
     S3_REGION = os.getenv("AWS_REGION") or os.getenv("REGION") or "auto"
-    # Endpoints are necessary for Railway's Minio or other S3-compatible services
     S3_ENDPOINT = os.getenv("AWS_ENDPOINT_URL_S3") or os.getenv("ENDPOINT") or os.getenv("BUCKET_ENDPOINT")
     
-    # Custom flag to enable/disable S3 storage. 
-    # Fallback to checking the user's USE_BUCKET variable if STORAGE_TYPE isn't specifically 's3'.
     _use_bucket = os.getenv("USE_BUCKET", "false").lower() == "true"
     STORAGE_TYPE = "s3" if _use_bucket else os.getenv("STORAGE_TYPE", "local")

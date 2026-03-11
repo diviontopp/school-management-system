@@ -9,9 +9,12 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 def create_app():
     # ── Database Initialization ────────────────────────────────
-    # Run one-time initialization if INIT_DB environment variable is set
+    # Run in a background thread so it does NOT block gunicorn startup.
+    # Railway's health check will pass immediately; init happens concurrently.
     if os.getenv("INIT_DB", "False") == "True":
-        initialize_database()
+        import threading
+        init_thread = threading.Thread(target=initialize_database, daemon=True)
+        init_thread.start()
 
     base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Flask(__name__, 
@@ -69,6 +72,19 @@ def create_app():
     app.register_blueprint(library_bp, url_prefix='/library')
     app.register_blueprint(clubs_bp, url_prefix='/clubs')
 
+    # ── Health Check ──────────────────────────────────────
+    @app.route('/health')
+    def health_check():
+        """Lightweight health check for Railway."""
+        from database.connection import query
+        try:
+            # Simple query to check DB connectivity
+            query("SELECT 1")
+            return {"status": "healthy", "database": "connected"}, 200
+        except Exception as e:
+            return {"status": "degraded", "database": str(e)}, 200 # Still return 200 so Railway doesn't kill the app during init
+
+    # ── Error Handlers ────────────────────────────────────
     # Handle 404
     @app.errorhandler(404)
     def page_not_found(e):

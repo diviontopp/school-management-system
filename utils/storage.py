@@ -67,8 +67,8 @@ def upload_to_storage(file, filename):
             s3.upload_fileobj(
                 file,
                 bucket,
-                filename,
-                ExtraArgs={'ACL': 'public-read'} # Make it public if your bucket configuration allows
+                filename
+                # Removed 'public-read' ACL to prevent crashes on strict buckets
             )
             return True
         except Exception as e:
