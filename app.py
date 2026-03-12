@@ -49,10 +49,12 @@ def create_app():
     
     # WhiteNoise for static files (CRITICAL for Gunicorn!)
     print(">>> BOOT: Initializing WhiteNoise...", flush=True)
+    # Use the absolute static folder path explicitly
+    static_dir = os.path.abspath(app.static_folder)
     app.wsgi_app = WhiteNoise(app.wsgi_app, 
-                             root=app.static_folder, 
-                             prefix=app.static_url_path + '/',
-                             autorefresh=True)
+                             root=static_dir, 
+                             prefix='/static/',
+                             index_file=True)
     
     # Trust Railway Edge Proxy
     print(">>> BOOT: Initializing ProxyFix...", flush=True)
@@ -65,9 +67,6 @@ def create_app():
         print(f">>> REQUEST: {request.method} {request.path}", flush=True)
 
     # ── Fail-safe Core Routes ─────────────────────────────
-    # The '/' route is already handled by public_bp.index
-    # We keep a health check but remove the redundant root route to avoid conflicts
-
     @app.route('/health')
     def health():
         return {"status": "ok", "env": "production"}, 200
@@ -77,13 +76,26 @@ def create_app():
         target = 'images/dbx_gallery/gallery_img_15.jpg'
         full_path = os.path.join(app.static_folder, target)
         exists = os.path.exists(full_path)
+        size = os.path.getsize(full_path) if exists else -1
+        
+        # Test if we can actually read the file content
+        content_peek = "N/A"
+        try:
+            if exists:
+                with open(full_path, 'rb') as f:
+                    content_peek = f.read(10).hex()
+        except Exception as e:
+            content_peek = f"ERROR_READING: {str(e)}"
+
         contents = os.listdir(app.static_folder) if os.path.exists(app.static_folder) else "DIR_NOT_FOUND"
         return {
             "target": target,
             "static_folder": app.static_folder,
             "full_path": full_path,
             "exists": exists,
-            "static_contents": contents[:10], # First 10 items
+            "size": size,
+            "read_test": content_peek,
+            "static_contents": contents[:10],
             "cwd": os.getcwd()
         }
 
