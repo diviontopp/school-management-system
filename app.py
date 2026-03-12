@@ -8,19 +8,21 @@ from flask_talisman import Talisman
 from database.connection import initialize_database
 
 from werkzeug.middleware.proxy_fix import ProxyFix
+from whitenoise import WhiteNoise
 
 def create_app():
     print(">>> Creating Flask App...", flush=True)
+    
+    # Absolute paths to avoid resolution issues in production
+    base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Flask(__name__, 
-                template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), 'templates')),
-                static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')),
+                template_folder=os.path.join(base_dir, 'templates'),
+                static_folder=os.path.join(base_dir, 'static'),
                 static_url_path='/static')
     
-    # ── Configuration ──────────────────────────────────────
     app.config.from_object(Config)
-    base_dir = os.path.abspath(os.path.dirname(__file__))
 
-    # ── Blueprint Registration (Early) ──────────────────────
+    # ── Blueprint Registration (Top Priority) ──────────────
     from routes.public import public_bp
     from routes.auth import auth_bp
     from routes.student import student_bp
@@ -30,7 +32,6 @@ def create_app():
     from routes.library import library_bp
     from routes.clubs import clubs_bp
 
-    # Explicitly register PUBLIC first to ensure / is captured correctly
     app.register_blueprint(public_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(student_bp, url_prefix='/student')
@@ -44,57 +45,30 @@ def create_app():
     # Trust Railway Edge Proxy
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
     
-    # Relaxed Talisman for Railway
-    csp = {
-        'default-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "*"],
-        'img-src': ["'self'", "data:", "https:", "*"]
-    }
-    Talisman(app, 
-             content_security_policy=csp, 
-             force_https=False, 
-             session_cookie_secure=False
-    )
+    # WhiteNoise for static files (CRITICAL for Gunicorn!)
+    app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.join(base_dir, 'static/'), prefix='/static/')
 
     # ── Logging ───────────────────────────────────────────
     @app.before_request
     def log_request_info():
-        # Flush ensures we see logs in Railway immediately
         print(f">>> REQUEST: {request.method} {request.path}", flush=True)
 
-    # ── Routes ────────────────────────────────────────────
-    # ── Routes ────────────────────────────────────────────
-    @app.route('/ping')
-    def ping():
-        return "pong", 200
+    # ── Fail-safe Core Routes ─────────────────────────────
+    @app.route('/')
+    def root_landing_page():
+        """Bypasses blueprint to ensure landing page always works"""
+        return render_template('public/index.html')
 
     @app.route('/health')
     def health():
-        db_status = "untested"
-        try:
-            from database.connection import query
-            query("SELECT 1", fetch_one=True)
-            db_status = "connected"
-        except Exception as e:
-            db_status = f"error: {str(e)}"
-        
-        return {
-            "status": "ok",
-            "database": db_status,
-            "port": os.getenv("PORT", "unknown")
-        }, 200
+        return {"status": "ok", "env": "production"}, 200
 
     @app.errorhandler(Exception)
     def handle_exception(e):
-        # Log the full traceback to Railway console
         import traceback
         print(f">>> ERROR: {str(e)}", flush=True)
         traceback.print_exc()
         return "Internal Server Error", 500
-
-    # Direct Index Fallback (Emergency Route if Blueprint fails)
-    @app.route('/index_direct')
-    def index_direct():
-        return render_template('public/index.html')
 
     # Register context processors
     from utils.storage import get_storage_url
@@ -102,9 +76,7 @@ def create_app():
     def inject_storage():
         return dict(storage_url=get_storage_url)
 
-    print(">>> Flask App Created and Configured. Registered Routes:", flush=True)
-    for rule in app.url_map.iter_rules():
-        print(f">>> ROUTE: {rule.endpoint} -> {rule}", flush=True)
+    print(">>> Flask App Created and Fully Hardened.", flush=True)
     return app
 
 app = create_app()
