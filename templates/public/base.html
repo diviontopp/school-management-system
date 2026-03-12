@@ -252,16 +252,24 @@
         <div class="container nav-container">
             <a href="{{ url_for('public.index') }}" class="nav-brand">DBX Egmore.</a>
 
-            <ul class="nav-links">
-                <li><a href="{{ url_for('public.index') }}">Home</a></li>
-                <li><a href="{{ url_for('public.admissions') }}">Admissions</a></li>
-                <li><a href="{{ url_for('public.gallery') }}">Gallery</a></li>
-                <li><a href="{{ url_for('public.contact') }}">Contact</a></li>
-            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-            <div class="nav-actions">
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Portal Login</a>
-                <a href="{{ url_for('public.admissions') }}" class="btn btn-primary">Apply Now</a>
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('public.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('public.admissions') }}">Admissions</a></li>
+                    <li><a href="{{ url_for('public.gallery') }}">Gallery</a></li>
+                    <li><a href="{{ url_for('public.contact') }}">Contact</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Portal Login</a>
+                    <a href="{{ url_for('public.admissions') }}" class="btn btn-primary">Apply Now</a>
+                </div>
             </div>
         </div>
     </nav>

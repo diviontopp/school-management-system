@@ -36,7 +36,14 @@
         <div class="main-content">
             <!-- Header -->
             <header class="top-header">
-                <div class="header-title">
+                <div class="header-title" style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="sidebar-toggle" aria-label="Toggle Sidebar" style="display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--text-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
                     {% block header_title %}Welcome{% endblock %}
                 </div>
 
@@ -57,6 +64,29 @@
         </div>
     </div>
 
+    <div class="sidebar-overlay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const overlay = document.querySelector('.sidebar-overlay');
+
+            if (sidebarToggle && sidebar && overlay) {
+                const closeSidebar = () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                };
+
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.add('active');
+                    overlay.classList.add('active');
+                });
+
+                overlay.addEventListener('click', closeSidebar);
+            }
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 

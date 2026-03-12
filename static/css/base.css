@@ -208,3 +208,93 @@ ul {
 .btn-primary:hover {
     background-color: var(--accent-hover);
 }
+
+/* =========================================================================
+   Responsive Design (Mobile-First)
+========================================================================= */
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: var(--shadow-lg);
+        height: 100%;
+        max-width: 80vw;
+        padding-top: calc(24px + env(safe-area-inset-top));
+        padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100vw;
+    }
+
+    .top-header {
+        padding: 0 16px;
+        height: 60px;
+    }
+
+    .sidebar-toggle {
+        display: block !important;
+    }
+
+    .content-area {
+        padding: 16px;
+    }
+    
+    .search-bar {
+        min-width: 120px;
+        width: 100%;
+        font-size: 16px; /* Prevents Safari zoom on iOS */
+    }
+
+    .header-actions {
+        gap: 12px;
+    }
+
+    .brand {
+        padding-top: 10px;
+    }
+
+    .card {
+        padding: 16px;
+        overflow-x: auto; /* Prevent blowout from large tables */
+    }
+
+    /* Target generic inputs to prevent mobile zoom */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+    
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

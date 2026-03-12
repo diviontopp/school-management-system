@@ -24,7 +24,44 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.ticker.lagSmoothing(0);
 
 
-    // --- 2. Navbar Scroll Effect ---
+    // --- 2. Mobile Navigation Toggle ---
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navContent = document.querySelector('.nav-content');
+
+    if (mobileMenuToggle && navContent) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuToggle.classList.toggle('active');
+            navContent.classList.toggle('active');
+            
+            // Toggle body scroll
+            if (navContent.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navContent.classList.contains('active') && !navContent.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                mobileMenuToggle.classList.remove('active');
+                navContent.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close menu on link click
+        const navLinks = navContent.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuToggle.classList.remove('active');
+                navContent.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+
+    // --- 3. Navbar Scroll Effect ---
     const navbar = document.querySelector('.navbar');
     if (navbar) {
         window.addEventListener('scroll', () => {
