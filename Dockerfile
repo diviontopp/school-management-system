@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 8080
 
 # Start the application: Init DB then run Gunicorn on dynamic $PORT
-# Using gthread for concurrent health checks and wsgi:app for clean entry
+# Using wsgi:app for the clean entry point
 CMD python init_db.py && gunicorn \
     --bind 0.0.0.0:$PORT \
     --workers 2 \
