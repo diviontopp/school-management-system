@@ -25,6 +25,7 @@ def get_storage_url(filename, folder='images'):
     If STORAGE_TYPE is 's3', it returns the S3 URL.
     Otherwise, it returns the local static URL.
     """
+    original_filename = filename
     # If filename starts with static/, remove it as url_for/S3 will handle prefixes
     if filename.startswith('static/'):
         filename = filename.replace('static/', '', 1)
@@ -49,8 +50,14 @@ def get_storage_url(filename, folder='images'):
             
     # Fallback to local static serving
     if '/' in filename or '.' in filename:
-        return url_for('static', filename=filename)
-    return url_for('static', filename=f"{folder}/{filename}")
+        res = url_for('static', filename=filename)
+    else:
+        res = url_for('static', filename=f"{folder}/{filename}")
+    
+    # Logging for production debugging
+    if current_app.config.get('DEBUG') or os.getenv('RAILWAY_ENVIRONMENT'):
+        print(f">>> STORAGE_URL: {original_filename} -> {res}", flush=True)
+    return res
 
 def upload_to_storage(file, filename):
     """

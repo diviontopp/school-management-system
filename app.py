@@ -11,31 +11,47 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 def create_app():
     print(">>> Creating Flask App...", flush=True)
-    
-    base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Flask(__name__, 
-                template_folder=os.path.join(base_dir, 'templates'),
-                static_folder=os.path.join(base_dir, 'static'),
+                template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), 'templates')),
+                static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')),
                 static_url_path='/static')
     
-    # ── Middleware ──────────────────────────────────────────
-    # Trust Railway Edge Proxy (1 layer)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
-    
-    # WhiteNoise for static files
-    from whitenoise import WhiteNoise
-    app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.join(base_dir, 'static/'), prefix='/static/')
-
+    # ── Configuration ──────────────────────────────────────
     app.config.from_object(Config)
+    base_dir = os.path.abspath(os.path.dirname(__file__))
 
-    # Talisman with relaxed settings for debugging
+    # ── Blueprint Registration (Early) ──────────────────────
+    from routes.public import public_bp
+    from routes.auth import auth_bp
+    from routes.student import student_bp
+    from routes.teacher import teacher_bp
+    from routes.parent import parent_bp
+    from routes.admin import admin_bp
+    from routes.library import library_bp
+    from routes.clubs import clubs_bp
+
+    # Explicitly register PUBLIC first to ensure / is captured correctly
+    app.register_blueprint(public_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(student_bp, url_prefix='/student')
+    app.register_blueprint(teacher_bp, url_prefix='/teacher')
+    app.register_blueprint(parent_bp, url_prefix='/parent')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(library_bp, url_prefix='/library')
+    app.register_blueprint(clubs_bp, url_prefix='/clubs')
+
+    # ── Middleware ──────────────────────────────────────────
+    # Trust Railway Edge Proxy
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
+    
+    # Relaxed Talisman for Railway
     csp = {
         'default-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", "*"],
         'img-src': ["'self'", "data:", "https:", "*"]
     }
     Talisman(app, 
              content_security_policy=csp, 
-             force_https=False, # Let Railway Edge Proxy handle HTTPS enforcement
+             force_https=False, 
              session_cookie_secure=False
     )
 
@@ -75,27 +91,10 @@ def create_app():
         traceback.print_exc()
         return "Internal Server Error", 500
 
-    # ── Initialization ────────────────────────────────────
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-    # Register blueprints
-    from routes.public import public_bp
-    from routes.auth import auth_bp
-    from routes.student import student_bp
-    from routes.teacher import teacher_bp
-    from routes.parent import parent_bp
-    from routes.admin import admin_bp
-    from routes.library import library_bp
-    from routes.clubs import clubs_bp
-
-    app.register_blueprint(public_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(student_bp, url_prefix='/student')
-    app.register_blueprint(teacher_bp, url_prefix='/teacher')
-    app.register_blueprint(parent_bp, url_prefix='/parent')
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(library_bp, url_prefix='/library')
-    app.register_blueprint(clubs_bp, url_prefix='/clubs')
+    # Direct Index Fallback (Emergency Route if Blueprint fails)
+    @app.route('/index_direct')
+    def index_direct():
+        return render_template('public/index.html')
 
     # Register context processors
     from utils.storage import get_storage_url
