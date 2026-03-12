@@ -16,8 +16,16 @@ COPY . .
 # Expose 8080 as a hint for Railway, though start.sh binds to $PORT
 EXPOSE 8080
 
-# Ensure start script is executable
-RUN chmod +x start.sh
-
-# Start the application using our robust durable script
-CMD ["./start.sh"]
+# Start the application: Init DB then run Gunicorn on dynamic $PORT
+# Using gthread for concurrent health checks and wsgi:app for clean entry
+CMD python init_db.py && gunicorn \
+    --bind 0.0.0.0:$PORT \
+    --workers 2 \
+    --worker-class gthread \
+    --threads 4 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile - \
+    --forwarded-allow-ips "*" \
+    --log-level debug \
+    wsgi:app

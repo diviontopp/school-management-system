@@ -46,14 +46,7 @@ def create_app():
         print(f">>> REQUEST: {request.method} {request.path}", flush=True)
 
     # ── Routes ────────────────────────────────────────────
-    @app.route('/')
-    def home():
-        # Satisfies checklist item 4 while allowing site to load if blueprint fails
-        try:
-            return render_template('public/index.html')
-        except Exception:
-            return "School Portal Server is running (Template load failed)", 200
-
+    # ── Routes ────────────────────────────────────────────
     @app.route('/ping')
     def ping():
         return "pong", 200
