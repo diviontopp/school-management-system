@@ -469,7 +469,7 @@ h6 {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 3rem;
+        gap: 2rem;
         padding: calc(2rem + env(safe-area-inset-top)) 2rem calc(2rem + env(safe-area-inset-bottom));
         transform: translateX(100%);
         transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -484,11 +484,11 @@ h6 {
     .nav-links {
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        gap: 1.5rem;
     }
 
     .nav-links a {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
 
     .nav-actions {
