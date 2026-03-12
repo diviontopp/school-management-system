@@ -99,6 +99,11 @@ def create_app():
             "cwd": os.getcwd()
         }
 
+    @app.route('/test-static-direct')
+    def test_static_direct():
+        return send_from_directory(os.path.join(app.root_path, 'static/images/dbx_gallery'),
+                                   'gallery_img_15.jpg')
+
     @app.route('/favicon.ico')
     def favicon():
         return send_from_directory(os.path.join(app.root_path, 'static/images'),
