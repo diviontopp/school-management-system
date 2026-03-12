@@ -54,9 +54,15 @@ def get_storage_url(filename, folder='images'):
     else:
         res = url_for('static', filename=f"{folder}/{filename}")
     
-    # Logging for production debugging
+    # Production Debugging: Check if file actually exists in the static folder
     if current_app.config.get('DEBUG') or os.getenv('RAILWAY_ENVIRONMENT'):
         print(f">>> STORAGE_URL: {original_filename} -> {res}", flush=True)
+        
+        # Verify filesystem existence to catch deployment issues
+        static_file_path = os.path.join(current_app.static_folder, filename)
+        if not os.path.exists(static_file_path):
+            print(f">>> CRITICAL: Static file NOT FOUND on disk: {static_file_path}", flush=True)
+    
     return res
 
 def upload_to_storage(file, filename):

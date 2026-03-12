@@ -42,11 +42,19 @@ def create_app():
     app.register_blueprint(clubs_bp, url_prefix='/clubs')
 
     # ── Middleware ──────────────────────────────────────────
-    # Trust Railway Edge Proxy
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
+    print(f">>> DEBUG: Static Folder: {app.static_folder}", flush=True)
+    print(f">>> DEBUG: Static URL Path: {app.static_url_path}", flush=True)
     
     # WhiteNoise for static files (CRITICAL for Gunicorn!)
-    app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.join(base_dir, 'static/'), prefix='/static/')
+    # Should wrap the app before ProxyFix to ensure it handles static files first
+    # Using autorefresh=True for debugging purposes
+    app.wsgi_app = WhiteNoise(app.wsgi_app, 
+                             root=app.static_folder, 
+                             prefix=app.static_url_path + '/',
+                             autorefresh=True)
+    
+    # Trust Railway Edge Proxy
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
     # ── Logging ───────────────────────────────────────────
     @app.before_request
@@ -54,14 +62,27 @@ def create_app():
         print(f">>> REQUEST: {request.method} {request.path}", flush=True)
 
     # ── Fail-safe Core Routes ─────────────────────────────
-    @app.route('/')
-    def root_landing_page():
-        """Bypasses blueprint to ensure landing page always works"""
-        return render_template('public/index.html')
+    # The '/' route is already handled by public_bp.index
+    # We keep a health check but remove the redundant root route to avoid conflicts
 
     @app.route('/health')
     def health():
         return {"status": "ok", "env": "production"}, 200
+
+    @app.route('/debug-static')
+    def debug_static():
+        target = 'images/dbx_gallery/gallery_img_15.jpg'
+        full_path = os.path.join(app.static_folder, target)
+        exists = os.path.exists(full_path)
+        contents = os.listdir(app.static_folder) if os.path.exists(app.static_folder) else "DIR_NOT_FOUND"
+        return {
+            "target": target,
+            "static_folder": app.static_folder,
+            "full_path": full_path,
+            "exists": exists,
+            "static_contents": contents[:10], # First 10 items
+            "cwd": os.getcwd()
+        }
 
     @app.route('/favicon.ico')
     def favicon():
