@@ -32,7 +32,7 @@ def get_storage_url(filename, folder='images'):
 
     # Hybrid Logic: Assets in dbx, dbx_gallery or gallery_dynamic are theme files.
     # We prioritize local static for these to ensure UI works out-of-the-box.
-    theme_folders = ['images/dbx', 'images/dbx_gallery', 'images/gallery_dynamic', 'assets/']
+    theme_folders = ['images/dbx', 'images/dbx_gallery', 'images/gallery_dynamic', 'assets/', 'images/icon.jpg']
     is_theme_asset = any(filename.startswith(folder) for folder in theme_folders)
 
     if current_app.config.get('STORAGE_TYPE') == 's3' and not is_theme_asset:

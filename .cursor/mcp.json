@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "railway": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@teammaestro/railway-mcp"
+      ],
+      "env": {
+        "RAILWAY_API_TOKEN": "9168ac13-01c5-4fbe-8a8e-1f46e07b4f67"
+      }
+    }
+  }
+}
