@@ -29,16 +29,17 @@ def get_storage_url(filename, folder='images'):
     if filename.startswith('static/'):
         filename = filename.replace('static/', '', 1)
 
-    if current_app.config.get('STORAGE_TYPE') == 's3':
+    # Hybrid Logic: Assets in dbx_gallery or gallery_dynamic are often theme files.
+    # We prioritize local static for these to ensure UI works out-of-the-box.
+    theme_folders = ['images/dbx_gallery', 'images/gallery_dynamic', 'assets/']
+    is_theme_asset = any(filename.startswith(folder) for folder in theme_folders)
+
+    if current_app.config.get('STORAGE_TYPE') == 's3' and not is_theme_asset:
         bucket = current_app.config.get('S3_BUCKET')
         endpoint = current_app.config.get('S3_ENDPOINT')
         
-        # In S3, we typically store everything in a flat or structured way.
-        # We'll assume the filename passed in matches the S3 key structure.
-        
         # If endpoint is provided (Railway/Minio), we use it to build the URL
         if endpoint:
-            # Clean endpoint (remove trailing slash)
             base_url = endpoint.rstrip('/')
             return f"{base_url}/{bucket}/{filename}"
         else:
@@ -47,8 +48,7 @@ def get_storage_url(filename, folder='images'):
             return f"https://{bucket}.s3.{region}.amazonaws.com/{filename}"
             
     # Fallback to local static serving
-    # If the filename already has a path (like 'images/dbx/img.jpg'), we don't need folder prefix
-    if '/' in filename:
+    if '/' in filename or '.' in filename:
         return url_for('static', filename=filename)
     return url_for('static', filename=f"{folder}/{filename}")
 

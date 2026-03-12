@@ -103,7 +103,9 @@ def create_app():
     def inject_storage():
         return dict(storage_url=get_storage_url)
 
-    print(">>> Flask App Created and Configured.", flush=True)
+    print(">>> Flask App Created and Configured. Registered Routes:", flush=True)
+    for rule in app.url_map.iter_rules():
+        print(f">>> ROUTE: {rule.endpoint} -> {rule}", flush=True)
     return app
 
 app = create_app()
