@@ -4,7 +4,7 @@ import sys
 from flask import Flask, render_template, request, send_from_directory
 from config import Config
 print(f">>> BOOT: Config loaded. MYSQL_HOST={'set' if Config.MYSQL_HOST else 'None'}...", flush=True)
-from flask_talisman import Talisman
+# Talisman removed for now to simplify boot debugging
 from database.connection import initialize_database
 
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -23,6 +23,7 @@ def create_app():
     app.config.from_object(Config)
 
     # ── Blueprint Registration (Top Priority) ──────────────
+    print(">>> BOOT: Registering Blueprints...", flush=True)
     from routes.public import public_bp
     from routes.auth import auth_bp
     from routes.student import student_bp
@@ -40,21 +41,23 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(library_bp, url_prefix='/library')
     app.register_blueprint(clubs_bp, url_prefix='/clubs')
+    print(">>> BOOT: Blueprints Registered.", flush=True)
 
     # ── Middleware ──────────────────────────────────────────
     print(f">>> DEBUG: Static Folder: {app.static_folder}", flush=True)
     print(f">>> DEBUG: Static URL Path: {app.static_url_path}", flush=True)
     
     # WhiteNoise for static files (CRITICAL for Gunicorn!)
-    # Should wrap the app before ProxyFix to ensure it handles static files first
-    # Using autorefresh=True for debugging purposes
+    print(">>> BOOT: Initializing WhiteNoise...", flush=True)
     app.wsgi_app = WhiteNoise(app.wsgi_app, 
                              root=app.static_folder, 
                              prefix=app.static_url_path + '/',
                              autorefresh=True)
     
     # Trust Railway Edge Proxy
+    print(">>> BOOT: Initializing ProxyFix...", flush=True)
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
+    print(">>> BOOT: Middleware Initialized.", flush=True)
 
     # ── Logging ───────────────────────────────────────────
     @app.before_request
