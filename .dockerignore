@@ -1,0 +1,16 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git/
+.github/
+.vscode/
+.DS_Store
+.env
+.env.local
+.gemini/
+.gsd/
+AGENTS.md
+requirements.txt.bak

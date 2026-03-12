@@ -1,31 +1,31 @@
 FROM python:3.11-slim
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV PORT 8080
+
 WORKDIR /code
 
-# Install system dependencies for MySQL
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./requirements.txt /code/requirements.txt
-WORKDIR /code
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
 COPY . .
 
-# Expose 8080 as a hint for Railway, though start.sh binds to $PORT
+# Ensure start.sh is executable
+RUN chmod +x start.sh
+
+# Expose port
 EXPOSE 8080
 
-# Start the application: Init DB then run Gunicorn on dynamic $PORT
-# Using wsgi:app for the clean entry point
-CMD python init_db.py && gunicorn \
-    --bind 0.0.0.0:$PORT \
-    --workers 2 \
-    --worker-class gthread \
-    --threads 4 \
-    --timeout 120 \
-    --access-logfile - \
-    --error-logfile - \
-    --forwarded-allow-ips "*" \
-    --log-level debug \
-    wsgi:app
+# Use start.sh as the entry point
+CMD ["/bin/bash", "start.sh"]
