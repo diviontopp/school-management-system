@@ -1,7 +1,7 @@
 print(">>> BOOT: app.py is starting imports...", flush=True)
 import os
 import sys
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from config import Config
 print(f">>> BOOT: Config loaded. MYSQL_HOST={'set' if Config.MYSQL_HOST else 'None'}...", flush=True)
 from flask_talisman import Talisman
@@ -63,8 +63,18 @@ def create_app():
     def health():
         return {"status": "ok", "env": "production"}, 200
 
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(os.path.join(app.root_path, 'static/images'),
+                                   'icon.jpg', mimetype='image/vnd.microsoft.icon')
+
+    from werkzeug.exceptions import HTTPException
     @app.errorhandler(Exception)
     def handle_exception(e):
+        """Pass through HTTP errors like 404, log only real crashes"""
+        if isinstance(e, HTTPException):
+            return e
+            
         import traceback
         print(f">>> ERROR: {str(e)}", flush=True)
         traceback.print_exc()
