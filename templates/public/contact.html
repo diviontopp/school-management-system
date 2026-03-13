@@ -170,16 +170,7 @@
 
         <!-- Rapid Render Form -->
         <div class="contact-form-wrapper fade-up">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}"
-                style="margin-bottom: 2rem; padding: 1rem; border-radius: 8px; font-weight: 600; text-align: center; border: 1px solid rgba(0,0,0,0.1); background: #e0f2f1; color: #004d40;">
-                {{ message }}
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
+
 
             <form action="{{ url_for('public.submit_contact') }}" method="POST">
                 <div class="form-group">

@@ -35,7 +35,7 @@
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 100dvh;
             background: #fafafa;
             z-index: 99999;
             display: flex;
@@ -231,6 +231,30 @@
     <!-- Subtle Noise Texture Overlay for premium feel -->
     <div class="noise-overlay"></div>
 
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="toast-container"></div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="flash-data" style="display: none;" 
+             data-messages='[{% for category, message in messages %}{"category": "{{ category | safe }}", "message": "{{ message | safe }}"}{% if not loop.last %},{% endif %}{% endfor %}]'>
+        </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const dataEl = document.getElementById('flash-data');
+            if (dataEl) {
+              try {
+                const messages = JSON.parse(dataEl.getAttribute('data-messages'));
+                messages.forEach(msg => window.showToast(msg.message, msg.category));
+              } catch (e) {
+                console.error("Error parsing flash messages", e);
+              }
+            }
+          });
+        </script>
+      {% endif %}
+    {% endwith %}
+
     <!-- Portal Sidebar -->
     <div class="portal-sidebar">
         <a href="{{ url_for('student.dashboard') }}" class="sidebar-item">
@@ -295,11 +319,11 @@
                         <p><i>Virtus in Arduis</i> — Virtue lies in Hardship. Fostering excellence and innovation in
                             education.</p>
                         <div style="display: flex; gap: 1rem;">
-                            <a href="#" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
+                            <a href="#" aria-label="Follow us on Twitter" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
                                     class="fab fa-twitter"></i></a>
-                            <a href="#" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
+                            <a href="#" aria-label="Follow us on Instagram" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
                                     class="fab fa-instagram"></i></a>
-                            <a href="#" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
+                            <a href="#" aria-label="Join our LinkedIn community" style="color: white; opacity: 0.8; font-size: 1.2rem;"><i
                                     class="fab fa-linkedin"></i></a>
                         </div>
                     </div>

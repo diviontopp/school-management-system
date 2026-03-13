@@ -142,5 +142,88 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- 4. Form Submission Loading States ---
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', () => {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Processing...`;
+                
+                // Safety timeout if navigation doesn't happen (e.g. invalid form)
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                }, 10000);
+            }
+        });
+    });
+
+    // --- 5. Service Worker Registration ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').then(registration => {
+                console.log('SW registered: ', registration);
+            }).catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+        });
+    }
+
 });
-;
+
+// --- 5. Global Toast Notification System ---
+window.showToast = function(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    // Icon mapping
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        danger: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    const icon = icons[type] || icons.info;
+
+    toast.innerHTML = `
+        <div class="toast-icon"><i class="fas ${icon}"></i></div>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" aria-label="Close message"><i class="fas fa-times"></i></button>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+
+    // Auto dismiss after 5 seconds
+    const dismissTimeout = setTimeout(() => {
+        hideToast(toast);
+    }, 5000);
+
+    // Manual close
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+        clearTimeout(dismissTimeout);
+        hideToast(toast);
+    });
+
+    function hideToast(el) {
+        el.classList.remove('show');
+        el.addEventListener('transitionend', () => {
+            el.remove();
+        });
+    }
+};

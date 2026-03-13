@@ -109,6 +109,11 @@ def create_app():
         return send_from_directory(os.path.join(app.root_path, 'static/images'),
                                    'icon.jpg', mimetype='image/vnd.microsoft.icon')
 
+    @app.route('/sw.js')
+    def service_worker():
+        return send_from_directory(os.path.join(app.root_path, 'static/js'),
+                                   'sw.js', mimetype='application/javascript')
+
     from werkzeug.exceptions import HTTPException
     @app.errorhandler(Exception)
     def handle_exception(e):
