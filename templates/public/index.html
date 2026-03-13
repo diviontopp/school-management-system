@@ -533,7 +533,7 @@
 <!-- ===== HERO ===== -->
 <section class="hero">
     <div class="hero-bg" id="heroImage">
-        <img src="{{ storage_url('images/dbx/img_4.jpg') }}" alt="Don Bosco School of Excellence Campus">
+        <img class="img-parallax" style="height: 120%; top: -10%; position: relative;" src="{{ storage_url('images/dbx/img_4.jpg') }}" alt="Don Bosco School of Excellence Campus">
     </div>
     <div class="hero-gradient"></div>
     <div class="hero-decorative-text" id="floatingText">EXCELLENCE</div>
@@ -870,20 +870,7 @@
             });
         }
 
-        // --- 3. Generic fade-up animations ---
-        gsap.utils.toArray('.fade-up').forEach(el => {
-            gsap.to(el, {
-                scrollTrigger: {
-                    trigger: el,
-                    start: 'top 88%',
-                    toggleActions: 'play none none none'
-                },
-                y: 0,
-                opacity: 1,
-                duration: 0.7,
-                ease: 'power2.out'
-            });
-        });
+        // --- 3. Generic fade-up animations now handled by public.js via ScrollTrigger.batch ---
     });
 </script>
 {% endblock %}

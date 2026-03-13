@@ -76,20 +76,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3. Global GSAP Animations ---
     gsap.registerPlugin(ScrollTrigger);
 
-    // Fade Up Elements
-    const fadeUpElements = document.querySelectorAll('.fade-up');
-    fadeUpElements.forEach((el) => {
-        gsap.to(el, {
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse'
-            },
+    // Fade Up Elements (Batched for staggered entrance)
+    ScrollTrigger.batch(".fade-up", {
+        interval: 0.1, // time window for batching
+        batchMax: 6,   // max elements per batch
+        onEnter: batch => gsap.to(batch, {
             y: 0,
             opacity: 1,
-            duration: 1,
-            ease: 'power3.out'
-        });
+            duration: 0.8,
+            ease: "power3.out", // Smooth cinematic ease
+            stagger: 0.15,
+            overwrite: true
+        }),
+        start: 'top 85%',
+        once: true // Only animate once to avoid fatigue
+    });
+
+    // Subtle Parallax Effects
+    const parallaxImages = document.querySelectorAll('.img-parallax');
+    parallaxImages.forEach((img) => {
+        gsap.fromTo(img, 
+            { y: '-10%' },
+            { 
+                y: '10%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: img.parentElement,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            }
+        );
     });
 
     // View Timeline Image Box shadow visibility fix
@@ -125,3 +143,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+;

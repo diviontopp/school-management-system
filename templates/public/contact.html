@@ -138,12 +138,12 @@
 {% block content %}
 <section class="contact-section">
     <div class="container contact-container">
-        <div class="contact-info fade-up">
-            <h1>Let's start a conversation.</h1>
-            <p>Whether you're a prospective parent, seeking partnership, or just have a question, we're here to help.
+        <div class="contact-info">
+            <h1 class="fade-up">Let's start a conversation.</h1>
+            <p class="fade-up">Whether you're a prospective parent, seeking partnership, or just have a question, we're here to help.
             </p>
 
-            <div class="info-item">
+            <div class="info-item fade-up">
                 <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
                 <div class="info-content">
                     <h4>Visit Campus</h4>
@@ -151,7 +151,7 @@
                 </div>
             </div>
 
-            <div class="info-item" style="transition-delay: 0.1s;">
+            <div class="info-item fade-up">
                 <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
                 <div class="info-content">
                     <h4>Call Us</h4>
@@ -159,7 +159,7 @@
                 </div>
             </div>
 
-            <div class="info-item" style="transition-delay: 0.2s;">
+            <div class="info-item fade-up">
                 <div class="info-icon"><i class="fas fa-envelope"></i></div>
                 <div class="info-content">
                     <h4>Email Us</h4>
@@ -169,7 +169,7 @@
         </div>
 
         <!-- Rapid Render Form -->
-        <div class="contact-form-wrapper fade-up" style="transition-delay: 0s;">
+        <div class="contact-form-wrapper fade-up">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}

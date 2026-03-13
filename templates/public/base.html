@@ -381,43 +381,32 @@
                 let targetProgress = 0;
 
                 if (isLoaded) {
-                    // If loaded, jump to 100% when minimum duration is met
-                    if (elapsed >= minDuration) {
-                        targetProgress = 100;
-                    } else {
-                        // Keep easing towards 99% until time is up
-                        targetProgress = Math.min(99, (elapsed / maxSimulatedTime) * 100);
-                    }
+                    targetProgress = 100;
                 } else {
                     // Simulate loading up to 90% if the actual window load hasn't fired yet
-                    targetProgress = Math.min(90, (elapsed / maxSimulatedTime) * 100);
+                    targetProgress = Math.min(90, (elapsed / 4000) * 100);
                 }
 
-                // Smooth ease towards target
-                currentProgress += (targetProgress - currentProgress) * 0.1;
-
-                // Snap to 100 if we are close and allowed to finish
-                if (isLoaded && elapsed >= minDuration && targetProgress === 100 && currentProgress > 99) {
-                    currentProgress = 100;
-                }
+                // Faster ease towards target
+                currentProgress += (targetProgress - currentProgress) * 0.15;
 
                 // Update UI
                 if (counter) counter.innerText = Math.round(currentProgress);
                 if (bar) bar.style.width = currentProgress + '%';
 
                 // Check termination condition
-                if (currentProgress < 100) {
+                if (currentProgress < 99.5) {
                     animationFrameId = requestAnimationFrame(updateProgress);
                 } else {
                     // Finish animation
                     if (counter) counter.innerText = "100";
                     if (bar) bar.style.width = "100%";
 
-                    // Add slight delay before fading out to show 100%
+                    // Small buffer for 100% visibility
                     setTimeout(() => {
                         preloader.classList.add('fade-out');
                         document.body.style.overflow = '';
-                    }, 400);
+                    }, 200);
                 }
             }
 
@@ -428,11 +417,10 @@
                 isLoaded = true;
             }
 
-            window.addEventListener('load', function () {
-                if (!window.holdPreloader) {
-                    markLoaded();
-                }
-            });
+            window.addEventListener('load', markLoaded);
+
+            // High-priority catch for slow networks
+            setTimeout(markLoaded, 10000);
 
             // Global accessor for JS integrations
             window.dismissPreloader = markLoaded;

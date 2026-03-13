@@ -58,19 +58,7 @@
         border-radius: 10px;
     }
 
-    .timeline-item {
-        position: relative;
-        padding-left: 5rem;
-        margin-bottom: 4rem;
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .timeline-item.in-view {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    /* Animations managed by global GSAP in public.js via .fade-up */
 
     .timeline-marker {
         position: absolute;
@@ -639,7 +627,7 @@
         </div>
         <div class="premium-timeline-wrapper">
 
-            <div class="timeline-item timeline-animate">
+            <div class="timeline-item fade-up" style="position: relative; padding-left: 5rem; margin-bottom: 4rem;">
                 <div class="timeline-marker">1</div>
                 <div class="timeline-content">
                     <div class="timeline-header">
@@ -652,7 +640,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item timeline-animate">
+            <div class="timeline-item fade-up" style="position: relative; padding-left: 5rem; margin-bottom: 4rem;">
                 <div class="timeline-marker">2</div>
                 <div class="timeline-content">
                     <div class="timeline-header">
@@ -666,7 +654,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item timeline-animate">
+            <div class="timeline-item fade-up" style="position: relative; padding-left: 5rem; margin-bottom: 4rem;">
                 <div class="timeline-marker">3</div>
                 <div class="timeline-content">
                     <div class="timeline-header">
@@ -679,7 +667,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item timeline-animate">
+            <div class="timeline-item fade-up" style="position: relative; padding-left: 5rem; margin-bottom: 4rem;">
                 <div class="timeline-marker">4</div>
                 <div class="timeline-content">
                     <div class="timeline-header">
@@ -847,32 +835,32 @@
                 ready to ensure a smooth admission process.</p>
         </div>
         <div class="requirements-grid">
-            <div class="req-card">
+            <div class="req-card fade-up">
                 <div class="req-icon"><i class="fas fa-baby"></i></div>
                 <h4>Birth Certificate</h4>
                 <p>Original and photocopy of the child's birth certificate issued by the Municipal Corporation.</p>
             </div>
-            <div class="req-card">
+            <div class="req-card fade-up">
                 <div class="req-icon"><i class="fas fa-id-card"></i></div>
                 <h4>Aadhaar Card</h4>
                 <p>Aadhaar card of both the child and parent/guardian for identity verification.</p>
             </div>
-            <div class="req-card">
+            <div class="req-card fade-up">
                 <div class="req-icon"><i class="fas fa-home"></i></div>
                 <h4>Proof of Residence</h4>
                 <p>Current address proof such as utility bill, rental agreement, or bank statement.</p>
             </div>
-            <div class="req-card">
+            <div class="req-card fade-up">
                 <div class="req-icon"><i class="fas fa-graduation-cap"></i></div>
                 <h4>Previous Records</h4>
                 <p>Progress report or Transfer Certificate from the previously attended school (if applicable).</p>
             </div>
-            <div class="req-card">
+            <div class="req-card fade-up">
                 <div class="req-icon"><i class="fas fa-camera"></i></div>
                 <h4>Passport Photos</h4>
                 <p>Four recent passport-size photographs of the student on a white background.</p>
             </div>
-            <div class="req-card">
+            <div class="req-card fade-up">
                 <div class="req-icon"><i class="fas fa-file-medical"></i></div>
                 <h4>Health Records</h4>
                 <p>Immunisation records and health certificate from a certified medical practitioner.</p>
@@ -1007,18 +995,7 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Admissions Timeline Animation
-        const timelineItems = gsap.utils.toArray('.timeline-animate');
-        timelineItems.forEach((item, i) => {
-            gsap.to(item, {
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 80%",
-                    toggleClass: "in-view",
-                    once: true
-                }
-            });
-        });
+        // Global fade-up handles timeline items now
 
         // FAQ accordion
         document.querySelectorAll('.faq-question').forEach(q => {

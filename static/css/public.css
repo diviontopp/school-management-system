@@ -26,8 +26,14 @@
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
     --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
 
-    /* Transitions */
-    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Transitions & Easing from Animate Skill */
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    
+    --transition-smooth: all 0.4s var(--ease-out-expo);
+    --transition-fast: all 0.2s var(--ease-out-quart);
+    --transition-bounce-avoid: all 0.3s var(--ease-out-quint);
 }
 
 /* Reset & Base */
@@ -132,10 +138,15 @@ h6 {
     font-weight: 500;
     font-size: 1rem;
     border-radius: 100px;
-    transition: var(--transition-smooth);
+    transition: var(--transition-fast);
     cursor: pointer;
     border: none;
     outline: none;
+    will-change: transform;
+}
+
+.btn:active {
+    transform: scale(0.96) !important;
 }
 
 .btn-primary {
@@ -145,8 +156,8 @@ h6 {
 
 .btn-primary:hover {
     background-color: var(--clr-navy-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-soft);
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.12);
 }
 
 .btn-accent {
@@ -157,8 +168,8 @@ h6 {
 
 .btn-accent:hover {
     background-color: #c0ea24;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-soft);
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.12);
 }
 
 /* Sidebar for Portals */
@@ -235,6 +246,7 @@ h6 {
 .btn-outline:hover {
     background-color: var(--clr-navy);
     color: var(--clr-white);
+    transform: scale(1.03) translateY(-2px);
 }
 
 /* Noise Overlay */
@@ -447,7 +459,8 @@ h6 {
 /* Animations (Generic) */
 .fade-up {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
+    will-change: transform, opacity;
 }
 
 /* Responsive */
