@@ -27,13 +27,13 @@ INSERT IGNORE INTO subjects (name, code) VALUES
 -- ── Users: Admin ────────────────────────────────────────────
 -- password: admin123 (bcrypt — will be re-hashed by Flask on first run)
 INSERT IGNORE INTO users (role, username, password_hash) VALUES
-('admin', 'admin', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6');
+('admin', 'admin', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe');
 
 -- ── Users: Teachers ────────────────────────────────────────
 INSERT IGNORE INTO users (role, username, password_hash) VALUES
-('teacher', 'T001', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6'),
-('teacher', 'T002', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6'),
-('teacher', 'T003', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6');
+('teacher', 'T001', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
+('teacher', 'T002', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
+('teacher', 'T003', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe');
 
 -- ── Teachers ───────────────────────────────────────────────
 -- user_id 2 = T001, 3 = T002, 4 = T003
@@ -46,9 +46,9 @@ INSERT IGNORE INTO teachers (user_id, employee_id, first_name, last_name, depart
 -- password = birthdate DDMMYYYY (bcrypt of 01012010 etc.)
 -- Using same hash for demo — real passwords set when students are created
 INSERT IGNORE INTO users (role, username, password_hash) VALUES
-('student', 'ADM001', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6'),
-('student', 'ADM002', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6'),
-('student', 'ADM003', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6');
+('student', 'ADM001', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
+('student', 'ADM002', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
+('student', 'ADM003', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe');
 
 -- ── Students ───────────────────────────────────────────────
 -- user_id 5 = ADM001, 6 = ADM002, 7 = ADM003
@@ -59,7 +59,7 @@ INSERT IGNORE INTO students (user_id, admission_number, first_name, last_name, d
 
 -- ── Users: Parents ─────────────────────────────────────────
 INSERT IGNORE INTO users (role, username, password_hash) VALUES
-('parent', 'parent001', '$2b$12$A.PZ23VzWNr56jm0VH2u6.eHezD7Vs0nRGZmEH38dIfVKZlTbHGH6');
+('parent', 'parent001', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe');
 
 INSERT IGNORE INTO parents (user_id, first_name, last_name, phone, email, relationship) VALUES
 (8, 'Ramesh', 'Patel', '9876543210', 'ramesh.patel@gmail.com', 'Father');

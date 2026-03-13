@@ -1,18 +1,304 @@
-{% extends "base.html" %}
+{% extends "public/base.html" %}
 
-{% block title %}Login - Academia{% endblock %}
+{% block title %}Sign In - DBX Portal{% endblock %}
 
-{% block header_title %}Login{% endblock %}
+{% block extra_css %}
+<style>
+    .auth-section {
+        min-height: calc(100dvh - 80px); /* 80px is approx header height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-4) var(--space-2);
+        position: relative;
+        background: url('{{ storage_url("images/dbx/img_4.webp") }}') center/cover no-repeat;
+    }
+
+    /* Cinematic Dark Overlay */
+    .auth-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(8, 28, 51, 0.85) 0%, rgba(8, 28, 51, 0.6) 100%);
+        z-index: 1;
+    }
+
+    .auth-container {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .auth-card {
+        background: rgba(255, 255, 255, 0.05); /* Lighter Glass Background */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: var(--radius-xl);
+        padding: var(--space-4);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        color: var(--clr-white);
+        animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: var(--space-3);
+    }
+
+    .auth-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: var(--space-2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .auth-title {
+        font-family: var(--font-serif);
+        font-size: 2rem;
+        margin-bottom: var(--space-1);
+    }
+
+    .auth-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+    }
+
+    /* Role Tabs */
+    .role-tabs {
+        display: flex;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: var(--radius-md);
+        padding: 4px;
+        margin-bottom: var(--space-4);
+        gap: 2px;
+    }
+
+    .role-tab {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        padding: var(--space-1);
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: var(--radius-sm);
+        transition: all 0.3s ease;
+    }
+
+    .role-tab:hover {
+        color: var(--clr-white);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .role-tab.active {
+        background: var(--clr-white);
+        color: var(--clr-navy);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Styles */
+    .auth-form {
+        display: none;
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    .auth-form.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: var(--space-3);
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: var(--space-1);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+
+    .form-control {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--clr-white);
+        padding: 14px 16px;
+        border-radius: var(--radius-md);
+        font-family: var(--font-sans);
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--clr-gold);
+        box-shadow: 0 0 0 3px rgba(186, 140, 67, 0.2);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-login {
+        width: 100%;
+        background: var(--clr-gold);
+        color: var(--clr-white);
+        border: none;
+        padding: 16px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: var(--space-2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-login:hover {
+        background: #D4A352;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(186, 140, 67, 0.2);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: var(--space-3);
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .auth-footer a {
+        color: var(--clr-gold);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .auth-footer a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    @keyframes fadeUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.98); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 400px; margin: 0 auto; text-align: center;">
-    <h2>Sign In to Your Portal</h2>
-    <p>Select your role and enter your credentials.</p>
-    <br>
-    <form action="#" method="POST" style="display: flex; flex-direction: column; gap: 16px;">
-        <input type="text" placeholder="Username / ID" class="search-bar" style="width: 100%;">
-        <input type="password" placeholder="Password" class="search-bar" style="width: 100%;">
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
-    </form>
-</div>
+<section class="auth-section">
+    <div class="auth-container">
+        
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX Logo" class="auth-logo">
+                <h1 class="auth-title">Welcome Back</h1>
+                <p class="auth-subtitle">Select your portal role to sign in</p>
+            </div>
+
+            <div class="role-tabs" role="tablist">
+                <button type="button" class="role-tab active" role="tab" data-target="student-form" onclick="switchTab('student')" aria-selected="true">Student</button>
+                <button type="button" class="role-tab" role="tab" data-target="teacher-form" onclick="switchTab('teacher')" aria-selected="false">Teacher</button>
+                <button type="button" class="role-tab" role="tab" data-target="parent-form" onclick="switchTab('parent')" aria-selected="false">Parent</button>
+                <button type="button" class="role-tab" role="tab" data-target="admin-form" onclick="switchTab('admin')" aria-selected="false">Admin</button>
+            </div>
+
+            <!-- Preselect the form based on selected_role from Flask view -->
+            
+            {% set roles = [
+                {'id': 'student', 'label': 'Student', 'placeholder': 'Admission Number (e.g. ADM001)'},
+                {'id': 'teacher', 'label': 'Teacher', 'placeholder': 'Employee ID (e.g. T001)'},
+                {'id': 'parent', 'label': 'Parent', 'placeholder': 'Parent ID or Username'},
+                {'id': 'admin', 'label': 'Admin', 'placeholder': 'Admin Username'}
+            ] %}
+
+            {% for role in roles %}
+            <form id="{{ role.id }}-form" action="{{ url_for('auth.login') }}" method="POST" class="auth-form {% if selected_role == role.id or (not selected_role and loop.first) %}active{% endif %}">
+                <input type="hidden" name="role" value="{{ role.id }}">
+                
+                <div class="form-group">
+                    <label for="{{ role.id }}-username">{{ role.label }} ID / Username</label>
+                    <input type="text" id="{{ role.id }}-username" name="username" class="form-control" placeholder="{{ role.placeholder }}" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ role.id }}-password">Password</label>
+                    <input type="password" id="{{ role.id }}-password" name="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Sign In <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+            {% endfor %}
+            
+            <div class="auth-footer">
+                Having trouble signing in? <a href="{{ url_for('public.contact') }}">Contact Administration</a>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<script>
+    // Tab Switching Logic
+    function switchTab(roleId) {
+        // Update URL query parameter without reloading so sharing works correctly
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('role', roleId);
+        window.history.pushState({}, '', newUrl);
+
+        // Reset all tabs to inactive
+        document.querySelectorAll('.role-tab').forEach(tab => {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.auth-form').forEach(form => {
+            form.classList.remove('active');
+        });
+
+        // Activate the chosen tab
+        const activeTab = document.querySelector(`.role-tab[data-target="${roleId}-form"]`);
+        const activeForm = document.getElementById(`${roleId}-form`);
+        
+        if (activeTab && activeForm) {
+            activeTab.classList.add('active');
+            activeTab.setAttribute('aria-selected', 'true');
+            activeForm.classList.add('active');
+        }
+    }
+
+    // On load, apply pre-selected role if passed via Flask parameter
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selRole = urlParams.get('role');
+        if (selRole && ['student', 'teacher', 'parent', 'admin'].includes(selRole)) {
+            switchTab(selRole);
+        }
+    });
+</script>
 {% endblock %}
