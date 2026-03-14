@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Main Public Stylesheet -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}?v=2">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}?v=3">
 
     {% block extra_css %}{% endblock %}
     <style>
@@ -52,14 +52,11 @@
         }
 
         /* Subtle background grid */
+        /* Removed grid as it was mistaken for noise */
         .preloader-bg {
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridShift 8s linear infinite;
+            background: #fafafa;
         }
 
         @keyframes gridShift {
@@ -219,7 +216,7 @@
                 <div class="orbit-ring orbit-ring-2"></div>
                 <img src="{{ storage_url('images/icon.jpg') }}" alt="Loading..." class="preloader-icon">
             </div>
-            <div class="preloader-brand">DBX <span>Egmore</span>.</div>
+            <div class="preloader-brand">DBX <span>Egmore</span></div>
             <div class="preloader-tagline">Igniting Minds · Inspiring Excellence</div>
         </div>
         <div class="preloader-counter" id="preloaderCounter">0</div>
@@ -276,7 +273,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="{{ url_for('public.index') }}" class="nav-brand">DBX Egmore.</a>
+            <a href="{{ url_for('public.index') }}" class="nav-brand">DBX Egmore</a>
 
             <button class="mobile-menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span>
@@ -313,7 +310,7 @@
             <div class="container">
                 <div class="footer-grid">
                     <div class="footer-brand">
-                        <h3>DBX Egmore.</h3>
+                        <h3>DBX Egmore</h3>
                         <p><i>Virtus in Arduis</i> — Virtue lies in Hardship. Fostering excellence and innovation in
                             education.</p>
                         <div style="display: flex; gap: 1rem;">

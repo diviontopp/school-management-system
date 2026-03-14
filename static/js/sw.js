@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dbx-portal-v2';
+const CACHE_NAME = 'dbx-portal-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/static/css/public.css',
