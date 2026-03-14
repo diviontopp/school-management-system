@@ -4,309 +4,387 @@
 
 {% block extra_css %}
 <style>
-    .auth-section {
-        min-height: calc(100dvh - 80px); /* 80px is approx header height */
+    :root {
+        --auth-bg: rgba(15, 23, 42, 0.8); /* Translucent Slate-900 */
+        --auth-card: rgba(30, 41, 59, 0.5); /* Translucent Slate-800 */
+        --auth-accent: #6366f1;
+        --auth-accent-hover: #4f46e5;
+        --auth-text: #f8fafc;
+        --auth-muted: #94a3b8;
+        --auth-border: rgba(255, 255, 255, 0.1);
+    }
+
+    .auth-page {
+        background: #020617;
+        min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 100px var(--space-2) var(--space-4); /* Add top padding to clear header */
+        padding: 40px 20px;
+        font-family: var(--font-sans);
         position: relative;
+        overflow: hidden;
+    }
+
+    /* Animated Mesh Background */
+    .mesh-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .blob {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: var(--auth-accent);
+        filter: blur(120px);
+        border-radius: 50%;
+        opacity: 0.15;
+        animation: float 20s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    .blob-1 { top: -10%; left: -10%; background: #4f46e5; animation-delay: 0s; }
+    .blob-2 { bottom: -10%; right: -10%; background: #7c3aed; animation-delay: -5s; }
+    .blob-3 { top: 50%; left: 50%; width: 400px; height: 400px; background: #3b82f6; animation-delay: -10s; }
+
+    @keyframes float {
+        0% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(100px, 50px) scale(1.1); }
+        66% { transform: translate(-50px, 100px) scale(0.9); }
+        100% { transform: translate(0, 0) scale(1); }
+    }
+
+    .split-container {
+        display: flex;
+        width: 100%;
+        max-width: 1000px;
+        min-height: 600px;
+        background: var(--auth-bg);
+        border-radius: 28px;
+        overflow: hidden;
+        border: 1px solid var(--auth-border);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(24px); /* Glassmorphism */
+    }
+
+    /* Left Side */
+    .brand-side {
+        flex: 1;
+        position: relative;
+        display: none;
+        padding: 40px;
         background: url('{{ storage_url("images/dbx/img_4.webp") }}') center/cover no-repeat;
     }
 
-    /* Cinematic Dark Overlay */
-    .auth-section::before {
+    @media (min-width: 768px) {
+        .brand-side { display: flex; flex-direction: column; }
+    }
+
+    .brand-side::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(8, 28, 51, 0.85) 0%, rgba(8, 28, 51, 0.6) 100%);
-        z-index: 1;
+        background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.8));
     }
 
-    .auth-container {
+    .brand-content {
         position: relative;
-        z-index: 10000; /* Move above noise overlay (9999) */
-        width: 100%;
-        max-width: 420px; /* Made it smaller */
-    }
-
-    .auth-card {
-        background: rgba(15, 23, 42, 0.8); /* Grounded dark navy background instead of thin glass */
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: var(--radius-xl);
-        padding: var(--space-4); /* Restored padding for breathing room */
-        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
-        color: var(--clr-white);
-        animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    .auth-header {
-        text-align: center;
-        margin-bottom: var(--space-3);
-    }
-
-    .header-main {
+        z-index: 1;
+        height: 100%;
         display: flex;
-        flex-direction: column; /* Back to vertical for prestige */
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        margin-bottom: 20px;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
-    .auth-logo {
-        width: 72px; /* Increased prominence */
-        height: 72px;
-        border-radius: 50%;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-        border: 2px solid rgba(255, 255, 255, 0.1);
+    .brand-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .back-link {
+        color: white;
+        text-decoration: none;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 16px;
+        border-radius: 100px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        background: rgba(253, 224, 71, 0.15); /* Hint of DBX Gold */
+        border-color: rgba(253, 224, 71, 0.3);
+    }
+
+    .brand-footer h2 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        line-height: 1.1;
+        color: white;
+        margin-bottom: 24px;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .indicator-group {
+        display: flex;
+        gap: 12px;
+    }
+
+    .indicator {
+        width: 32px;
+        height: 3px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .indicator.active {
+        background: #fde047; /* DBX Gold accent */
+    }
+
+    /* Right Side */
+    .form-side {
+        flex: 1;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: transparent;
+    }
+
+    @media (min-width: 768px) {
+        .form-side { padding: 60px; }
+    }
+
+    .form-header {
+        margin-bottom: 32px;
     }
 
     .auth-title {
-        font-family: var(--font-serif);
-        font-size: 2.2rem;
-        color: var(--clr-white); /* Clean white for academic look */
-        letter-spacing: -0.01em;
-        margin: 0;
-        text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--auth-text);
+        letter-spacing: -0.03em;
+        margin-bottom: 8px;
     }
 
     .auth-subtitle {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.95rem;
+        color: var(--auth-muted);
+        font-size: 0.935rem;
     }
 
-    /* Role Tabs */
-    .role-tabs {
-        display: flex;
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: var(--radius-md);
-        padding: 4px;
-        margin-bottom: var(--space-4);
-        gap: 2px;
+    .auth-subtitle a {
+        color: var(--auth-accent);
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 4px;
     }
 
-    .role-tab {
-        flex: 1;
+    .auth-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        background: var(--auth-card);
+        padding: 5px;
+        border-radius: 14px;
+        margin: 32px 0;
+        border: 1px solid var(--auth-border);
+    }
+
+    .tab-trigger {
         background: transparent;
         border: none;
-        color: rgba(255, 255, 255, 0.5); /* Muted for contrast */
-        padding: var(--space-1);
-        font-size: 0.9rem;
-        font-weight: 500;
+        color: var(--auth-muted);
+        padding: 10px 4px;
+        font-size: 0.8125rem;
+        font-weight: 600;
         cursor: pointer;
-        border-radius: var(--radius-sm);
+        border-radius: 10px;
         transition: all 0.3s ease;
     }
 
-    .role-tab:hover {
-        color: var(--clr-white);
-        background: rgba(255, 255, 255, 0.05);
+    .tab-trigger:hover { color: var(--auth-text); }
+
+    .tab-trigger.active {
+        background: var(--auth-accent);
+        color: white;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
-    .role-tab.active {
-        background: var(--clr-white);
-        color: var(--clr-navy);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; animation: contentFade 0.4s ease-out; }
 
-    /* Form Styles */
-    .auth-form {
-        display: none;
-        animation: fadeIn 0.4s ease forwards;
-    }
+    .form-item { margin-bottom: 24px; }
 
-    .auth-form.active {
+    .form-label {
         display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--auth-text);
+        margin-bottom: 10px;
+        opacity: 0.9;
     }
 
-    .form-group {
-        margin-bottom: var(--space-3);
-        text-align: left;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: var(--space-1);
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.9rem;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-    }
-
-    .form-control {
+    .form-input {
         width: 100%;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: var(--clr-white);
-        padding: 14px 16px;
-        border-radius: var(--radius-md);
-        font-family: var(--font-sans);
+        background: var(--auth-card);
+        border: 1px solid var(--auth-border);
+        border-radius: 12px;
+        padding: 14px 18px;
+        color: var(--auth-text);
+        font-size: 0.935rem;
         transition: all 0.3s ease;
-        font-size: 1rem;
     }
 
-    .form-control:focus {
+    .form-input:focus {
         outline: none;
-        background: rgba(255, 255, 255, 0.15);
-        border-color: var(--clr-gold);
-        box-shadow: 0 0 0 3px rgba(186, 140, 67, 0.2);
+        border-color: var(--auth-accent);
+        background: rgba(30, 41, 59, 0.7);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
     }
 
-    .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-login {
+    .btn-submit {
         width: 100%;
-        background: var(--clr-gold);
-        color: var(--clr-white);
+        background: var(--auth-accent);
+        color: white;
         border: none;
         padding: 16px;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: var(--radius-md);
+        border-radius: 14px;
+        font-size: 0.935rem;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: var(--space-2);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        margin: 12px 0 24px;
     }
 
-    .btn-login:hover {
-        background: #D4A352;
+    .btn-submit:hover { 
+        background: var(--auth-accent-hover); 
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(186, 140, 67, 0.2);
+        box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
     }
 
-    .btn-login:active {
-        transform: translateY(0);
-    }
+    .btn-submit:active { transform: translateY(0); }
 
-    .auth-footer {
+    .help-link {
         text-align: center;
-        margin-top: var(--space-3);
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.875rem;
+        color: var(--auth-muted);
     }
-    
-    .auth-footer a {
-        color: var(--clr-gold);
+
+    .help-link a {
+        color: var(--auth-accent);
         text-decoration: none;
-        transition: color 0.3s;
+        font-weight: 600;
     }
 
-    .auth-footer a:hover {
-        color: #fff;
-        text-decoration: underline;
-    }
-
-    @keyframes fadeUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.98); }
-        to { opacity: 1; transform: scale(1); }
+    @keyframes contentFade {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="auth-section">
-    <div class="auth-container">
-        
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="header-main">
-                    <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX Logo" class="auth-logo">
-                    <h1 class="auth-title">Welcome Back</h1>
+<div class="auth-page">
+    <!-- Atmospheric Mesh Background -->
+    <div class="mesh-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="split-container">
+        <!-- Brand Side -->
+        <div class="brand-side">
+            <div class="brand-content">
+                <div class="brand-header">
+                    <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);">
+                    <a href="{{ url_for('public.index') }}" class="back-link">
+                        Back to website <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                <p class="auth-subtitle">Select your portal role to sign in</p>
+                
+                <div class="brand-footer">
+                    <h2>Inspiring Excellence,<br>Empowering Leaders</h2>
+                    <div class="indicator-group">
+                        <div class="indicator"></div>
+                        <div class="indicator active"></div>
+                        <div class="indicator"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side">
+            <div class="form-header">
+                <h1 class="auth-title">Welcome Back</h1>
+                <p class="auth-subtitle">Don't have an account? <a href="{{ url_for('public.contact') }}">Contact us</a></p>
             </div>
 
-            <div class="role-tabs" role="tablist">
-                <button type="button" class="role-tab active" role="tab" data-target="student-form" onclick="switchTab('student')" aria-selected="true">Student</button>
-                <button type="button" class="role-tab" role="tab" data-target="teacher-form" onclick="switchTab('teacher')" aria-selected="false">Teacher</button>
-                <button type="button" class="role-tab" role="tab" data-target="parent-form" onclick="switchTab('parent')" aria-selected="false">Parent</button>
-                <button type="button" class="role-tab" role="tab" data-target="admin-form" onclick="switchTab('admin')" aria-selected="false">Admin</button>
+            <div class="auth-tabs" role="tablist">
+                <button type="button" class="tab-trigger active" data-target="student-form" onclick="switchTab('student')">Student</button>
+                <button type="button" class="tab-trigger" data-target="teacher-form" onclick="switchTab('teacher')">Teacher</button>
+                <button type="button" class="tab-trigger" data-target="parent-form" onclick="switchTab('parent')">Parent</button>
+                <button type="button" class="tab-trigger" data-target="admin-form" onclick="switchTab('admin')">Admin</button>
             </div>
 
-            <!-- Preselect the form based on selected_role from Flask view -->
-            
-            {% set roles = [
-                {'id': 'student', 'label': 'Student', 'placeholder': 'Admission Number (e.g. ADM001)'},
-                {'id': 'teacher', 'label': 'Teacher', 'placeholder': 'Employee ID (e.g. T001)'},
+            {% set role_data = [
+                {'id': 'student', 'label': 'Student', 'placeholder': 'Admission Number'},
+                {'id': 'teacher', 'label': 'Teacher', 'placeholder': 'Employee ID'},
                 {'id': 'parent', 'label': 'Parent', 'placeholder': 'Parent ID or Username'},
                 {'id': 'admin', 'label': 'Admin', 'placeholder': 'Admin Username'}
             ] %}
 
-            {% for role in roles %}
-            <form id="{{ role.id }}-form" action="{{ url_for('auth.login') }}" method="POST" class="auth-form {% if selected_role == role.id or (not selected_role and loop.first) %}active{% endif %}">
+            {% for role in role_data %}
+            <form id="{{ role.id }}-form" action="{{ url_for('auth.login') }}" method="POST" class="auth-form {% if (selected_role == role.id) or (not selected_role and loop.first) %}active{% endif %}">
                 <input type="hidden" name="role" value="{{ role.id }}">
                 
-                <div class="form-group">
-                    <label for="{{ role.id }}-username">{{ role.label }} ID / Username</label>
-                    <input type="text" id="{{ role.id }}-username" name="username" class="form-control" placeholder="{{ role.placeholder }}" required autocomplete="username">
+                <div class="form-item">
+                    <label class="form-label">{{ role.label }} ID</label>
+                    <input type="text" name="username" class="form-input" placeholder="{{ role.placeholder }}" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="{{ role.id }}-password">Password</label>
-                    <input type="password" id="{{ role.id }}-password" name="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+                <div class="form-item">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-input" placeholder="Enter your password" required>
                 </div>
 
-                <button type="submit" class="btn-login">
-                    Sign In <i class="fas fa-arrow-right"></i>
-                </button>
+                <button type="submit" class="btn-submit">Sign In</button>
             </form>
             {% endfor %}
-            
-            <div class="auth-footer">
-                Having trouble signing in? <a href="{{ url_for('public.contact') }}">Contact Administration</a>
+
+            <div class="help-link">
+                Having trouble? <a href="{{ url_for('public.contact') }}">Get help</a>
             </div>
         </div>
-        
     </div>
-</section>
+</div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
-    // Tab Switching Logic
     function switchTab(roleId) {
-        // Update URL query parameter without reloading so sharing works correctly
         const newUrl = new URL(window.location);
         newUrl.searchParams.set('role', roleId);
         window.history.pushState({}, '', newUrl);
 
-        // Reset all tabs to inactive
-        document.querySelectorAll('.role-tab').forEach(tab => {
-            tab.classList.remove('active');
-            tab.setAttribute('aria-selected', 'false');
+        document.querySelectorAll('.tab-trigger').forEach(tab => {
+            tab.classList.toggle('active', tab.getAttribute('data-target') === roleId + '-form');
         });
         document.querySelectorAll('.auth-form').forEach(form => {
-            form.classList.remove('active');
+            form.classList.toggle('active', form.id === roleId + '-form');
         });
-
-        // Activate the chosen tab
-        const activeTab = document.querySelector(`.role-tab[data-target="${roleId}-form"]`);
-        const activeForm = document.getElementById(`${roleId}-form`);
-        
-        if (activeTab && activeForm) {
-            activeTab.classList.add('active');
-            activeTab.setAttribute('aria-selected', 'true');
-            activeForm.classList.add('active');
-        }
     }
 
-    // On load, apply pre-selected role if passed via Flask parameter
     document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const selRole = urlParams.get('role');
