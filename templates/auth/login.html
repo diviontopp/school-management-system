@@ -31,13 +31,13 @@
     }
 
     .auth-card {
-        background: rgba(255, 255, 255, 0.05); /* Lighter Glass Background */
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(15, 23, 42, 0.8); /* Grounded dark navy background instead of thin glass */
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: var(--radius-xl);
-        padding: var(--space-3); /* Reduced padding for smaller look */
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        padding: var(--space-4); /* Restored padding for breathing room */
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
         color: var(--clr-white);
         animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         opacity: 0;
@@ -51,25 +51,28 @@
 
     .header-main {
         display: flex;
+        flex-direction: column; /* Back to vertical for prestige */
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        margin-bottom: 8px;
+        gap: 16px;
+        margin-bottom: 20px;
     }
 
     .auth-logo {
-        width: 50px; /* Smaller for horizontal layout */
-        height: 50px;
+        width: 72px; /* Increased prominence */
+        height: 72px;
         border-radius: 50%;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        border: 2px solid rgba(255, 255, 255, 0.1);
     }
 
     .auth-title {
         font-family: var(--font-serif);
-        font-size: 1.75rem; /* Adjusted for horizontal layout */
-        color: var(--clr-gold);
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        font-size: 2.2rem;
+        color: var(--clr-white); /* Clean white for academic look */
+        letter-spacing: -0.01em;
         margin: 0;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
 
     .auth-subtitle {
@@ -91,7 +94,7 @@
         flex: 1;
         background: transparent;
         border: none;
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.5); /* Muted for contrast */
         padding: var(--space-1);
         font-size: 0.9rem;
         font-weight: 500;
@@ -102,7 +105,7 @@
 
     .role-tab:hover {
         color: var(--clr-white);
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .role-tab.active {
