@@ -35,7 +35,7 @@
 
     /* Timeline / Process */
     .timeline-section {
-        padding: 8rem 0;
+        padding: 8rem 0 4rem;
         background-color: var(--clr-offwhite);
     }
 
@@ -166,36 +166,173 @@
         font-size: 1.05rem;
     }
 
-    /* Premium Interactive Calendar */
+    /* Premium Interactive Calendar Rework (Quieter) */
     .calendar-section {
-        padding: 8rem 0;
+        padding: 4rem 0 8rem;
         background: var(--clr-navy);
         position: relative;
         overflow: hidden;
     }
 
-    .calendar-section::before {
-        content: '';
-        position: absolute;
-        top: -30%;
-        left: -10%;
-        width: 600px;
-        height: 600px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
-        pointer-events: none;
+    .calendar-grid-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 3rem;
+        margin-top: 4rem;
     }
 
-    .calendar-container {
-        max-width: 1000px;
-        margin: 4rem auto 0;
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+    .calendar-glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
+        border-radius: 32px;
+        padding: 3rem;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+    }
+
+    .calendar-month {
+        font-family: var(--font-serif);
+        font-size: 2.2rem;
+        color: white;
+        margin: 0;
+    }
+
+    .calendar-controls {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .calendar-controls button {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .calendar-controls button:hover {
+        background: var(--clr-gold);
+        border-color: var(--clr-gold);
+        color: var(--clr-navy);
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.75rem;
+    }
+
+    .calendar-day-header {
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: var(--clr-gold);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding-bottom: 1.5rem;
+    }
+
+    .calendar-day {
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .calendar-day.empty {
+        background: transparent;
+        border: none;
+    }
+
+    .calendar-day:not(.empty):hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-4px);
+    }
+
+    .day-number {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .event-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin-top: 8px;
+    }
+
+    .dot-holiday { background: var(--clr-gold); }
+    .dot-exam { background: #ef4444; }
+    .dot-ptm { background: var(--color-success); }
+
+    .upcoming-highlights {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .highlight-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 2rem;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        border-radius: 24px;
+        transition: transform 0.3s ease;
+    }
+
+    .highlight-card:hover {
+        transform: scale(1.02);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .highlight-date {
+        color: var(--clr-gold);
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .highlight-title {
+        color: white;
+        font-family: var(--font-serif);
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .highlight-desc {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1rem;
+    }
+
+    @media (max-width: 992px) {
+        .calendar-grid-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .calendar-grid {
+            gap: 0.4rem;
+        }
+        .day-number { font-size: 0.9rem; }
+        .calendar-glass-card { padding: 1.5rem; }
     }
 
     .calendar-header {
@@ -686,126 +823,113 @@
     </div>
 </section>
 
-<!-- INTERACTIVE CALENDAR -->
+<!-- CALENDAR SECTION -->
 <section class="calendar-section">
     <div class="container">
-        <div style="text-align:center;">
+        <div style="text-align: center;">
             <h2 class="text-title" style="color: white;">Academic Calendar</h2>
-            <p style="color:rgba(255,255,255,0.7); margin-top:0.8rem; max-width: 600px; margin-inline: auto;">
-                Plan ahead with our interactive monthly view outlining holidays, examinations, and critical community
-                events.
+            <p style="color: rgba(255,255,255,0.7); margin-top: 1rem; max-width: 600px; margin-inline: auto;">
+                Plan ahead with our interactive monthly view outlining holidays, examinations, and critical community events.
             </p>
         </div>
 
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <h3 class="calendar-month">October 2026</h3>
-                <div class="calendar-controls">
-                    <button><i class="fas fa-chevron-left"></i></button>
-                    <button><i class="fas fa-chevron-right"></i></button>
+        <div class="calendar-grid-layout">
+            <!-- Main Calendar -->
+            <div class="calendar-glass-card fade-up">
+                <div class="calendar-header">
+                    <h3 class="calendar-month">October 2026</h3>
+                    <div class="calendar-controls">
+                        <button aria-label="Previous month"><i class="fas fa-chevron-left"></i></button>
+                        <button aria-label="Next month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-day-header">S</div>
+                    <div class="calendar-day-header">M</div>
+                    <div class="calendar-day-header">T</div>
+                    <div class="calendar-day-header">W</div>
+                    <div class="calendar-day-header">T</div>
+                    <div class="calendar-day-header">F</div>
+                    <div class="calendar-day-header">S</div>
+
+                    <!-- Oct 1 is Thursday -->
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+
+                    <div class="calendar-day"><span class="day-number">1</span></div>
+                    <div class="calendar-day">
+                        <span class="day-number">2</span>
+                        <div class="event-dot dot-holiday"></div>
+                    </div>
+                    <div class="calendar-day"><span class="day-number">3</span></div>
+                    <div class="calendar-day"><span class="day-number">4</span></div>
+                    <div class="calendar-day"><span class="day-number">5</span></div>
+                    <div class="calendar-day"><span class="day-number">6</span></div>
+                    <div class="calendar-day"><span class="day-number">7</span></div>
+                    <div class="calendar-day"><span class="day-number">8</span></div>
+                    <div class="calendar-day"><span class="day-number">9</span></div>
+                    <div class="calendar-day"><span class="day-number">10</span></div>
+                    <div class="calendar-day"><span class="day-number">11</span></div>
+                    <div class="calendar-day">
+                        <span class="day-number">12</span>
+                        <div class="event-dot dot-exam"></div>
+                    </div>
+                    <div class="calendar-day">
+                        <span class="day-number">13</span>
+                        <div class="event-dot dot-exam"></div>
+                    </div>
+                    <div class="calendar-day">
+                        <span class="day-number">14</span>
+                        <div class="event-dot dot-exam"></div>
+                    </div>
+                    <div class="calendar-day">
+                        <span class="day-number">15</span>
+                        <div class="event-dot dot-exam"></div>
+                    </div>
+                    <div class="calendar-day">
+                        <span class="day-number">16</span>
+                        <div class="event-dot dot-exam"></div>
+                    </div>
+                    <div class="calendar-day"><span class="day-number">17</span></div>
+                    <div class="calendar-day"><span class="day-number">18</span></div>
+                    <div class="calendar-day"><span class="day-number">19</span></div>
+                    <div class="calendar-day"><span class="day-number">20</span></div>
+                    <div class="calendar-day"><span class="day-number">21</span></div>
+                    <div class="calendar-day"><span class="day-number">22</span></div>
+                    <div class="calendar-day"><span class="day-number">23</span></div>
+                    <div class="calendar-day">
+                        <span class="day-number">24</span>
+                        <div class="event-dot dot-ptm"></div>
+                    </div>
+                    <div class="calendar-day"><span class="day-number">25</span></div>
+                    <div class="calendar-day"><span class="day-number">26</span></div>
+                    <div class="calendar-day"><span class="day-number">27</span></div>
+                    <div class="calendar-day"><span class="day-number">28</span></div>
+                    <div class="calendar-day"><span class="day-number">29</span></div>
+                    <div class="calendar-day"><span class="day-number">30</span></div>
+                    <div class="calendar-day"><span class="day-number">31</span></div>
                 </div>
             </div>
 
-            <div class="calendar-grid">
-                <!-- Days of week -->
-                <div class="calendar-day-header">Sun</div>
-                <div class="calendar-day-header">Mon</div>
-                <div class="calendar-day-header">Tue</div>
-                <div class="calendar-day-header">Wed</div>
-                <div class="calendar-day-header">Thu</div>
-                <div class="calendar-day-header">Fri</div>
-                <div class="calendar-day-header">Sat</div>
-
-                <!-- Empty slots for alignment (October 1st is Thursday) -->
-                <div class="calendar-day empty"></div>
-                <div class="calendar-day empty"></div>
-                <div class="calendar-day empty"></div>
-                <div class="calendar-day empty"></div>
-
-                <!-- Day 1 -->
-                <div class="calendar-day">
-                    <span class="day-number">1</span>
+            <!-- Upcoming Events Sidebar -->
+            <div class="upcoming-highlights fade-up">
+                <div class="highlight-card">
+                    <div class="highlight-date">Oct 02, 2026</div>
+                    <div class="highlight-title">Gandhi Jayanti</div>
+                    <div class="highlight-desc">National Holiday - School remains closed.</div>
                 </div>
-                <!-- Day 2 (Gandhi Jayanti) -->
-                <div class="calendar-day">
-                    <span class="day-number">2</span>
-                    <div class="event-indicator event-holiday"></div>
-                    <div class="day-tooltip"><b>Gandhi Jayanti</b><br>National Holiday</div>
+                <div class="highlight-card">
+                    <div class="highlight-date">Oct 12 – 16, 2026</div>
+                    <div class="highlight-title">Term I Mid-Point Exams</div>
+                    <div class="highlight-desc">Mandatory assessment for Grades 6 - 12.</div>
                 </div>
-                <!-- 3 to 11 -->
-                <div class="calendar-day"><span class="day-number">3</span></div>
-                <div class="calendar-day"><span class="day-number">4</span></div>
-                <div class="calendar-day"><span class="day-number">5</span></div>
-                <div class="calendar-day"><span class="day-number">6</span></div>
-                <div class="calendar-day"><span class="day-number">7</span></div>
-                <div class="calendar-day"><span class="day-number">8</span></div>
-                <div class="calendar-day"><span class="day-number">9</span></div>
-                <div class="calendar-day"><span class="day-number">10</span></div>
-                <div class="calendar-day"><span class="day-number">11</span></div>
-
-                <!-- Day 12 to 16: Half Yearly Exams -->
-                <div class="calendar-day">
-                    <span class="day-number">12</span>
-                    <div class="event-indicator event-exam"></div>
-                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
-                </div>
-                <div class="calendar-day">
-                    <span class="day-number">13</span>
-                    <div class="event-indicator event-exam"></div>
-                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
-                </div>
-                <div class="calendar-day">
-                    <span class="day-number">14</span>
-                    <div class="event-indicator event-exam"></div>
-                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
-                </div>
-                <div class="calendar-day">
-                    <span class="day-number">15</span>
-                    <div class="event-indicator event-exam"></div>
-                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
-                </div>
-                <div class="calendar-day">
-                    <span class="day-number">16</span>
-                    <div class="event-indicator event-exam"></div>
-                    <div class="day-tooltip"><b>Term I Exams</b><br>Grades 6 - 12</div>
-                </div>
-
-                <!-- 17 to 23 -->
-                <div class="calendar-day"><span class="day-number">17</span></div>
-                <div class="calendar-day"><span class="day-number">18</span></div>
-                <div class="calendar-day"><span class="day-number">19</span></div>
-                <div class="calendar-day"><span class="day-number">20</span></div>
-                <div class="calendar-day"><span class="day-number">21</span></div>
-                <div class="calendar-day"><span class="day-number">22</span></div>
-                <div class="calendar-day"><span class="day-number">23</span></div>
-
-                <!-- 24 PTM -->
-                <div class="calendar-day">
-                    <span class="day-number">24</span>
-                    <div class="event-indicator event-ptm"></div>
-                    <div class="day-tooltip"><b>Parent Teacher Meeting</b><br>Term I Results Review</div>
-                </div>
-
-                <!-- 25 to 31 -->
-                <div class="calendar-day"><span class="day-number">25</span></div>
-                <div class="calendar-day"><span class="day-number">26</span></div>
-                <div class="calendar-day"><span class="day-number">27</span></div>
-                <div class="calendar-day"><span class="day-number">28</span></div>
-                <div class="calendar-day"><span class="day-number">29</span></div>
-                <div class="calendar-day"><span class="day-number">30</span></div>
-                <div class="calendar-day"><span class="day-number">31</span></div>
-            </div>
-
-            <!-- Legend -->
-            <div class="calendar-legend">
-                <div class="legend-item">
-                    <div class="legend-dot event-holiday"></div> Public Holidays
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot event-exam"></div> Examination Dates
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot event-ptm"></div> Parent Teacher Meetings
+                <div class="highlight-card">
+                    <div class="highlight-date">Oct 24, 2026</div>
+                    <div class="highlight-title">Result Review (PTM)</div>
+                    <div class="highlight-desc">Join us for a detailed discussion on Term I performance.</div>
                 </div>
             </div>
         </div>
@@ -927,25 +1051,27 @@
 
         <form action="{{ url_for('public.submit_enquiry') }}" method="POST" class="minimal-form">
             <div class="form-group">
-                <label class="form-label">Parent / Guardian Name</label>
-                <input type="text" name="parent_name" class="form-control" placeholder="Full Name" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Student Name</label>
-                <input type="text" name="student_name" class="form-control" placeholder="Child's Name" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Phone Number</label>
-                <input type="tel" name="phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Grade Applying For</label>
-                <select name="grade" class="form-control" style="background: rgba(255,255,255,0.07); appearance:none;"
+                <label for="parent_name" class="form-label">Parent / Guardian Name</label>
+                <input type="text" id="parent_name" name="parent_name" class="form-control" placeholder="Full Name"
                     required>
+            </div>
+            <div class="form-group">
+                <label for="student_name" class="form-label">Student Name</label>
+                <input type="text" id="student_name" name="student_name" class="form-control" placeholder="Child's Name"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+            </div>
+            <div class="form-group">
+                <label for="grade" class="form-label">Grade Applying For</label>
+                <select id="grade" name="grade" class="form-control"
+                    style="background: rgba(255,255,255,0.07); appearance:none;" required>
                     <option value="" disabled selected>Select Grade</option>
                     <option value="LKG">LKG</option>
                     <option value="UKG">UKG</option>
@@ -964,8 +1090,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label">Child's Date of Birth</label>
-                <input type="text" name="dob" class="form-control" placeholder="DD/MM/YYYY" required>
+                <label for="dob" class="form-label">Child's Date of Birth</label>
+                <input type="text" id="dob" name="dob" class="form-control" placeholder="DD/MM/YYYY" required>
             </div>
             <div class="form-group full-width" style="text-align: center; margin-top: 0.5rem;">
                 <button type="submit" class="btn btn-accent"

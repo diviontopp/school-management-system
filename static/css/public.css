@@ -11,7 +11,7 @@
 
     /* Surfaces (Light Mode) */
     --color-bg: #f8fafc;
-    --color-surface: #ffffff;
+    --color-surface: #F1F4E4;
 
     /* Spacing Scale */
     --space-1: 8px;
@@ -32,11 +32,11 @@
     /* ---- Legacy Mappings (For backwards compatibility) ---- */
     --clr-navy: var(--color-primary);
     --clr-navy-light: var(--color-primary-hover);
-    --clr-gold: #FFD700;
-    --clr-gold-light: #FFDF33;
+    --clr-gold: #C5A028;
+    --clr-gold-light: #D4AF37;
     --clr-offwhite: var(--color-bg);
     --clr-white: var(--color-surface);
-    --clr-lime: #D2FF28;
+    --clr-lime: #F1F4E4;
     --clr-text-main: #2D3748;
     --clr-text-muted: #718096;
 

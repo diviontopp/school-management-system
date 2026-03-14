@@ -29,7 +29,8 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center 50%; /* Center the image more to avoid cutting the top/bottom */
+        object-position: center 20%;
+        /* Adjusted to show more of the building top if available */
         opacity: 0.85;
     }
 
@@ -48,7 +49,8 @@
 
     .hero-decorative-text {
         position: absolute;
-        bottom: 5%; /* Moved up to be fully visible */
+        bottom: 5%;
+        /* Moved up to be fully visible */
         right: -2%;
         font-family: var(--font-sans);
         font-weight: 900;
@@ -225,7 +227,7 @@
 
     .facilities-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
         margin-top: 4rem;
     }
@@ -296,7 +298,7 @@
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 2rem;
         text-align: center;
     }
@@ -535,7 +537,8 @@
     <div class="hero-bg" id="heroImage">
         <picture>
             <source srcset="{{ storage_url('images/dbx/img_4.webp') }}" type="image/webp">
-            <img class="img-parallax" style="height: 120%; top: -10%; position: relative;" src="{{ storage_url('images/dbx/img_4.jpg') }}" alt="Don Bosco School of Excellence Campus">
+            <img class="img-parallax" style="height: 110%; top: -5%; position: relative; object-position: center 20%;"
+                src="{{ storage_url('images/dbx/img_4.jpg') }}" alt="Don Bosco School of Excellence Campus">
         </picture>
     </div>
     <div class="hero-gradient"></div>
@@ -710,23 +713,23 @@
             </p>
         </div>
         <div
-            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin: 0 auto; max-width: 1000px;">
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; margin: 0 auto; max-width: 1000px;">
             <div class="leader-card fade-up">
                 <img src="{{ storage_url('images/dbx/img_13.webp') }}" loading="lazy" alt="Saint John Bosco"
                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; display: block;">
-                <h3>Saint John Bosco</h3>
+                <h3 style="font-family: var(--font-serif);">Saint John Bosco</h3>
                 <p>Founder</p>
             </div>
             <div class="leader-card fade-up">
                 <img src="{{ storage_url('images/dbx/img_11.webp') }}" loading="lazy" alt="Rev. Fr. Xavier Packiam SDB"
                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; display: block;">
-                <h3>Rev. Fr. Xavier Packiam, SDB</h3>
+                <h3 style="font-family: var(--font-serif);">Rev. Fr. Xavier Packiam, SDB</h3>
                 <p>Rector & Correspondent</p>
             </div>
             <div class="leader-card fade-up">
                 <img src="{{ storage_url('images/dbx/img_12.webp') }}" loading="lazy" alt="Rev. Fr. Mathias SDB"
                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; display: block;">
-                <h3>Rev. Fr. Mathias, SDB</h3>
+                <h3 style="font-family: var(--font-serif);">Rev. Fr. Mathias, SDB</h3>
                 <p>Principal</p>
             </div>
         </div>
@@ -734,38 +737,36 @@
 </section>
 
 <!-- ===== ADMISSIONS PREVIEW ===== -->
-<section class="home-admissions" style="background: var(--clr-lime); color: var(--clr-navy);">
+<section class="home-admissions" style="background: var(--clr-offwhite); padding: 10rem 0; border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05);">
     <div class="container">
-        <div style="text-align: center; margin-bottom: 4rem;">
-            <h2 class="text-title fade-up">Join the Salesian Legacy</h2>
-            <p class="text-body-large fade-up" style="max-width: 700px; margin: 1rem auto 0;">
+        <div style="text-align: center; margin-bottom: 5rem;">
+            <h2 class="text-title fade-up" style="color: var(--clr-navy);">Join the <span style="color: var(--clr-gold);">Salesian Legacy</span></h2>
+            <p class="text-body-large fade-up" style="max-width: 700px; margin: 1.5rem auto 0; color: var(--clr-text-muted);">
                 Admissions open for the academic year 2026–27. Begin the process today.
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;">
-            <div class="admission-step-preview fade-up">
-                <div class="admission-step-icon"><i class="fas fa-file-signature"></i></div>
-                <h3>Apply Online</h3>
-                <p class="text-muted">Visit dbxegmore.in or dbschoolofexcellence.in to register.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+            <div class="admission-step-preview fade-up" style="background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); text-align: center;">
+                <div class="admission-step-icon" style="background: rgba(15, 76, 129, 0.05); color: var(--clr-navy); margin-bottom: 2rem;"><i class="fas fa-file-signature"></i></div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1rem;">Apply Online</h3>
+                <p style="color: var(--clr-text-muted); line-height: 1.6;">Visit dbxegmore.in or dbschoolofexcellence.in to register.</p>
             </div>
-            <div class="admission-step-preview fade-up">
-                <div class="admission-step-icon" style="background: var(--clr-gold); color: #000;"><i
-                        class="fas fa-handshake"></i></div>
-                <h3>Interaction</h3>
-                <p class="text-muted">A conversational discussion to assess the student's readiness.</p>
+            <div class="admission-step-preview fade-up" style="background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); text-align: center;">
+                <div class="admission-step-icon" style="background: rgba(197, 160, 40, 0.1); color: var(--clr-gold); margin-bottom: 2rem;"><i class="fas fa-handshake"></i></div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1rem;">Interaction</h3>
+                <p style="color: var(--clr-text-muted); line-height: 1.6;">A conversational discussion to assess the student's readiness.</p>
             </div>
-            <div class="admission-step-preview fade-up">
-                <div class="admission-step-icon" style="background: var(--clr-lime); color: #000;"><i
-                        class="fas fa-check-double"></i></div>
-                <h3>Enrolment</h3>
-                <p class="text-muted">Submit documents and join the DBX Egmore family.</p>
+            <div class="admission-step-preview fade-up" style="background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); text-align: center;">
+                <div class="admission-step-icon" style="background: rgba(15, 76, 129, 0.08); color: var(--clr-navy); margin-bottom: 2rem;"><i class="fas fa-check-double"></i></div>
+                <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1rem;">Enrolment</h3>
+                <p style="color: var(--clr-text-muted); line-height: 1.6;">Submit documents and join the DBX Egmore family.</p>
             </div>
         </div>
 
-        <div style="text-align: center; margin-top: 4rem;" class="fade-up">
-            <a href="{{ url_for('public.admissions') }}" class="btn btn-primary">
-                Full Admission Details <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+        <div style="text-align: center; margin-top: 5rem;" class="fade-up">
+            <a href="{{ url_for('public.admissions') }}" class="btn btn-primary" style="padding: 1rem 3rem;">
+                Full Admission Details <i class="fas fa-arrow-right" style="margin-left: 12px;"></i>
             </a>
         </div>
     </div>
