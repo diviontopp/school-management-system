@@ -288,7 +288,7 @@ h6 {
     transform: scale(1.03) translateY(-2px);
 }
 
-/* Noise Overlay */
+/* Noise Overlay - Standardized at 0.05 opacity site-wide */
 .noise-overlay {
     position: fixed;
     top: 0;
@@ -297,9 +297,14 @@ h6 {
     height: 100vh;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.05; /* Deeply subtle premium grain */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    transition: opacity 0.5s ease;
+    opacity: 0.05; /* Universal subtle premium grain */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    /* No transition to prevent flickering or 'accumulation' perception during page loads */
+}
+
+/* Duplication Guard: Hide any accidental extra noise overlays */
+.noise-overlay ~ .noise-overlay {
+    display: none !important;
 }
 
 /* Navigation */

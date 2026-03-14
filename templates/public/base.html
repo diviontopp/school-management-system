@@ -228,19 +228,7 @@
         </div>
     </div>
 
-    <!-- Subtle Noise Texture Overlay for premium feel -->
     <div class="noise-overlay" id="baseNoiseOverlay"></div>
-    <script>
-        // Prevent noise accumulation during rapid navigation or partial loads
-        (function() {
-            const overlays = document.querySelectorAll('.noise-overlay');
-            if (overlays.length > 1) {
-                for (let i = 1; i < overlays.length; i++) {
-                    overlays[i].remove();
-                }
-            }
-        })();
-    </script>
 
     <!-- Toast Notifications Container -->
     <div id="toastContainer" class="toast-container"></div>

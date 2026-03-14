@@ -114,16 +114,6 @@
         font-size: 1.25em; /* Make text bigger */
     }
 
-    /* Noise texture toggling will be handled via JS for specific section precision */
-    .noise-hidden {
-        opacity: 0 !important;
-        visibility: hidden !important;
-    }
-    
-    .noise-overlay {
-        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        pointer-events: none;
-    }
 
     .cg-gallery footer {
         position: absolute;
@@ -720,22 +710,6 @@
                 ease: "power3.out",
             }, "-=1");
 
-            // Dynamic Noise Texture Toggling - Synced with Pin Duration
-            const noiseOverlay = document.querySelector('.noise-overlay');
-            if (noiseOverlay) {
-                ScrollTrigger.create({
-                    trigger: ".cg-gallery",
-                    start: "top top",
-                    end: "+=1200", // Exactly matches the pin duration
-                    onToggle: self => {
-                        if (self.isActive) {
-                            noiseOverlay.classList.add('noise-hidden');
-                        } else {
-                            noiseOverlay.classList.remove('noise-hidden');
-                        }
-                    }
-                });
-            }
         }
     });
 </script>
