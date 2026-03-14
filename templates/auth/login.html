@@ -77,11 +77,30 @@
         position: relative;
         display: none;
         padding: 40px;
-        background: url('{{ storage_url("images/dbx/img_4.webp") }}') center/cover no-repeat;
+        overflow: hidden;
     }
 
     @media (min-width: 768px) {
         .brand-side { display: flex; flex-direction: column; }
+    }
+
+    .hero-slider {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .hero-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+    }
+
+    .hero-slide.active {
+        opacity: 1;
     }
 
     .brand-side::before {
@@ -89,6 +108,7 @@
         position: absolute;
         inset: 0;
         background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.8));
+        z-index: 1;
     }
 
     .brand-content {
@@ -304,6 +324,13 @@
     <div class="split-container">
         <!-- Brand Side -->
         <div class="brand-side">
+            <!-- Hero Slider -->
+            <div class="hero-slider" id="login-hero-slider">
+                <div class="hero-slide active" data-bg="{{ storage_url('images/dbx/img_4.webp') }}"></div>
+                <div class="hero-slide" data-bg="{{ storage_url('images/dbx/login_hero_2.jpg') }}"></div>
+                <div class="hero-slide" data-bg="{{ storage_url('images/dbx/login_hero_1.jpg') }}"></div>
+            </div>
+
             <div class="brand-content">
                 <div class="brand-header">
                     <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);">
@@ -314,9 +341,9 @@
                 
                 <div class="brand-footer">
                     <h2>Inspiring Excellence,<br>Empowering Leaders</h2>
-                    <div class="indicator-group">
-                        <div class="indicator"></div>
+                    <div class="indicator-group" id="hero-indicators">
                         <div class="indicator active"></div>
+                        <div class="indicator"></div>
                         <div class="indicator"></div>
                     </div>
                 </div>
@@ -385,12 +412,37 @@
         });
     }
 
+    // Hero Slider Logic
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    const indicators = document.querySelectorAll('#hero-indicators .indicator');
+
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        indicators[currentSlide].classList.remove('active');
+        
+        currentSlide = (currentSlide + 1) % slides.length;
+        
+        slides[currentSlide].classList.add('active');
+        indicators[currentSlide].classList.add('active');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        // Apply Background Images
+        document.querySelectorAll('.hero-slide').forEach(slide => {
+            const bg = slide.getAttribute('data-bg');
+            if (bg) slide.style.backgroundImage = `url(${bg})`;
+        });
+
+        // Init Role
         const urlParams = new URLSearchParams(window.location.search);
         const selRole = urlParams.get('role');
         if (selRole && ['student', 'teacher', 'parent', 'admin'].includes(selRole)) {
             switchTab(selRole);
         }
+
+        // Init Slider
+        setInterval(nextSlide, 5000); // Switch every 5 seconds
     });
 </script>
 {% endblock %}
