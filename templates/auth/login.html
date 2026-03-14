@@ -5,55 +5,27 @@
 {% block extra_css %}
 <style>
     :root {
-        --auth-bg: rgba(15, 23, 42, 0.8); /* Translucent Slate-900 */
-        --auth-card: rgba(30, 41, 59, 0.5); /* Translucent Slate-800 */
-        --auth-accent: #6366f1;
-        --auth-accent-hover: #4f46e5;
-        --auth-text: #f8fafc;
-        --auth-muted: #94a3b8;
-        --auth-border: rgba(255, 255, 255, 0.1);
+        /* REFINED CHARCOAL & IVORY - Professional academic palette */
+        --auth-bg: #d1d5c9; /* Sage Shadow: Muted academic green - selected theme */
+        --auth-card: #1d1d1f; /* Apple-style deep charcoal - cleaner than pure black */
+        --auth-accent: #d4af37; /* Champagne Gold - Institutional & Prestigious */
+        --auth-accent-hover: #c5a028;
+        --auth-text: #ffffff;
+        --auth-muted: #86868b;
+        --auth-border: rgba(255, 255, 255, 0.08);
     }
 
+    /* Override any body styles from base that might clash */
+    body { background: var(--auth-bg); }
+
     .auth-page {
-        background: #020617;
-        min-height: 100vh;
+        min-height: 100vh; /* Fill entire viewport height to push footer down */
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 20px;
-        font-family: var(--font-sans);
+        padding: 140px 20px 80px; /* Increased top padding to clear header */
         position: relative;
-        overflow: hidden;
-    }
-
-    /* Animated Mesh Background */
-    .mesh-bg {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    .blob {
-        position: absolute;
-        width: 600px;
-        height: 600px;
-        background: var(--auth-accent);
-        filter: blur(120px);
-        border-radius: 50%;
-        opacity: 0.15;
-        animation: float 20s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
-    }
-
-    .blob-1 { top: -10%; left: -10%; background: #4f46e5; animation-delay: 0s; }
-    .blob-2 { bottom: -10%; right: -10%; background: #7c3aed; animation-delay: -5s; }
-    .blob-3 { top: 50%; left: 50%; width: 400px; height: 400px; background: #3b82f6; animation-delay: -10s; }
-
-    @keyframes float {
-        0% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(100px, 50px) scale(1.1); }
-        66% { transform: translate(-50px, 100px) scale(0.9); }
-        100% { transform: translate(0, 0) scale(1); }
+        z-index: 1;
     }
 
     .split-container {
@@ -61,19 +33,16 @@
         width: 100%;
         max-width: 1000px;
         min-height: 600px;
-        background: var(--auth-bg);
-        border-radius: 28px;
+        background: var(--auth-card);
+        border-radius: 24px;
         overflow: hidden;
-        border: 1px solid var(--auth-border);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25);
         position: relative;
-        z-index: 1;
-        backdrop-filter: blur(24px); /* Glassmorphism */
     }
 
-    /* Left Side */
+    /* Left Side: Brand & Imagery */
     .brand-side {
-        flex: 1;
+        flex: 1.1;
         position: relative;
         display: none;
         padding: 40px;
@@ -96,126 +65,91 @@
         background-size: cover;
         background-position: center;
         opacity: 0;
-        transition: opacity 1.5s ease-in-out;
+        transition: opacity 0.6s ease-in-out;
     }
 
-    .hero-slide.active {
-        opacity: 1;
-    }
+    .hero-slide.active { opacity: 1; }
 
     .brand-side::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.8));
+        background: linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.6));
         z-index: 1;
     }
 
     .brand-content {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
 
-    .brand-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .back-link {
-        color: white;
-        text-decoration: none;
-        font-size: 0.875rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 8px 16px;
-        border-radius: 100px;
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .back-link:hover {
-        background: rgba(253, 224, 71, 0.15); /* Hint of DBX Gold */
-        border-color: rgba(253, 224, 71, 0.3);
-    }
-
     .brand-footer h2 {
+        font-family: var(--font-serif);
         font-size: 2.25rem;
-        font-weight: 700;
-        line-height: 1.1;
+        font-weight: 600;
         color: white;
+        line-height: 1.2;
         margin-bottom: 24px;
-        text-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .indicator-group {
         display: flex;
-        gap: 12px;
+        gap: 8px;
     }
 
     .indicator {
-        width: 32px;
-        height: 3px;
-        border-radius: 4px;
+        width: 30px;
+        height: 2px;
         background: rgba(255, 255, 255, 0.2);
     }
 
     .indicator.active {
-        background: #fde047; /* DBX Gold accent */
+        background: white;
     }
 
-    /* Right Side */
+    /* Right Side: Authentication Form */
     .form-side {
         flex: 1;
-        padding: 40px;
+        padding: 50px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        background: transparent;
+        background: var(--auth-card);
     }
 
-    @media (min-width: 768px) {
-        .form-side { padding: 60px; }
-    }
-
-    .form-header {
-        margin-bottom: 32px;
-    }
+    .form-header { margin-bottom: 32px; }
 
     .auth-title {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 1.75rem;
+        font-weight: 600;
         color: var(--auth-text);
-        letter-spacing: -0.03em;
         margin-bottom: 8px;
+        letter-spacing: -0.02em;
     }
 
     .auth-subtitle {
         color: var(--auth-muted);
-        font-size: 0.935rem;
+        font-size: 0.95rem;
     }
 
     .auth-subtitle a {
         color: var(--auth-accent);
         text-decoration: none;
-        font-weight: 600;
-        margin-left: 4px;
+        font-weight: 500;
     }
 
+    /* Tabs Styling - Refined */
     .auth-tabs {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        background: var(--auth-card);
+        background: rgba(255, 255, 255, 0.03);
         padding: 5px;
-        border-radius: 14px;
-        margin: 32px 0;
+        border-radius: 12px;
+        margin-bottom: 32px;
         border: 1px solid var(--auth-border);
     }
 
@@ -224,119 +158,108 @@
         border: none;
         color: var(--auth-muted);
         padding: 10px 4px;
-        font-size: 0.8125rem;
-        font-weight: 600;
+        font-size: 0.85rem;
+        font-weight: 500;
         cursor: pointer;
-        border-radius: 10px;
-        transition: all 0.3s ease;
+        border-radius: 8px;
+        transition: all 0.2s ease;
     }
 
-    .tab-trigger:hover { color: var(--auth-text); }
+    .tab-trigger:hover { color: #fff; }
 
     .tab-trigger.active {
-        background: var(--auth-accent);
-        color: white;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--auth-accent);
+        font-weight: 600;
     }
 
     .auth-form { display: none; }
-    .auth-form.active { display: block; animation: contentFade 0.4s ease-out; }
+    .auth-form.active { display: block; animation: authFade 0.4s ease-out; }
+
+    @keyframes authFade {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
     .form-item { margin-bottom: 24px; }
 
     .form-label {
         display: block;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--auth-text);
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--auth-muted);
         margin-bottom: 10px;
-        opacity: 0.9;
     }
 
     .form-input {
         width: 100%;
-        background: var(--auth-card);
+        background: rgba(255, 255, 255, 0.03);
         border: 1px solid var(--auth-border);
-        border-radius: 12px;
-        padding: 14px 18px;
+        border-radius: 10px;
+        padding: 14px 16px;
         color: var(--auth-text);
-        font-size: 0.935rem;
-        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
     }
 
     .form-input:focus {
         outline: none;
         border-color: var(--auth-accent);
-        background: rgba(30, 41, 59, 0.7);
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        background: rgba(255, 255, 255, 0.05);
     }
 
+    /* Button Styling - Refined */
     .btn-submit {
         width: 100%;
         background: var(--auth-accent);
-        color: white;
+        color: #121212; /* Deep charcoal for sharp contrast on gold */
         border: none;
         padding: 16px;
-        border-radius: 14px;
-        font-size: 0.935rem;
+        border-radius: 10px;
+        font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        margin: 12px 0 24px;
+        transition: all 0.2s ease;
+        margin: 8px 0 24px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
     }
 
     .btn-submit:hover { 
-        background: var(--auth-accent-hover); 
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
+        background: var(--auth-accent-hover);
+        transform: translateY(-1px);
     }
-
-    .btn-submit:active { transform: translateY(0); }
 
     .help-link {
         text-align: center;
-        font-size: 0.875rem;
+        font-size: 0.85rem;
         color: var(--auth-muted);
     }
 
     .help-link a {
         color: var(--auth-accent);
         text-decoration: none;
-        font-weight: 600;
     }
 
-    @keyframes contentFade {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+    /* Hide noise overlay from base to keep it crisp */
+    .noise-overlay { display: none !important; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="auth-page">
-    <!-- Atmospheric Mesh Background -->
-    <div class="mesh-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-
     <div class="split-container">
-        <!-- Brand Side -->
+        <!-- Brand Imagery Side -->
         <div class="brand-side">
-            <!-- Hero Slider -->
             <div class="hero-slider" id="login-hero-slider">
                 <div class="hero-slide active" data-bg="{{ storage_url('images/dbx/img_4.webp') }}"></div>
-                <div class="hero-slide" data-bg="{{ storage_url('images/dbx/login_hero_2.jpg') }}"></div>
                 <div class="hero-slide" data-bg="{{ storage_url('images/dbx/login_hero_1.jpg') }}"></div>
+                <div class="hero-slide" data-bg="{{ storage_url('images/dbx/login_hero_2.jpg') }}"></div>
             </div>
 
             <div class="brand-content">
                 <div class="brand-header">
-                    <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);">
-                    <a href="{{ url_for('public.index') }}" class="back-link">
-                        Back to website <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX Logo" style="width: 45px; height: 45px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);">
                 </div>
                 
                 <div class="brand-footer">
@@ -354,14 +277,14 @@
         <div class="form-side">
             <div class="form-header">
                 <h1 class="auth-title">Welcome Back</h1>
-                <p class="auth-subtitle">Don't have an account? <a href="{{ url_for('public.contact') }}">Contact us</a></p>
+                <p class="auth-subtitle">Don't have an account? <a href="{{ url_for('public.contact') }}">Contact Support</a></p>
             </div>
 
-            <div class="auth-tabs" role="tablist">
-                <button type="button" class="tab-trigger active" data-target="student-form" onclick="switchTab('student')">Student</button>
-                <button type="button" class="tab-trigger" data-target="teacher-form" onclick="switchTab('teacher')">Teacher</button>
-                <button type="button" class="tab-trigger" data-target="parent-form" onclick="switchTab('parent')">Parent</button>
-                <button type="button" class="tab-trigger" data-target="admin-form" onclick="switchTab('admin')">Admin</button>
+            <div class="auth-tabs">
+                <button type="button" class="tab-trigger active" onclick="switchTab('student')">Student</button>
+                <button type="button" class="tab-trigger" onclick="switchTab('teacher')">Teacher</button>
+                <button type="button" class="tab-trigger" onclick="switchTab('parent')">Parent</button>
+                <button type="button" class="tab-trigger" onclick="switchTab('admin')">Admin</button>
             </div>
 
             {% set role_data = [
@@ -372,7 +295,7 @@
             ] %}
 
             {% for role in role_data %}
-            <form id="{{ role.id }}-form" action="{{ url_for('auth.login') }}" method="POST" class="auth-form {% if (selected_role == role.id) or (not selected_role and loop.first) %}active{% endif %}">
+            <form id="{{ role.id }}-form" action="{{ url_for('auth.login') }}" method="POST" class="auth-form {% if loop.first %}active{% endif %}">
                 <input type="hidden" name="role" value="{{ role.id }}">
                 
                 <div class="form-item">
@@ -382,7 +305,7 @@
 
                 <div class="form-item">
                     <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-input" placeholder="Enter your password" required>
+                    <input type="password" name="password" class="form-input" placeholder="Enter password" required>
                 </div>
 
                 <button type="submit" class="btn-submit">Sign In</button>
@@ -390,7 +313,7 @@
             {% endfor %}
 
             <div class="help-link">
-                Having trouble? <a href="{{ url_for('public.contact') }}">Get help</a>
+                Having trouble? <a href="{{ url_for('public.contact') }}">Get Help</a>
             </div>
         </div>
     </div>
@@ -400,49 +323,44 @@
 {% block extra_js %}
 <script>
     function switchTab(roleId) {
-        const newUrl = new URL(window.location);
-        newUrl.searchParams.set('role', roleId);
-        window.history.pushState({}, '', newUrl);
-
         document.querySelectorAll('.tab-trigger').forEach(tab => {
-            tab.classList.toggle('active', tab.getAttribute('data-target') === roleId + '-form');
+            tab.classList.toggle('active', tab.innerText.toLowerCase() === roleId);
         });
         document.querySelectorAll('.auth-form').forEach(form => {
             form.classList.toggle('active', form.id === roleId + '-form');
         });
+        
+        const url = new URL(window.location);
+        url.searchParams.set('role', roleId);
+        window.history.pushState({}, '', url);
     }
 
-    // Hero Slider Logic
+    // Hero Slider
     let currentSlide = 0;
     const slides = document.querySelectorAll('.hero-slide');
-    const indicators = document.querySelectorAll('#hero-indicators .indicator');
+    const indicators = document.querySelectorAll('.indicator');
 
     function nextSlide() {
         slides[currentSlide].classList.remove('active');
         indicators[currentSlide].classList.remove('active');
-        
         currentSlide = (currentSlide + 1) % slides.length;
-        
         slides[currentSlide].classList.add('active');
         indicators[currentSlide].classList.add('active');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Apply Background Images
+        // Init backgrounds
         document.querySelectorAll('.hero-slide').forEach(slide => {
             const bg = slide.getAttribute('data-bg');
             if (bg) slide.style.backgroundImage = `url(${bg})`;
         });
 
-        // Init Role
+        // Handle URL role
         const urlParams = new URLSearchParams(window.location.search);
-        const selRole = urlParams.get('role');
-        if (selRole && ['student', 'teacher', 'parent', 'admin'].includes(selRole)) {
-            switchTab(selRole);
-        }
+        const role = urlParams.get('role');
+        if (role) switchTab(role);
 
-        // Init Slider
-        setInterval(nextSlide, 5000); // Switch every 5 seconds
+        setInterval(nextSlide, 3000);
     });
 </script>
 {% endblock %}
