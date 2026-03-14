@@ -9,7 +9,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: var(--space-4) var(--space-2);
+        padding: 100px var(--space-2) var(--space-4); /* Add top padding to clear header */
         position: relative;
         background: url('{{ storage_url("images/dbx/img_4.webp") }}') center/cover no-repeat;
     }
@@ -27,7 +27,7 @@
         position: relative;
         z-index: 10000; /* Move above noise overlay (9999) */
         width: 100%;
-        max-width: 480px;
+        max-width: 420px; /* Made it smaller */
     }
 
     .auth-card {
@@ -36,7 +36,7 @@
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: var(--radius-xl);
-        padding: var(--space-4);
+        padding: var(--space-3); /* Reduced padding for smaller look */
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         color: var(--clr-white);
         animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -49,20 +49,27 @@
         margin-bottom: var(--space-3);
     }
 
+    .header-main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
     .auth-logo {
-        width: 80px;
-        height: 80px;
+        width: 50px; /* Smaller for horizontal layout */
+        height: 50px;
         border-radius: 50%;
-        margin-bottom: var(--space-2);
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .auth-title {
         font-family: var(--font-serif);
-        font-size: 2.5rem; /* Slightly larger */
-        margin-bottom: var(--space-1);
-        color: var(--clr-gold); /* Yellow/Gold for better contrast */
+        font-size: 1.75rem; /* Adjusted for horizontal layout */
+        color: var(--clr-gold);
         text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        margin: 0;
     }
 
     .auth-subtitle {
@@ -217,8 +224,10 @@
         
         <div class="auth-card">
             <div class="auth-header">
-                <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX Logo" class="auth-logo">
-                <h1 class="auth-title">Welcome Back</h1>
+                <div class="header-main">
+                    <img src="{{ storage_url('images/icon.jpg') }}" alt="DBX Logo" class="auth-logo">
+                    <h1 class="auth-title">Welcome Back</h1>
+                </div>
                 <p class="auth-subtitle">Select your portal role to sign in</p>
             </div>
 
