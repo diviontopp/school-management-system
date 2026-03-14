@@ -25,7 +25,7 @@
 
     .auth-container {
         position: relative;
-        z-index: 2;
+        z-index: 10000; /* Move above noise overlay (9999) */
         width: 100%;
         max-width: 480px;
     }
@@ -59,8 +59,10 @@
 
     .auth-title {
         font-family: var(--font-serif);
-        font-size: 2rem;
+        font-size: 2.5rem; /* Slightly larger */
         margin-bottom: var(--space-1);
+        color: var(--clr-gold); /* Yellow/Gold for better contrast */
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .auth-subtitle {
