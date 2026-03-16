@@ -230,9 +230,11 @@
     
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <div id="flash-data" style="display: none;" 
-             data-messages='[{% for category, message in messages %}{"category": "{{ category | safe }}", "message": "{{ message | safe }}"}{% if not loop.last %},{% endif %}{% endfor %}]'>
-        </div>
+        {% set flash_data = [] %}
+        {% for category, message in messages %}
+          {% set _ = flash_data.append({'category': category, 'message': message}) %}
+        {% endfor %}
+        <div id="flash-data" style="display: none;" data-messages='{{ flash_data | tojson | safe }}'></div>
         <script>
           document.addEventListener('DOMContentLoaded', () => {
             const dataEl = document.getElementById('flash-data');
