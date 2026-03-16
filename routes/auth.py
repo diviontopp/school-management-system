@@ -61,8 +61,17 @@ def login():
                 return redirect(url_for('auth.login', role=role))
                 
         except Exception as e:
-            print(f"Login error: {str(e)}")
-            flash("An error occurred during login. Please try again later.", "danger")
+            error_msg = str(e)
+            print(f">>> CRITICAL: Login error: {error_msg}")
+            
+            # More helpful messages for common setup issues
+            if "doesn't exist" in error_msg.lower() or "table" in error_msg.lower():
+                flash("System database not initialized. Please contact administrator.", "danger")
+            elif "connection" in error_msg.lower() or "connect" in error_msg.lower():
+                flash("Database connection failure. Please try again later.", "danger")
+            else:
+                flash("An unexpected error occurred during login. Please try again.", "danger")
+            
             return redirect(url_for('auth.login', role=role))
 
     # GET request - serve login page

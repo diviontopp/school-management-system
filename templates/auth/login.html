@@ -6,13 +6,13 @@
 <style>
     :root {
         /* REFINED CHARCOAL & IVORY - Professional academic palette */
-        --auth-bg: #d1d5c9; /* Sage Shadow: Muted academic green - selected theme */
-        --auth-card: #1d1d1f; /* Apple-style deep charcoal - cleaner than pure black */
-        --auth-accent: #d4af37; /* Champagne Gold - Institutional & Prestigious */
-        --auth-accent-hover: #c5a028;
+        --auth-bg: #0f172a; /* Deeper dark blue-gray */
+        --auth-card: #000000; /* True Black for the "Black/Gold" request */
+        --auth-accent: #C5A028; /* Polished Gold */
+        --auth-accent-hover: #D4AF37;
         --auth-text: #ffffff;
-        --auth-muted: #86868b;
-        --auth-border: rgba(255, 255, 255, 0.08);
+        --auth-muted: #94a3b8;
+        --auth-border: rgba(197, 160, 40, 0.2); /* Gold-tinted border */
     }
 
     /* Override any body styles from base that might clash */
@@ -193,41 +193,58 @@
 
     .form-input {
         width: 100%;
-        background: rgba(255, 255, 255, 0.03);
+        background: #000000; /* Deepest black for contrast */
         border: 1px solid var(--auth-border);
-        border-radius: 10px;
-        padding: 14px 16px;
-        color: var(--auth-text);
+        border-radius: 12px;
+        padding: 16px;
+        color: #ffffff;
         font-size: 0.95rem;
-        transition: all 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .form-input::placeholder {
+        color: rgba(197, 160, 40, 0.4); /* Subdued gold placeholder */
     }
 
     .form-input:focus {
         outline: none;
         border-color: var(--auth-accent);
-        background: rgba(255, 255, 255, 0.05);
+        background: #050505;
+        box-shadow: 0 0 0 1px var(--auth-accent);
     }
 
-    /* Button Styling - Refined */
+    /* Override Browser Autofill "Light Yellow" */
+    .form-input:-webkit-autofill,
+    .form-input:-webkit-autofill:hover, 
+    .form-input:-webkit-autofill:focus, 
+    .form-input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px #000000 inset !important;
+        -webkit-text-fill-color: #C5A028 !important; /* Premium gold text on autofill */
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Button Styling - Refined Premium Gold Gradient */
     .btn-submit {
         width: 100%;
-        background: var(--auth-accent);
-        color: #121212; /* Deep charcoal for sharp contrast on gold */
+        background: linear-gradient(135deg, #C5A028 0%, #D4AF37 100%);
+        color: #000000;
         border: none;
-        padding: 16px;
-        border-radius: 10px;
-        font-size: 1rem;
+        padding: 18px;
+        border-radius: 12px;
+        font-size: 0.95rem;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s ease;
-        margin: 8px 0 24px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        margin: 12px 0 28px;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.15em;
+        box-shadow: 0 4px 15px rgba(197, 160, 40, 0.2);
     }
 
     .btn-submit:hover { 
-        background: var(--auth-accent-hover);
-        transform: translateY(-1px);
+        background: linear-gradient(135deg, #D4AF37 0%, #C5A028 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(197, 160, 40, 0.3);
     }
 
     .help-link {
