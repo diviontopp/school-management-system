@@ -132,6 +132,24 @@ def create_app():
     def inject_storage():
         return dict(storage_url=get_storage_url)
 
+    # Template filter for MySQL TIME (timedelta) → "HH:MM" string
+    @app.template_filter('format_time')
+    def format_time_filter(td):
+        """Convert a timedelta or time object to HH:MM string."""
+        if td is None:
+            return ''
+        try:
+            # MySQL TIME columns return timedelta
+            total_seconds = int(td.total_seconds())
+            hours = total_seconds // 3600
+            minutes = (total_seconds % 3600) // 60
+            return f"{hours:02d}:{minutes:02d}"
+        except (AttributeError, TypeError):
+            try:
+                return td.strftime('%H:%M')
+            except Exception:
+                return str(td)
+
     print(">>> Flask App Created and Fully Hardened.", flush=True)
     return app
 

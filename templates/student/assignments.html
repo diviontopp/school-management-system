@@ -1,0 +1,103 @@
+{% extends "student/student_base.html" %}
+{% block title %}Assignments — Scholaris Student Portal{% endblock %}
+{% block page_title %}Assignments{% endblock %}
+
+{% block content %}
+{% if not student %}
+<div class="empty-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>Student record not found.</p>
+</div>
+{% else %}
+
+<!-- ═══════════ PENDING ASSIGNMENTS ═══════════ -->
+<div class="assignments-section">
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <h3>Pending</h3>
+        <span class="section-badge">{{ pending|length }}</span>
+    </div>
+
+    {% if pending %}
+    <div class="cards-grid">
+        {% for hw in pending %}
+        <div class="item-card" data-flippable="true" data-item-id="{{ hw.id }}" data-item-type="homework">
+            <div class="card-front">
+                <span class="card-subject">{{ hw.subject_name }}</span>
+                <h4 class="card-title">{{ hw.title }}</h4>
+                {% if hw.description %}
+                <p class="card-detail">{{ hw.description[:100] }}{% if hw.description|length > 100 %}...{% endif %}</p>
+                {% endif %}
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                    <span class="card-date
+                        {% set days_left = (hw.deadline - today).days %}
+                        {% if days_left > 3 %}card-date--safe{% elif days_left >= 1 %}card-date--warn{% else %}card-date--danger{% endif %}">
+                        <i class="fas fa-clock"></i>
+                        Due {{ hw.deadline.strftime('%d %b') }}
+                    </span>
+                    {% if days_left < 0 %}
+                    <span class="assignment-status status--overdue">OVERDUE</span>
+                    {% elif days_left <= 1 %}
+                    <span class="assignment-status status--pending">URGENT</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-flip-content">
+                <span class="flip-question">Completed?</span>
+                <div class="flip-buttons">
+                    <button class="flip-btn flip-btn--yes" type="button">YES</button>
+                    <button class="flip-btn flip-btn--no" type="button">NO</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-check-circle"></i>
+        <p>All caught up! No pending assignments. 🎉</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- ═══════════ COMPLETED ASSIGNMENTS ═══════════ -->
+<div class="assignments-section">
+    <div class="section-header">
+        <div class="section-bar" style="background: #10b981;"></div>
+        <h3>Completed</h3>
+        <span class="section-badge" style="background: #dcfce7; color: #16a34a;">{{ completed|length }}</span>
+    </div>
+
+    {% if completed %}
+    <div class="cards-grid">
+        {% for hw in completed %}
+        <div class="item-card" style="opacity: 0.7;">
+            <div class="card-front">
+                <span class="card-subject">{{ hw.subject_name }}</span>
+                <h4 class="card-title">{{ hw.title }}</h4>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                    <span class="card-date card-date--safe">
+                        <i class="fas fa-check"></i>
+                        Submitted
+                        {% if hw.submitted_at %}
+                        · {{ hw.submitted_at.strftime('%d %b') }}
+                        {% endif %}
+                    </span>
+                    <span class="assignment-status status--completed">
+                        <i class="fas fa-check-circle"></i> DONE
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-clipboard-list"></i>
+        <p>No completed assignments yet.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endif %}
+{% endblock %}

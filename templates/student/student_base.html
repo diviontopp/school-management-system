@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Scholaris Student Portal{% endblock %}</title>
+
+    <meta name="description" content="Scholaris Student Portal — Your academic dashboard.">
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/icon.jpg') }}">
+
+    <!-- Google Fonts: Same as school website -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Student Portal CSS (inherits base.css tokens) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- ═══════════ MOBILE MENU TOGGLE ═══════════ -->
+    <button class="mobile-toggle" id="hamburgerBtn" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- ═══════════ OVERLAY ═══════════ -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <div class="portal-layout">
+
+        <!-- ═══════════ SIDEBAR ═══════════ -->
+        <aside class="portal-sidebar-nav" id="navDrawer" aria-label="Student portal navigation">
+            <!-- Brand -->
+            <div class="ps-brand">
+                <div class="ps-brand-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="ps-brand-text">
+                    <span class="ps-brand-name">Scholaris</span>
+                    <span class="ps-brand-sub">Student Portal</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="ps-nav">
+                <span class="ps-nav-label">MENU</span>
+                <a href="{{ url_for('student.dashboard') }}" class="ps-nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('student.assignments') }}" class="ps-nav-item {% if active_page == 'assignments' %}active{% endif %}">
+                    <i class="fas fa-tasks"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="{{ url_for('student.attendance') }}" class="ps-nav-item {% if active_page == 'attendance' %}active{% endif %}">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Attendance</span>
+                </a>
+                <a href="{{ url_for('student.grades') }}" class="ps-nav-item {% if active_page == 'grades' %}active{% endif %}">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Grades</span>
+                </a>
+                <a href="{{ url_for('student.timetable') }}" class="ps-nav-item {% if active_page == 'timetable' %}active{% endif %}">
+                    <i class="fas fa-clock"></i>
+                    <span>Timetable</span>
+                </a>
+                <a href="{{ url_for('student.profile') }}" class="ps-nav-item {% if active_page == 'profile' %}active{% endif %}">
+                    <i class="fas fa-user-circle"></i>
+                    <span>My Profile</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <div class="ps-sidebar-footer">
+                <div class="ps-divider"></div>
+                <a href="{{ url_for('public.index') }}" class="ps-nav-item ps-nav-item--muted">
+                    <i class="fas fa-globe"></i>
+                    <span>School Website</span>
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="ps-nav-item ps-nav-item--danger">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ═══════════ MAIN CONTENT ═══════════ -->
+        <main class="portal-main">
+            <!-- Sticky Header -->
+            <header class="portal-topbar">
+                <div class="topbar-left">
+                    <h1 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <div class="topbar-right">
+                    {% if student %}
+                    <div class="topbar-user">
+                        <div class="topbar-avatar">{{ student.first_name[0] }}{{ student.last_name[0] }}</div>
+                        <div class="topbar-user-meta">
+                            <span class="topbar-user-name">{{ student.first_name }}</span>
+                            <span class="topbar-user-class">{{ student.class_name }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Page Body -->
+            <section class="portal-body">
+                {% block content %}{% endblock %}
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            // Using JSON.parse to avoid IDE lint errors with Jinja2 syntax
+            const rawMsgs = JSON.parse('{{ messages | tojson | safe }}');
+            rawMsgs.forEach(function(m) {
+              if (window.showToast) window.showToast(m[1], m[0]);
+            });
+          });
+        </script>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Student Portal JS -->
+    <script src="{{ url_for('static', filename='js/student.js') }}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

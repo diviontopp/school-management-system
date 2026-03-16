@@ -1,0 +1,76 @@
+{% extends "student/student_base.html" %}
+{% block title %}Timetable — Scholaris Student Portal{% endblock %}
+{% block page_title %}Timetable{% endblock %}
+
+{% block content %}
+{% if not student %}
+<div class="empty-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>Student record not found.</p>
+</div>
+{% else %}
+
+<div class="section-header">
+    <div class="section-bar"></div>
+    <h3>Weekly Timetable</h3>
+    <span class="section-badge">{{ student.class_name }}</span>
+</div>
+
+{% if grid %}
+<div class="timetable-wrapper">
+    <table class="timetable">
+        <thead>
+            <tr>
+                <th>Period</th>
+                {% for day in days %}
+                <th>{{ day[:3] }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for pn, data in grid.items() %}
+            {% set p = data['period'] %}
+            {% if p.is_break %}
+            <tr class="break-row">
+                <td class="period-label">{{ p.break_name or 'Break' }}</td>
+                {% for day in days %}
+                <td>{{ p.start_time|format_time }} - {{ p.end_time|format_time }}</td>
+                {% endfor %}
+            </tr>
+            {% else %}
+            <tr>
+                <td class="period-label">
+                    P{{ p.period_number }}<br>
+                    <span style="font-size: 0.7rem; font-weight: 400;">
+                        {{ p.start_time|format_time }}
+                    </span>
+                </td>
+                {% for day in days %}
+                <td>
+                    {% set slot = data['slots'].get(day) %}
+                    {% if slot %}
+                    <span class="subject-name">{{ slot.subject_name or '—' }}</span>
+                    <span class="teacher-name">{{ slot.teacher_name or '' }}</span>
+                    {% if slot.room %}
+                    <span class="teacher-name">{{ slot.room }}</span>
+                    {% endif %}
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-clock"></i>
+    <p>No timetable data available for your class.</p>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

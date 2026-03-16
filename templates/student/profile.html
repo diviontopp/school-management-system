@@ -1,0 +1,63 @@
+{% extends "student/student_base.html" %}
+{% block title %}My Profile — Scholaris Student Portal{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+{% if not student %}
+<div class="empty-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>Student record not found.</p>
+</div>
+{% else %}
+
+<div class="profile-card">
+    <div class="profile-card-header">
+        <h2>{{ student.first_name }} {{ student.last_name }}</h2>
+        <p>{{ student.class_name }} · Roll #{{ student.roll_number }}</p>
+    </div>
+    <div class="profile-card-body">
+        <div class="profile-row">
+            <span class="profile-label">Admission No.</span>
+            <span class="profile-value">{{ student.admission_number }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Class</span>
+            <span class="profile-value">{{ student.class_name }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Roll Number</span>
+            <span class="profile-value">{{ student.roll_number or '—' }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Date of Birth</span>
+            <span class="profile-value">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Gender</span>
+            <span class="profile-value">
+                {% if student.gender == 'M' %}Male
+                {% elif student.gender == 'F' %}Female
+                {% else %}{{ student.gender }}{% endif %}
+            </span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Email</span>
+            <span class="profile-value">{{ student.email or '—' }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Phone</span>
+            <span class="profile-value">{{ student.phone or '—' }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Address</span>
+            <span class="profile-value">{{ student.address or '—' }}</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Admission Date</span>
+            <span class="profile-value">{{ student.admission_date.strftime('%d %B %Y') if student.admission_date else '—' }}</span>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

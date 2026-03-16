@@ -1,0 +1,73 @@
+{% extends "student/student_base.html" %}
+{% block title %}Grades — Scholaris Student Portal{% endblock %}
+{% block page_title %}Grades{% endblock %}
+
+{% block content %}
+{% if not student %}
+<div class="empty-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>Student record not found.</p>
+</div>
+{% else %}
+
+<div class="section-header">
+    <div class="section-bar"></div>
+    <h3>My Grades</h3>
+    <span class="section-badge">{{ scores|length }} tests</span>
+</div>
+
+{% if by_subject %}
+    {% for subject, subject_scores in by_subject.items() %}
+    <div style="margin-bottom: var(--space-4);">
+        <h4 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; 
+                   background: #0f4c81; color: #fff; 
+                   display: inline-block; padding: 4px 16px; margin-bottom: var(--space-1);
+                   border-radius: 6px;">
+            {{ subject }}
+        </h4>
+
+        <div class="data-table-wrapper" style="margin-bottom: 0;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Marks</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in subject_scores %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ s.test_name }}</td>
+                        <td>{{ s.test_type }}</td>
+                        <td>{{ s.test_date.strftime('%d %b %Y') }}</td>
+                        <td>
+                            <strong>{{ s.marks_obtained }}</strong> / {{ s.max_marks }}
+                            {% set pct = (s.marks_obtained / s.max_marks * 100)|int if s.max_marks > 0 else 0 %}
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">({{ pct }}%)</span>
+                        </td>
+                        <td>
+                            {% if s.grade %}
+                            <span class="status-pill {% if s.grade in ['A+', 'A'] %}status-pill--present{% elif s.grade in ['B+', 'B'] %}status-pill--excused{% elif s.grade in ['C+', 'C'] %}status-pill--late{% else %}status-pill--absent{% endif %}">
+                                {{ s.grade }}
+                            </span>
+                            {% else %}—{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-chart-bar"></i>
+    <p>No test scores available yet.</p>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

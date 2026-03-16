@@ -1,0 +1,144 @@
+{% extends "student/student_base.html" %}
+{% block title %}Dashboard — Scholaris Student Portal{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+{% if not student %}
+<div class="empty-state">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>Student record not found. Please contact administration.</p>
+</div>
+{% else %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+    <div class="welcome-text">
+        <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+        <p>Class {{ student.class_name }} · Roll #{{ student.roll_number }}</p>
+    </div>
+    <div class="welcome-date">
+        <i class="fas fa-calendar-alt"></i>
+        {{ today.strftime('%d %B %Y') }}
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="stats-grid">
+    <div class="stat-card stat-card--green">
+        <div class="stat-value">{{ attendance_pct }}%</div>
+        <div class="stat-label">Attendance</div>
+    </div>
+    <div class="stat-card stat-card--blue">
+        <div class="stat-value">{{ test_count }}</div>
+        <div class="stat-label">Upcoming Tests</div>
+    </div>
+    <div class="stat-card stat-card--gold">
+        <div class="stat-value">{{ hw_pending }}</div>
+        <div class="stat-label">Pending Homework</div>
+    </div>
+    <div class="stat-card stat-card--purple">
+        <div class="stat-value">{{ student.class_name }}</div>
+        <div class="stat-label">Your Class</div>
+    </div>
+</div>
+
+<!-- ═══════════ UPCOMING TESTS ═══════════ -->
+<div class="section-header">
+    <div class="section-bar"></div>
+    <h3>Upcoming Tests</h3>
+    <span class="section-badge">{{ upcoming_tests|length }}</span>
+</div>
+
+{% if upcoming_tests %}
+<div class="cards-grid">
+    {% for test in upcoming_tests %}
+    <div class="item-card" data-flippable="true" data-item-id="{{ test.id }}" data-item-type="test">
+        <div class="card-front">
+            <span class="card-subject">{{ test.subject_name }}</span>
+            <h4 class="card-title">{{ test.name }}</h4>
+            {% if test.portions %}
+            <p class="card-detail">{{ test.portions }}</p>
+            {% endif %}
+            <span class="card-date
+                {% set days_until = (test.test_date - today).days %}
+                {% if days_until > 3 %}card-date--safe{% elif days_until >= 1 %}card-date--warn{% else %}card-date--danger{% endif %}">
+                <i class="fas fa-calendar"></i>
+                {{ test.test_date.strftime('%d %b') }} · {{ test.test_type }}
+            </span>
+        </div>
+        <div class="card-flip-content">
+            <span class="flip-question">Studied?</span>
+            <div class="flip-buttons">
+                <button class="flip-btn flip-btn--yes" type="button">YES</button>
+                <button class="flip-btn flip-btn--no" type="button">NO</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-clipboard-check"></i>
+    <p>No upcoming tests — relax! 🎉</p>
+</div>
+{% endif %}
+
+<!-- ═══════════ UPCOMING HOMEWORK ═══════════ -->
+<div class="section-header">
+    <div class="section-bar"></div>
+    <h3>Upcoming Homework</h3>
+    <span class="section-badge">{{ upcoming_homework|length }}</span>
+</div>
+
+{% if upcoming_homework %}
+<div class="cards-grid">
+    {% for hw in upcoming_homework %}
+    {% set is_done = hw.submission_status == 'Submitted' %}
+    <div class="item-card {% if is_done %}{% endif %}" 
+         data-flippable="{{ 'false' if is_done else 'true' }}" 
+         data-item-id="{{ hw.id }}" 
+         data-item-type="homework"
+         {% if is_done %}style="opacity: 0.6;"{% endif %}>
+        <div class="card-front">
+            <span class="card-subject">{{ hw.subject_name }}</span>
+            <h4 class="card-title">{{ hw.title }}</h4>
+            {% if hw.description %}
+            <p class="card-detail">{{ hw.description[:80] }}{% if hw.description|length > 80 %}...{% endif %}</p>
+            {% endif %}
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="card-date
+                    {% if is_done %}card-date--safe
+                    {% else %}
+                        {% set days_left = (hw.deadline - today).days %}
+                        {% if days_left > 3 %}card-date--safe{% elif days_left >= 1 %}card-date--warn{% else %}card-date--danger{% endif %}
+                    {% endif %}">
+                    <i class="fas fa-clock"></i>
+                    {% if is_done %}
+                        Submitted ✓
+                    {% else %}
+                        Due {{ hw.deadline.strftime('%d %b') }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        {% if not is_done %}
+        <div class="card-flip-content">
+            <span class="flip-question">Completed?</span>
+            <div class="flip-buttons">
+                <button class="flip-btn flip-btn--yes" type="button">YES</button>
+                <button class="flip-btn flip-btn--no" type="button">NO</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-book-open"></i>
+    <p>No pending homework — enjoy your free time! 📚</p>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}
