@@ -13,59 +13,57 @@ def get_pool():
     global _pool, _pool_error
     if _pool is not None:
         return _pool
-    if _pool_error is not None:
-        raise _pool_error
 
-    # Only attempt connection if host is configured
+    # Clear previous error on retry attempt
+    _pool_error = None
+
     if not Config.MYSQL_HOST:
-        _pool_error = Exception("DATABASE_URL is not configured. Please check your environment variables.")
+        _pool_error = Exception("DATABASE_URL is not configured. Please check environment variables (MYSQL_URL).")
         raise _pool_error
 
-    try:
-        print(f"DEBUG: Attempting to connect to MySQL at {Config.MYSQL_HOST}:{Config.MYSQL_PORT}...")
-        kwargs = {
-            "pool_name": "school_portal_pool",
-            "pool_size": 10,             # Increased pool size for better concurrency
-            "host": Config.MYSQL_HOST,
-            "port": Config.MYSQL_PORT,
-            "user": Config.MYSQL_USER,
-            "password": Config.MYSQL_PASSWORD,
-            "database": Config.MYSQL_DATABASE,
-            "charset": "utf8mb4",
-            "collation": "utf8mb4_unicode_ci",
-            "autocommit": False,
-            "connection_timeout": 15,   # Increased timeout for cold starts
-            "client_flags": [mysql.connector.ClientFlag.MULTI_STATEMENTS] # Performance optimization
-        }
-        if Config.DATABASE_URL and "ssl-mode=" in Config.DATABASE_URL:
-            # If the URL already contains ssl-mode, the connector might handle it,
-            # but we ensure the pooling kwargs are consistent.
-            pass
+    import time
+    last_exception = None
+    
+    # Retry loop for connection (handles cold-start DBs)
+    for attempt in range(3):
+        try:
+            print(f"DEBUG: Attempt {attempt+1}/3 to connect to MySQL at {Config.MYSQL_HOST}...", flush=True)
+            kwargs = {
+                "pool_name": "school_portal_pool",
+                "pool_size": 10,
+                "host": Config.MYSQL_HOST,
+                "port": Config.MYSQL_PORT,
+                "user": Config.MYSQL_USER,
+                "password": Config.MYSQL_PASSWORD,
+                "database": Config.MYSQL_DATABASE,
+                "charset": "utf8mb4",
+                "collation": "utf8mb4_unicode_ci",
+                "autocommit": False,
+                "connection_timeout": 20,
+                "client_flags": [mysql.connector.ClientFlag.MULTI_STATEMENTS]
+            }
 
-        if not getattr(Config, 'MYSQL_SSL_DISABLED', True):
-            # Aiven and most cloud providers require SSL. 
-            # We use 'REQUIRED' or 'VERIFY_IDENTITY' usually, but 'ssl_disabled=False' 
-            # is the basic toggle in mysql-connector-python.
-            kwargs['ssl_disabled'] = False
-            # For Aiven specifically, they often provide a CA cert. 
-            # If the user hasn't provided one, we at least enable SSL.
-            # We don't verify cert here to avoid path issues in container, 
-            # unless a CA path is explicitly set in env (future proofing).
-            ca_path = os.getenv("MYSQL_ATTR_SSL_CA")
-            if ca_path and os.path.exists(ca_path):
-                kwargs['ssl_ca'] = ca_path
-                kwargs['ssl_verify_cert'] = True
-            else:
-                kwargs['ssl_verify_identity'] = False
-                kwargs['ssl_verify_cert'] = False
+            if not getattr(Config, 'MYSQL_SSL_DISABLED', True):
+                kwargs['ssl_disabled'] = False
+                ca_path = os.getenv("MYSQL_ATTR_SSL_CA")
+                if ca_path and os.path.exists(ca_path):
+                    kwargs['ssl_ca'] = ca_path
+                    kwargs['ssl_verify_cert'] = True
+                else:
+                    kwargs['ssl_verify_identity'] = False
+                    kwargs['ssl_verify_cert'] = False
 
-        print(f"DEBUG: Connecting to {kwargs['host']} port {kwargs['port']} database {kwargs['database']}...", flush=True)
-        _pool = pooling.MySQLConnectionPool(**kwargs)
-        print(f"✓ Connection pool created for {kwargs['database']}!", flush=True)
-        return _pool
-    except Exception as e:
-        _pool_error = e
-        raise
+            _pool = pooling.MySQLConnectionPool(**kwargs)
+            print(f"✓ Connection pool created successfully!", flush=True)
+            return _pool
+        except Exception as e:
+            last_exception = e
+            print(f"WARN: DB Connection attempt {attempt+1} failed: {e}", flush=True)
+            if attempt < 2:
+                time.sleep(2) # Wait before retry
+    
+    _pool_error = last_exception
+    raise _pool_error
 
 
 def get_connection():
