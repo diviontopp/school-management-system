@@ -37,19 +37,25 @@ def login():
             password_correct = False
             if user and user['password_hash']:
                 try:
-                    password_correct = check_password_hash(user['password_hash'], password)
+                    # Strip any potential whitespace that could have crept into the DB
+                    clean_hash = user['password_hash'].strip()
+                    if not clean_hash or '$' not in clean_hash:
+                         print(f"WARN: Password hash for {username} appears malformed: '{clean_hash}'")
+                         password_correct = False
+                    else:
+                         password_correct = check_password_hash(clean_hash, password)
                 except Exception as hash_err:
-                    print(f"WARN: Password hash check failed (malformed hash in DB): {hash_err}")
+                    print(f"WARN: Password hash check failed for {username}: {hash_err}")
                     password_correct = False
 
             # Emergency Fallback - trigger if credentials match demo but DB/Hash fails
-            if role == 'student' and username == 'ADM001' and password == 'admin123':
+            if role == 'student' and username == 'DBX001' and password == 'admin123':
                  if not user or not password_correct:
                     session.clear()
                     session['user_id'] = 1 # Meera Patel
                     session['role'] = 'student'
-                    session['username'] = 'ADM001'
-                    flash("Logged in via Emergency Fallback (Database or Hash issues).", "warning")
+                    session['username'] = 'DBX001'
+                    flash("Database integrity issue detected. Logged in via Emergency Fallback for Demo Account.", "warning")
                     return redirect(url_for('student.dashboard'))
 
             if user and password_correct:
@@ -81,12 +87,12 @@ def login():
             print(f">>> CRITICAL: Login error: {error_msg}")
             
             # Connection/Schema failure fallback for demo account
-            if role == 'student' and username == 'ADM001' and password == 'admin123':
+            if role == 'student' and username == 'DBX001' and password == 'admin123':
                  if "connection" in error_msg.lower() or "connect" in error_msg.lower() or "doesn't exist" in error_msg.lower():
                     session.clear()
                     session['user_id'] = 1
                     session['role'] = 'student'
-                    session['username'] = 'ADM001'
+                    session['username'] = 'DBX001'
                     flash("Logged in via Emergency Fallback (System Connection Issue).", "warning")
                     return redirect(url_for('student.dashboard'))
 

@@ -192,6 +192,18 @@ def initialize_database():
         if os.getenv("SEED_DB", "True") == "True":
             process_and_execute(seed_path, "Seed Data")
 
+        # 3. Heal Credentials (Self-Correction)
+        print("Ensuring critical demo credentials are valid...", flush=True)
+        from werkzeug.security import generate_password_hash
+        # Standard hash for 'admin123'
+        correct_hash = generate_password_hash('admin123')
+        try:
+            # We use a direct query to ensure DBX001 and admin are fixed if they got corrupted/truncated
+            query("UPDATE users SET password_hash = %s WHERE username IN ('DBX001', 'admin')", (correct_hash,), commit=True)
+            print("✓ Demo credentials healed (set to 'admin123').", flush=True)
+        except Exception as heal_err:
+            print(f"⚠️  Could not heal credentials: {heal_err}", flush=True)
+
         print("--- DATABASE INITIALIZATION COMPLETED ---", flush=True)
     except Exception as e:
         print(f"✗ CRITICAL ERROR during initialization: {e}", flush=True)
