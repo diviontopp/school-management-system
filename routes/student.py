@@ -24,6 +24,7 @@ def _get_student(user_id):
 def dashboard():
     student = _get_student(session['user_id'])
     if not student:
+        print(f">>> CRITICAL: Student record missing for user_id={session['user_id']} (username={session.get('username')})", flush=True)
         return render_template('student/dashboard.html', student=None, error="Student record not found.")
 
     # Upcoming tests (next 30 days)

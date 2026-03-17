@@ -201,8 +201,18 @@ def initialize_database():
             # We use a direct query to ensure DBX001 and admin are fixed if they got corrupted/truncated
             query("UPDATE users SET password_hash = %s WHERE username IN ('DBX001', 'admin')", (correct_hash,), commit=True)
             print("✓ Demo credentials healed (set to 'admin123').", flush=True)
+            
+            # 4. Heal Student Link (Ensures record matches user ID)
+            dbx_user = query("SELECT id FROM users WHERE username = 'DBX001'", fetch_one=True)
+            if dbx_user:
+                # Clean up old ADM001 admission number if it exists and conflicts
+                query("UPDATE students SET admission_number = 'DBX001' WHERE admission_number = 'ADM001'", commit=True)
+                
+                # Fix the user_id link for Meera Patel / DBX001
+                query("UPDATE students SET user_id = %s WHERE admission_number = 'DBX001'", (dbx_user['id'],), commit=True)
+                print(f"✓ Student DBX001 record verified and linked (User ID: {dbx_user['id']}).", flush=True)
         except Exception as heal_err:
-            print(f"⚠️  Could not heal credentials: {heal_err}", flush=True)
+            print(f"⚠️  Could not heal records: {heal_err}", flush=True)
 
         print("--- DATABASE INITIALIZATION COMPLETED ---", flush=True)
     except Exception as e:

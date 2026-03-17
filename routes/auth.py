@@ -51,8 +51,12 @@ def login():
             # Emergency Fallback - trigger if credentials match demo but DB/Hash fails
             if role == 'student' and username == 'DBX001' and password == 'admin123':
                  if not user or not password_correct:
+                    # Try to find the real ID from DB even if hash check failed
+                    demo_user = query("SELECT id FROM users WHERE username = 'DBX001' AND role = 'student'", fetch_one=True)
+                    actual_id = demo_user['id'] if demo_user else 5 # Fallback to 5 which is standard for Meera Patel
+                    
                     session.clear()
-                    session['user_id'] = 1 # Meera Patel
+                    session['user_id'] = actual_id
                     session['role'] = 'student'
                     session['username'] = 'DBX001'
                     flash("Database integrity issue detected. Logged in via Emergency Fallback for Demo Account.", "warning")
@@ -89,11 +93,12 @@ def login():
             # Connection/Schema failure fallback for demo account
             if role == 'student' and username == 'DBX001' and password == 'admin123':
                  if "connection" in error_msg.lower() or "connect" in error_msg.lower() or "doesn't exist" in error_msg.lower():
+                    # Even if connection fails, we set a likely ID (5) to bypass DB dependence
                     session.clear()
-                    session['user_id'] = 1
+                    session['user_id'] = 5 # Standard ID for Meera Patel in seed data
                     session['role'] = 'student'
                     session['username'] = 'DBX001'
-                    flash("Logged in via Emergency Fallback (System Connection Issue).", "warning")
+                    flash("Logged in via Emergency Fallback (System Connection Issue). Data shown may be simulated.", "warning")
                     return redirect(url_for('student.dashboard'))
 
             if "doesn't exist" in error_msg.lower() or "table" in error_msg.lower():
