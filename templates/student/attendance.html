@@ -31,7 +31,7 @@
 </div>
 
 <!-- ═══════════ CALENDAR ═══════════ -->
-<div class="cal-container">
+<div class="cal-container" id="attendanceGrid" data-records='{{ att_map | tojson | safe }}'>
     <div class="cal-header">
         <button class="cal-nav-btn" id="calPrev" aria-label="Previous month">
             <i class="fas fa-chevron-left"></i>
@@ -79,12 +79,7 @@
 {% block extra_js %}
 <script>
 // Attendance data from server
-const attendanceMap = {};
-{% if records %}
-{% for r in records %}
-attendanceMap['{{ r.date.strftime("%Y-%m-%d") }}'] = '{{ r.status|lower }}';
-{% endfor %}
-{% endif %}
+const attendanceMap = JSON.parse(document.getElementById('attendanceGrid').dataset.records || '{}');
 
 const today = new Date();
 let viewYear  = today.getFullYear();

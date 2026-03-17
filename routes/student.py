@@ -209,9 +209,13 @@ def attendance():
     late = sum(1 for r in records if r['status'] == 'Late')
     pct = round((present / total) * 100) if total > 0 else 0
 
+    # Process records for the calendar JS
+    att_map = {r['date'].strftime('%Y-%m-%d'): r['status'].lower() for r in records}
+
     return render_template('student/attendance.html',
         student=student,
         records=records,
+        att_map=att_map,
         total=total, present=present, absent=absent, late=late,
         attendance_pct=pct,
         active_page='attendance'

@@ -122,18 +122,24 @@
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
 
+    <!-- Flash Message Data (for JS toasts) -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const rawMsgs = JSON.parse('{{ messages | tojson | safe }}');
-            rawMsgs.forEach(function(m) {
+    <div id="flash-data" data-messages='{{ messages | tojson | safe }}' style="display: none;"></div>
+    {% endwith %}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const flashEl = document.getElementById('flash-data');
+        if (flashEl) {
+          try {
+            const messages = JSON.parse(flashEl.dataset.messages || '[]');
+            messages.forEach(function(m) {
               if (window.showToast) window.showToast(m[1], m[0]);
             });
-          });
-        </script>
-      {% endif %}
-    {% endwith %}
+          } catch (e) { console.error("Flash parse error:", e); }
+        }
+      });
+    </script>
 
     <!-- Student Portal JS -->
     <script src="{{ url_for('static', filename='js/student.js') }}"></script>
