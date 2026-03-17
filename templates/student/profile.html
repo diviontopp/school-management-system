@@ -10,54 +10,119 @@
 </div>
 {% else %}
 
-<div class="profile-card">
-    <div class="profile-card-header">
+<!-- Profile Hero -->
+<div class="profile-hero">
+    <div class="profile-avatar-large">{{ student.first_name[0] }}{{ student.last_name[0] }}</div>
+    <div class="profile-hero-info">
         <h2>{{ student.first_name }} {{ student.last_name }}</h2>
-        <p>{{ student.class_name }} · Roll #{{ student.roll_number }}</p>
-    </div>
-    <div class="profile-card-body">
-        <div class="profile-row">
-            <span class="profile-label">Admission No.</span>
-            <span class="profile-value">{{ student.admission_number }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Class</span>
-            <span class="profile-value">{{ student.class_name }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Roll Number</span>
-            <span class="profile-value">{{ student.roll_number or '—' }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Date of Birth</span>
-            <span class="profile-value">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Gender</span>
-            <span class="profile-value">
-                {% if student.gender == 'M' %}Male
-                {% elif student.gender == 'F' %}Female
-                {% else %}{{ student.gender }}{% endif %}
+        <div class="profile-hero-meta">
+            <span class="profile-meta-badge">
+                <i class="fas fa-graduation-cap"></i>
+                {{ student.class_name }}
             </span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Email</span>
-            <span class="profile-value">{{ student.email or '—' }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Phone</span>
-            <span class="profile-value">{{ student.phone or '—' }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Address</span>
-            <span class="profile-value">{{ student.address or '—' }}</span>
-        </div>
-        <div class="profile-row">
-            <span class="profile-label">Admission Date</span>
-            <span class="profile-value">{{ student.admission_date.strftime('%d %B %Y') if student.admission_date else '—' }}</span>
+            <span class="profile-meta-badge">
+                <i class="fas fa-hashtag"></i>
+                Roll {{ student.roll_number or '—' }}
+            </span>
+            <span class="profile-meta-badge">
+                <i class="fas fa-id-badge"></i>
+                {{ student.admission_number }}
+            </span>
+            {% if student.gender %}
+            <span class="profile-meta-badge">
+                <i class="fas fa-user"></i>
+                {% if student.gender == 'M' %}Male{% elif student.gender == 'F' %}Female{% else %}{{ student.gender }}{% endif %}
+            </span>
+            {% endif %}
         </div>
     </div>
 </div>
 
+<!-- Info Grid -->
+<div class="profile-grid">
+    <div class="profile-field-card">
+        <div class="profile-field-icon"><i class="fas fa-calendar-alt"></i></div>
+        <div class="profile-field-body">
+            <div class="profile-field-label">Date of Birth</div>
+            <div class="profile-field-value">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</div>
+        </div>
+    </div>
+    <div class="profile-field-card">
+        <div class="profile-field-icon"><i class="fas fa-envelope"></i></div>
+        <div class="profile-field-body">
+            <div class="profile-field-label">Email Address</div>
+            <div class="profile-field-value">{{ student.email or '—' }}</div>
+        </div>
+    </div>
+    <div class="profile-field-card">
+        <div class="profile-field-icon"><i class="fas fa-phone"></i></div>
+        <div class="profile-field-body">
+            <div class="profile-field-label">Phone Number</div>
+            <div class="profile-field-value">{{ student.phone or '—' }}</div>
+        </div>
+    </div>
+    <div class="profile-field-card">
+        <div class="profile-field-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <div class="profile-field-body">
+            <div class="profile-field-label">Address</div>
+            <div class="profile-field-value" style="font-size: 0.85rem;">{{ student.address or '—' }}</div>
+        </div>
+    </div>
+    <div class="profile-field-card">
+        <div class="profile-field-icon"><i class="fas fa-door-open"></i></div>
+        <div class="profile-field-body">
+            <div class="profile-field-label">Class & Section</div>
+            <div class="profile-field-value">{{ student.class_name }}</div>
+        </div>
+    </div>
+    <div class="profile-field-card">
+        <div class="profile-field-icon"><i class="fas fa-calendar-check"></i></div>
+        <div class="profile-field-body">
+            <div class="profile-field-label">Admission Date</div>
+            <div class="profile-field-value">{{ student.admission_date.strftime('%d %B %Y') if student.admission_date else '—' }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Row -->
+<div style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; color: var(--clr-text-main); margin-bottom: 14px; letter-spacing: -0.01em;">
+    Academic Overview
+</div>
+<div class="profile-stats">
+    <a href="{{ url_for('student.attendance') }}" class="profile-stat-card" style="text-decoration: none;">
+        <div class="profile-stat-num" style="color: #059669;">{{ attendance_pct }}%</div>
+        <div class="profile-stat-label">Attendance</div>
+    </a>
+    <a href="{{ url_for('student.grades') }}" class="profile-stat-card" style="text-decoration: none;">
+        <div class="profile-stat-num">{{ scores_count }}</div>
+        <div class="profile-stat-label">Tests Graded</div>
+    </a>
+    <a href="{{ url_for('student.assignments') }}" class="profile-stat-card" style="text-decoration: none;">
+        <div class="profile-stat-num" style="color: var(--clr-gold);">{{ hw_done }}</div>
+        <div class="profile-stat-label">Homework Done</div>
+    </a>
+</div>
+
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navDrawer');
+    const overlay = document.getElementById('menuOverlay');
+    if (btn) btn.addEventListener('click', () => { nav.classList.toggle('open'); overlay.classList.toggle('open'); });
+    if (overlay) overlay.addEventListener('click', () => { nav.classList.remove('open'); overlay.classList.remove('open'); });
+
+    window.showToast = function(msg, category) {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = `toast toast--${category}`;
+        t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 5000);
+    };
+});
+</script>
 {% endblock %}

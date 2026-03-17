@@ -9,15 +9,15 @@
     <meta name="description" content="Scholaris Student Portal — Your academic dashboard.">
     <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/icon.jpg') }}">
 
-    <!-- Google Fonts: Same as school website -->
+    <!-- Premium Fonts: Plus Jakarta Sans + Fraunces -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Student Portal CSS (inherits base.css tokens) -->
+    <!-- Student Portal CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
 
     {% block extra_css %}{% endblock %}
@@ -51,7 +51,7 @@
 
             <!-- Navigation -->
             <nav class="ps-nav">
-                <span class="ps-nav-label">MENU</span>
+                <span class="ps-nav-label">Menu</span>
                 <a href="{{ url_for('student.dashboard') }}" class="ps-nav-item {% if active_page == 'dashboard' %}active{% endif %}">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
@@ -104,7 +104,7 @@
                     <div class="topbar-user">
                         <div class="topbar-avatar">{{ student.first_name[0] }}{{ student.last_name[0] }}</div>
                         <div class="topbar-user-meta">
-                            <span class="topbar-user-name">{{ student.first_name }}</span>
+                            <span class="topbar-user-name">{{ student.first_name }} {{ student.last_name }}</span>
                             <span class="topbar-user-class">{{ student.class_name }}</span>
                         </div>
                     </div>
@@ -126,7 +126,6 @@
       {% if messages %}
         <script>
           document.addEventListener('DOMContentLoaded', function() {
-            // Using JSON.parse to avoid IDE lint errors with Jinja2 syntax
             const rawMsgs = JSON.parse('{{ messages | tojson | safe }}');
             rawMsgs.forEach(function(m) {
               if (window.showToast) window.showToast(m[1], m[0]);

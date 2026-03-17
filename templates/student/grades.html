@@ -10,58 +10,102 @@
 </div>
 {% else %}
 
-<div class="section-header">
-    <div class="section-bar"></div>
-    <h3>My Grades</h3>
-    <span class="section-badge">{{ scores|length }} tests</span>
+{% set subject_colors = {
+    'Mathematics': '#6366f1', 'Maths': '#6366f1',
+    'English': '#ec4899',
+    'Science': '#10b981', 'Physics': '#10b981', 'Chemistry': '#84cc16', 'Biology': '#22c55e',
+    'History': '#f59e0b', 'Geography': '#3b82f6',
+    'Computer Science': '#8b5cf6', 'Art': '#14b8a6',
+    'Physical Education': '#f97316', 'Hindi': '#ef4444'
+} %}
+
+{% set subject_icons = {
+    'Mathematics': 'fa-calculator', 'Maths': 'fa-calculator',
+    'English': 'fa-book-open',
+    'Science': 'fa-flask', 'Physics': 'fa-atom', 'Chemistry': 'fa-vial', 'Biology': 'fa-leaf',
+    'History': 'fa-landmark', 'Geography': 'fa-globe',
+    'Computer Science': 'fa-laptop-code', 'Art': 'fa-palette',
+    'Physical Education': 'fa-running', 'Hindi': 'fa-language'
+} %}
+
+<!-- Grades Header -->
+{% if scores %}
+{% set total_pct = namespace(v=0, count=0) %}
+{% for s in scores %}
+{% if s.max_marks > 0 %}
+{% set total_pct.v = total_pct.v + (s.marks_obtained / s.max_marks * 100) %}
+{% set total_pct.count = total_pct.count + 1 %}
+{% endif %}
+{% endfor %}
+{% set avg_pct = (total_pct.v / total_pct.count)|round|int if total_pct.count > 0 else 0 %}
+{% set avg_grade = 'A+' if avg_pct >= 90 else ('A' if avg_pct >= 80 else ('B+' if avg_pct >= 75 else ('B' if avg_pct >= 65 else ('C+' if avg_pct >= 55 else 'C')))) %}
+
+<div class="grades-header">
+    <div class="gpa-circle">
+        <div class="gpa-value">{{ avg_grade }}</div>
+        <div class="gpa-label">Average</div>
+    </div>
+    <div class="grades-summary-text">
+        <h3>{{ student.first_name }}'s Academic Report</h3>
+        <p>{{ avg_pct }}% overall · {{ scores|length }} tests graded · {{ by_subject|length }} subjects</p>
+    </div>
 </div>
+{% endif %}
 
 {% if by_subject %}
     {% for subject, subject_scores in by_subject.items() %}
-    <div style="margin-bottom: var(--space-4);">
-        <h4 style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; 
-                   background: #0f4c81; color: #fff; 
-                   display: inline-block; padding: 4px 16px; margin-bottom: var(--space-1);
-                   border-radius: 6px;">
-            {{ subject }}
-        </h4>
+    {% set color = subject_colors.get(subject, '#64748b') %}
+    {% set icon = subject_icons.get(subject, 'fa-book') %}
 
-        <div class="data-table-wrapper" style="margin-bottom: 0;">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Test</th>
-                        <th>Type</th>
-                        <th>Date</th>
-                        <th>Marks</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for s in subject_scores %}
-                    <tr>
-                        <td style="font-weight: 600;">{{ s.test_name }}</td>
-                        <td>{{ s.test_type }}</td>
-                        <td>{{ s.test_date.strftime('%d %b %Y') }}</td>
-                        <td>
-                            <strong>{{ s.marks_obtained }}</strong> / {{ s.max_marks }}
-                            {% set pct = (s.marks_obtained / s.max_marks * 100)|int if s.max_marks > 0 else 0 %}
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">({{ pct }}%)</span>
-                        </td>
-                        <td>
-                            {% if s.grade %}
-                            <span class="status-pill {% if s.grade in ['A+', 'A'] %}status-pill--present{% elif s.grade in ['B+', 'B'] %}status-pill--excused{% elif s.grade in ['C+', 'C'] %}status-pill--late{% else %}status-pill--absent{% endif %}">
-                                {{ s.grade }}
-                            </span>
-                            {% else %}—{% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="subject-grade-card" style="--card-accent: {{ color }};">
+        <div class="subject-grade-header" style="background: linear-gradient(90deg, {{ color }}25, {{ color }}08);">
+            <div class="subject-icon" style="background: {{ color }}; color: #fff;">
+                <i class="fas {{ icon }}"></i>
+            </div>
+            <div class="subject-grade-title" style="color: var(--clr-text-main);">{{ subject }}</div>
+            {% set subj_scores_list = subject_scores %}
+            {% set ns = namespace(total=0, max=0, count=0) %}
+            {% for s in subj_scores_list %}
+                {% if s.max_marks > 0 %}
+                    {% set ns.total = ns.total + s.marks_obtained %}
+                    {% set ns.max = ns.max + s.max_marks %}
+                    {% set ns.count = ns.count + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if ns.max > 0 %}
+            <span class="status-badge status-badge--pending" style="margin-left: auto; font-size: 0.72rem;">
+                {{ (ns.total / ns.max * 100)|round|int }}% avg
+            </span>
+            {% endif %}
         </div>
+
+        {% for s in subject_scores %}
+        {% set pct = (s.marks_obtained / s.max_marks * 100)|round|int if s.max_marks > 0 else 0 %}
+        {% set grade_class = 'grade-pill--A' if s.grade and s.grade[0] == 'A' else ('grade-pill--B' if s.grade and s.grade[0] == 'B' else ('grade-pill--C' if s.grade and s.grade[0] == 'C' else 'grade-pill--D')) %}
+        <div class="grade-score-row">
+            <div class="grade-test-info">
+                <div class="grade-test-name">{{ s.test_name }}</div>
+                <div class="grade-test-meta">
+                    <span><i class="fas fa-tag" style="font-size:0.65rem;"></i> {{ s.test_type }}</span>
+                    <span><i class="fas fa-calendar" style="font-size:0.65rem;"></i> {{ s.test_date.strftime('%d %b %Y') }}</span>
+                </div>
+            </div>
+            <div class="grade-progress-wrap">
+                <div class="grade-progress-bar">
+                    <div class="grade-progress-fill" style="width: {{ pct }}%; background: {{ color }};" data-width="{{ pct }}"></div>
+                </div>
+                <div class="grade-progress-text">{{ s.marks_obtained }} / {{ s.max_marks }}</div>
+            </div>
+            {% if s.grade %}
+            <span class="grade-pill {{ grade_class }}">{{ s.grade }}</span>
+            {% else %}
+            <span class="grade-pill" style="background: var(--border-color); color: var(--clr-text-muted);">—</span>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
     {% endfor %}
+
 {% else %}
 <div class="empty-state">
     <i class="fas fa-chart-bar"></i>
@@ -70,4 +114,33 @@
 {% endif %}
 
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Animate progress bars on scroll/load
+document.addEventListener('DOMContentLoaded', () => {
+    const bars = document.querySelectorAll('.grade-progress-fill');
+    bars.forEach(bar => {
+        const w = bar.dataset.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = w + '%'; }, 200);
+    });
+
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navDrawer');
+    const overlay = document.getElementById('menuOverlay');
+    if (btn) btn.addEventListener('click', () => { nav.classList.toggle('open'); overlay.classList.toggle('open'); });
+    if (overlay) overlay.addEventListener('click', () => { nav.classList.remove('open'); overlay.classList.remove('open'); });
+
+    window.showToast = function(msg, category) {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = `toast toast--${category}`;
+        t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 5000);
+    };
+});
+</script>
 {% endblock %}

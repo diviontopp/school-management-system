@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, session
 from database.connection import query
 from utils.auth import login_required, role_required
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 student_bp = Blueprint('student', __name__)
 
@@ -106,6 +106,29 @@ def assignments():
         (student['id'], student['class_id'])
     ) or []
 
+    upcoming_tests = query(
+        """SELECT t.id, t.name, t.test_date, t.max_marks, t.portions, t.test_type,
+                  s.name as subject_name
+           FROM tests t
+           JOIN subjects s ON t.subject_id = s.id
+           WHERE t.class_id = %s AND t.test_date >= CURDATE()
+           ORDER BY t.test_date ASC
+           LIMIT 6""",
+        (student['class_id'],)
+    ) or []
+
+    scores = query(
+        """SELECT ts.marks_obtained, ts.grade, ts.remarks,
+                  t.name as test_name, t.max_marks, t.test_type, t.test_date,
+                  s.name as subject_name
+           FROM test_scores ts
+           JOIN tests t ON ts.test_id = t.id
+           JOIN subjects s ON t.subject_id = s.id
+           WHERE ts.student_id = %s
+           ORDER BY t.test_date DESC""",
+        (student['id'],)
+    ) or []
+
     completed = [hw for hw in all_homework if hw.get('submission_status') == 'Submitted']
     pending = [hw for hw in all_homework if not hw.get('submission_status') or hw['submission_status'] != 'Submitted']
 
@@ -113,6 +136,8 @@ def assignments():
         student=student,
         completed=completed,
         pending=pending,
+        scores=scores,
+        upcoming_tests=upcoming_tests,
         active_page='assignments',
         today=date.today()
     )
@@ -275,11 +300,15 @@ def timetable():
         if pn in grid:
             grid[pn]['slots'][day] = entry
 
+    today_day = datetime.now().strftime('%A')  # e.g. 'Monday'
+
     return render_template('student/timetable.html',
         student=student,
         grid=grid,
         periods=periods,
         days=days,
+        today_name=today_day,
+        today=date.today(),
         active_page='timetable'
     )
 
@@ -290,7 +319,38 @@ def timetable():
 @role_required('student')
 def profile():
     student = _get_student(session['user_id'])
+
+    # Extra stats for academic overview on profile
+    att_pct = 0
+    scores_count = 0
+    hw_done = 0
+
+    if student:
+        att_stats = query(
+            """SELECT COUNT(*) as total,
+                 SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) as present
+               FROM student_attendance WHERE student_id = %s""",
+            (student['id'],), fetch_one=True
+        )
+        if att_stats and att_stats['total'] and att_stats['total'] > 0:
+            att_pct = round((att_stats['present'] / att_stats['total']) * 100)
+
+        scores_count_row = query(
+            "SELECT COUNT(*) as cnt FROM test_scores WHERE student_id = %s",
+            (student['id'],), fetch_one=True
+        )
+        scores_count = scores_count_row['cnt'] if scores_count_row else 0
+
+        hw_done_row = query(
+            "SELECT COUNT(*) as cnt FROM homework_submissions WHERE student_id = %s AND status = 'Submitted'",
+            (student['id'],), fetch_one=True
+        )
+        hw_done = hw_done_row['cnt'] if hw_done_row else 0
+
     return render_template('student/profile.html',
         student=student,
+        attendance_pct=att_pct,
+        scores_count=scores_count,
+        hw_done=hw_done,
         active_page='profile'
     )

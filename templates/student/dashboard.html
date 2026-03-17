@@ -14,7 +14,7 @@
 <div class="welcome-banner">
     <div class="welcome-text">
         <h2>Welcome back, {{ student.first_name }}! 👋</h2>
-        <p>Class {{ student.class_name }} · Roll #{{ student.roll_number }}</p>
+        <p>{{ student.class_name }} &nbsp;·&nbsp; Roll #{{ student.roll_number }} &nbsp;·&nbsp; Academic Year 2025–26</p>
     </div>
     <div class="welcome-date">
         <i class="fas fa-calendar-alt"></i>
@@ -42,103 +42,211 @@
     </div>
 </div>
 
-<!-- ═══════════ UPCOMING TESTS ═══════════ -->
-<div class="section-header">
-    <div class="section-bar"></div>
-    <h3>Upcoming Tests</h3>
-    <span class="section-badge">{{ upcoming_tests|length }}</span>
-</div>
+<!-- ═══════════ UPCOMING TESTS CAROUSEL ═══════════ -->
+<div class="carousel-section">
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <h3>Upcoming Tests</h3>
+        <span class="section-badge">{{ upcoming_tests|length }}</span>
+    </div>
 
-{% if upcoming_tests %}
-<div class="cards-grid">
-    {% for test in upcoming_tests %}
-    <div class="item-card" data-flippable="true" data-item-id="{{ test.id }}" data-item-type="test">
-        <div class="card-front">
-            <span class="card-subject">{{ test.subject_name }}</span>
-            <h4 class="card-title">{{ test.name }}</h4>
-            {% if test.portions %}
-            <p class="card-detail">{{ test.portions }}</p>
-            {% endif %}
-            <span class="card-date
+    {% if upcoming_tests %}
+    <div class="carousel-wrapper" id="testsCarousel">
+        <div class="carousel-track-container">
+            <div class="carousel-track" id="testsTrack">
+                {% set subject_colors = {
+                    'Mathematics': '#6366f1', 'Maths': '#6366f1',
+                    'English': '#ec4899',
+                    'Science': '#10b981', 'Physics': '#10b981', 'Chemistry': '#84cc16', 'Biology': '#22c55e',
+                    'History': '#f59e0b', 'Geography': '#3b82f6',
+                    'Computer Science': '#8b5cf6', 'Art': '#14b8a6',
+                    'Physical Education': '#f97316', 'Hindi': '#ef4444'
+                } %}
+                {% for test in upcoming_tests %}
+                {% set color = subject_colors.get(test.subject_name, '#64748b') %}
                 {% set days_until = (test.test_date - today).days %}
-                {% if days_until > 3 %}card-date--safe{% elif days_until >= 1 %}card-date--warn{% else %}card-date--danger{% endif %}">
-                <i class="fas fa-calendar"></i>
-                {{ test.test_date.strftime('%d %b') }} · {{ test.test_type }}
-            </span>
-        </div>
-        <div class="card-flip-content">
-            <span class="flip-question">Studied?</span>
-            <div class="flip-buttons">
-                <button class="flip-btn flip-btn--yes" type="button">YES</button>
-                <button class="flip-btn flip-btn--no" type="button">NO</button>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{% else %}
-<div class="empty-state">
-    <i class="fas fa-clipboard-check"></i>
-    <p>No upcoming tests — relax! 🎉</p>
-</div>
-{% endif %}
-
-<!-- ═══════════ UPCOMING HOMEWORK ═══════════ -->
-<div class="section-header">
-    <div class="section-bar"></div>
-    <h3>Upcoming Homework</h3>
-    <span class="section-badge">{{ upcoming_homework|length }}</span>
-</div>
-
-{% if upcoming_homework %}
-<div class="cards-grid">
-    {% for hw in upcoming_homework %}
-    {% set is_done = hw.submission_status == 'Submitted' %}
-    <div class="item-card {% if is_done %}{% endif %}" 
-         data-flippable="{{ 'false' if is_done else 'true' }}" 
-         data-item-id="{{ hw.id }}" 
-         data-item-type="homework"
-         {% if is_done %}style="opacity: 0.6;"{% endif %}>
-        <div class="card-front">
-            <span class="card-subject">{{ hw.subject_name }}</span>
-            <h4 class="card-title">{{ hw.title }}</h4>
-            {% if hw.description %}
-            <p class="card-detail">{{ hw.description[:80] }}{% if hw.description|length > 80 %}...{% endif %}</p>
-            {% endif %}
-            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
-                <span class="card-date
-                    {% if is_done %}card-date--safe
-                    {% else %}
-                        {% set days_left = (hw.deadline - today).days %}
-                        {% if days_left > 3 %}card-date--safe{% elif days_left >= 1 %}card-date--warn{% else %}card-date--danger{% endif %}
-                    {% endif %}">
-                    <i class="fas fa-clock"></i>
-                    {% if is_done %}
-                        Submitted ✓
-                    {% else %}
-                        Due {{ hw.deadline.strftime('%d %b') }}
+                <div class="task-card" style="--card-accent: {{ color }};">
+                    <div class="task-card-subject">
+                        <div class="subject-dot"></div>
+                        <span class="subject-label">{{ test.subject_name }}</span>
+                    </div>
+                    <div class="task-card-title">{{ test.name }}</div>
+                    {% if test.portions %}
+                    <div class="task-card-detail">{{ test.portions[:90] }}{% if test.portions|length > 90 %}…{% endif %}</div>
                     {% endif %}
-                </span>
+                    <div class="task-card-footer">
+                        <span class="due-chip {% if days_until > 3 %}due-chip--safe{% elif days_until >= 1 %}due-chip--warn{% else %}due-chip--danger{% endif %}">
+                            <i class="fas fa-calendar"></i>
+                            {% if days_until == 0 %}Today!
+                            {% elif days_until == 1 %}Tomorrow
+                            {% else %}in {{ days_until }} days{% endif %}
+                        </span>
+                        <span class="type-chip">{{ test.test_type }}</span>
+                        <span class="due-chip due-chip--safe" style="background: rgba(100,116,139,0.1); color: #475569;">
+                            {{ test.max_marks }} marks
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
-        {% if not is_done %}
-        <div class="card-flip-content">
-            <span class="flip-question">Completed?</span>
-            <div class="flip-buttons">
-                <button class="flip-btn flip-btn--yes" type="button">YES</button>
-                <button class="flip-btn flip-btn--no" type="button">NO</button>
-            </div>
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="testsPrev" aria-label="Previous tests" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="carousel-indicator" id="testsIndicator">1 / {{ ((upcoming_tests|length) / 3)|round(0,'ceil')|int }}</span>
+            <button class="carousel-btn" id="testsNext" aria-label="Next tests">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
-        {% endif %}
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-clipboard-check"></i>
+        <p>No upcoming tests — great, relax! 🎉</p>
+    </div>
+    {% endif %}
 </div>
-{% else %}
-<div class="empty-state">
-    <i class="fas fa-book-open"></i>
-    <p>No pending homework — enjoy your free time! 📚</p>
+
+<!-- ═══════════ UPCOMING HOMEWORK CAROUSEL ═══════════ -->
+<div class="carousel-section">
+    <div class="section-header">
+        <div class="section-bar"></div>
+        <h3>Upcoming Homework</h3>
+        <span class="section-badge">{{ upcoming_homework|length }}</span>
+    </div>
+
+    {% if upcoming_homework %}
+    <div class="carousel-wrapper" id="hwCarousel">
+        <div class="carousel-track-container">
+            <div class="carousel-track" id="hwTrack">
+                {% for hw in upcoming_homework %}
+                {% set color = subject_colors.get(hw.subject_name, '#64748b') %}
+                {% set is_done = hw.submission_status == 'Submitted' %}
+                {% if not is_done %}
+                    {% set days_left = (hw.deadline - today).days %}
+                {% endif %}
+                <div class="task-card" style="--card-accent: {{ color }}; {% if is_done %}opacity: 0.7;{% endif %}">
+                    <div class="task-card-subject">
+                        <div class="subject-dot"></div>
+                        <span class="subject-label">{{ hw.subject_name }}</span>
+                    </div>
+                    <div class="task-card-title">{{ hw.title }}</div>
+                    {% if hw.description %}
+                    <div class="task-card-detail">{{ hw.description[:90] }}{% if hw.description|length > 90 %}…{% endif %}</div>
+                    {% endif %}
+                    <div class="task-card-footer">
+                        {% if is_done %}
+                        <span class="done-chip"><i class="fas fa-check-circle"></i> Submitted</span>
+                        {% else %}
+                        <span class="due-chip {% if days_left > 3 %}due-chip--safe{% elif days_left >= 1 %}due-chip--warn{% else %}due-chip--danger{% endif %}">
+                            <i class="fas fa-clock"></i>
+                            Due {{ hw.deadline.strftime('%d %b') }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="hwPrev" aria-label="Previous homework" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="carousel-indicator" id="hwIndicator">1 / {{ ((upcoming_homework|length) / 3)|round(0,'ceil')|int }}</span>
+            <button class="carousel-btn" id="hwNext" aria-label="Next homework">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-book-open"></i>
+        <p>No pending homework — enjoy your free time! 📚</p>
+    </div>
+    {% endif %}
 </div>
-{% endif %}
 
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Generic carousel factory
+function initCarousel(trackId, prevId, nextId, indicatorId, itemsPerSlide) {
+    const track = document.getElementById(trackId);
+    const prev  = document.getElementById(prevId);
+    const next  = document.getElementById(nextId);
+    const ind   = document.getElementById(indicatorId);
+    if (!track) return;
+
+    const cards = Array.from(track.children);
+    const total = Math.ceil(cards.length / itemsPerSlide);
+    let current = 0;
+
+    function go(idx) {
+        current = Math.max(0, Math.min(idx, total - 1));
+        // Each card is 33.333% wide with 16px gap between
+        // Offset = current * (3 cards width + 2 gaps) = current * (100% + 32px)
+        const cardPct = 100 / itemsPerSlide;
+        const offset = current * (cardPct * itemsPerSlide);
+        track.style.transform = `translateX(calc(-${current * 100}% - ${current * 32}px))`;
+        if (ind) ind.textContent = `${current + 1} / ${total}`;
+        if (prev) prev.disabled = current === 0;
+        if (next) next.disabled = current === total - 1;
+    }
+
+    // Recalculate based on container width
+    function recalc() {
+        const container = track.parentElement;
+        const w = container.offsetWidth;
+        const gap = 16;
+        const perSlide = w < 600 ? 1 : w < 900 ? 2 : 3;
+        const cardW = (w - gap * (perSlide - 1)) / perSlide;
+        cards.forEach(c => { c.style.flexBasis = cardW + 'px'; c.style.flex = `0 0 ${cardW}px`; });
+        track.style.transition = 'none';
+        current = 0;
+        track.style.transform = 'translateX(0)';
+        setTimeout(() => { track.style.transition = ''; }, 50);
+        if (ind) {
+            const newTotal = Math.ceil(cards.length / perSlide);
+            ind.textContent = `1 / ${newTotal}`;
+        }
+    }
+
+    if (prev) prev.addEventListener('click', () => go(current - 1));
+    if (next) next.addEventListener('click', () => go(current + 1));
+    go(0);
+    window.addEventListener('resize', recalc);
+    recalc();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initCarousel('testsTrack', 'testsPrev', 'testsNext', 'testsIndicator', 3);
+    initCarousel('hwTrack', 'hwPrev', 'hwNext', 'hwIndicator', 3);
+
+    // Mobile hamburger
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navDrawer');
+    const overlay = document.getElementById('menuOverlay');
+    if (btn) btn.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        overlay.classList.toggle('open');
+    });
+    if (overlay) overlay.addEventListener('click', () => {
+        nav.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+
+    // Toast function
+    window.showToast = function(msg, category) {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = `toast toast--${category === 'danger' ? 'danger' : category === 'success' ? 'success' : 'warning'}`;
+        t.innerHTML = `<i class="fas fa-${category === 'success' ? 'check-circle' : category === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i> ${msg}`;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 5000);
+    };
+});
+</script>
 {% endblock %}

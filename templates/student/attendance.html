@@ -16,63 +16,158 @@
         <div class="attendance-percentage">{{ attendance_pct }}%</div>
         <div class="stat-label">Overall Attendance</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card stat-card--blue">
         <div class="stat-value">{{ present }}</div>
         <div class="stat-label">Days Present</div>
     </div>
-    <div class="stat-card" style="border-left: 4px solid #ef4444;">
-        <div class="stat-value">{{ absent }}</div>
+    <div class="stat-card" style="border-top: 3px solid var(--clr-absent); border-radius: var(--radius-xl);">
+        <div class="stat-value" style="color: var(--clr-absent);">{{ absent }}</div>
         <div class="stat-label">Days Absent</div>
     </div>
     <div class="stat-card stat-card--gold">
-        <div class="stat-value">{{ late }}</div>
+        <div class="stat-value" style="color: var(--clr-late);">{{ late }}</div>
         <div class="stat-label">Days Late</div>
     </div>
 </div>
 
-<!-- ═══════════ ATTENDANCE RECORDS ═══════════ -->
-<div class="section-header">
-    <div class="section-bar"></div>
-    <h3>Recent Records</h3>
-    <span class="section-badge">{{ total }} days</span>
+<!-- ═══════════ CALENDAR ═══════════ -->
+<div class="cal-container">
+    <div class="cal-header">
+        <button class="cal-nav-btn" id="calPrev" aria-label="Previous month">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="cal-title" id="calTitle">Loading...</div>
+        <button class="cal-nav-btn" id="calNext" aria-label="Next month">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <div class="cal-grid" id="calGrid">
+        <!-- Day name headers -->
+        <div class="cal-day-name">Sun</div>
+        <div class="cal-day-name">Mon</div>
+        <div class="cal-day-name">Tue</div>
+        <div class="cal-day-name">Wed</div>
+        <div class="cal-day-name">Thu</div>
+        <div class="cal-day-name">Fri</div>
+        <div class="cal-day-name">Sat</div>
+        <!-- JS will inject day cells here -->
+    </div>
+
+    <div class="cal-legend">
+        <div class="legend-item">
+            <div class="legend-dot legend-dot--present"></div>
+            Present
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot legend-dot--absent"></div>
+            Absent
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot legend-dot--late"></div>
+            Late
+        </div>
+        <div class="legend-item" style="margin-left: auto; font-size: 0.72rem; color: var(--clr-text-muted);">
+            {{ total }} school days recorded
+        </div>
+    </div>
 </div>
 
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Attendance data from server
+const attendanceMap = {};
 {% if records %}
-<div class="data-table-wrapper">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Day</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for r in records %}
-            <tr>
-                <td>{{ r.date.strftime('%d %b %Y') }}</td>
-                <td>{{ r.date.strftime('%A') }}</td>
-                <td>
-                    <span class="status-pill
-                        {% if r.status == 'Present' %}status-pill--present
-                        {% elif r.status == 'Absent' %}status-pill--absent
-                        {% elif r.status == 'Late' %}status-pill--late
-                        {% elif r.status == 'Excused' %}status-pill--excused
-                        {% endif %}">
-                        {{ r.status }}
-                    </span>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% else %}
-<div class="empty-state">
-    <i class="fas fa-calendar-times"></i>
-    <p>No attendance records found yet.</p>
-</div>
+{% for r in records %}
+attendanceMap['{{ r.date.strftime("%Y-%m-%d") }}'] = '{{ r.status|lower }}';
+{% endfor %}
 {% endif %}
 
-{% endif %}
+const today = new Date();
+let viewYear  = today.getFullYear();
+let viewMonth = today.getMonth(); // 0-indexed
+
+const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function renderCalendar(year, month) {
+    document.getElementById('calTitle').textContent = `${monthNames[month]} ${year}`;
+
+    const grid = document.getElementById('calGrid');
+    // Keep the 7 day-name headers
+    const dayNames = grid.querySelectorAll('.cal-day-name');
+    grid.innerHTML = '';
+    dayNames.forEach(d => grid.appendChild(d.cloneNode(true)));
+
+    const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-day empty';
+        grid.appendChild(cell);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const status = attendanceMap[dateStr];
+        const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
+
+        const cell = document.createElement('div');
+        cell.className = 'cal-day';
+        if (isToday) cell.classList.add('today');
+        if (status === 'present') cell.classList.add('present');
+        else if (status === 'absent') cell.classList.add('absent');
+        else if (status === 'late') cell.classList.add('late');
+
+        cell.innerHTML = `<span>${day}</span>`;
+        if (status) {
+            const dot = document.createElement('div');
+            dot.className = 'cal-day-dot';
+            cell.appendChild(dot);
+        }
+        grid.appendChild(cell);
+    }
+
+    // Update button states
+    const prevMonth = new Date(year, month - 1, 1);
+    const nextMonth = new Date(year, month + 1, 1);
+    document.getElementById('calPrev').disabled = prevMonth.getFullYear() < 2024;
+    document.getElementById('calNext').disabled = nextMonth > today;
+}
+
+document.getElementById('calPrev').addEventListener('click', () => {
+    if (viewMonth === 0) { viewMonth = 11; viewYear--; }
+    else { viewMonth--; }
+    renderCalendar(viewYear, viewMonth);
+});
+
+document.getElementById('calNext').addEventListener('click', () => {
+    if (viewMonth === 11) { viewMonth = 0; viewYear++; }
+    else { viewMonth++; }
+    renderCalendar(viewYear, viewMonth);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderCalendar(viewYear, viewMonth);
+
+    const btn = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('navDrawer');
+    const overlay = document.getElementById('menuOverlay');
+    if (btn) btn.addEventListener('click', () => { nav.classList.toggle('open'); overlay.classList.toggle('open'); });
+    if (overlay) overlay.addEventListener('click', () => { nav.classList.remove('open'); overlay.classList.remove('open'); });
+
+    window.showToast = function(msg, category) {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = `toast toast--${category}`;
+        t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 5000);
+    };
+});
+</script>
 {% endblock %}
