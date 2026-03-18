@@ -4,71 +4,122 @@
 
 {% block content %}
 {% if not student %}
-<div class="empty-state">
-    <i class="fas fa-exclamation-triangle"></i>
-    <p>Student record not found.</p>
+<div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
+    <span class="material-symbols-outlined text-3xl">error</span>
+    <div>
+        <h3 class="font-bold text-lg">Student record not found</h3>
+        <p class="text-sm">Please contact administration.</p>
+    </div>
 </div>
 {% else %}
 
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="max-w-2xl">
+        <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Records</span>
+        <h1 class="font-serif text-5xl text-primary font-bold mt-2 tracking-tight">Attendance</h1>
+        <p class="text-slate-600 text-lg mt-3 font-medium">Track your presence and punctuality.</p>
+    </div>
+</div>
+
 <!-- ═══════════ OVERVIEW STATS ═══════════ -->
-<div class="attendance-overview">
-    <div class="stat-card stat-card--green">
-        <div class="attendance-percentage">{{ attendance_pct }}%</div>
-        <div class="stat-label">Overall Attendance</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-{% if attendance_pct >= 85 %}green-500{% elif attendance_pct >= 75 %}amber-500{% else %}red-500{% endif %} transition-colors">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">data_usage</span>
+            </div>
+        </div>
+        <div>
+            <span class="text-3xl font-serif font-bold text-primary">{{ attendance_pct }}%</span>
+            <p class="text-xs font-bold text-slate-500 uppercase mt-1">Overall</p>
+        </div>
     </div>
-    <div class="stat-card stat-card--blue">
-        <div class="stat-value">{{ present }}</div>
-        <div class="stat-label">Days Present</div>
+    
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-green-500 transition-colors">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+                <span class="material-symbols-outlined">how_to_reg</span>
+            </div>
+        </div>
+        <div>
+            <span class="text-3xl font-serif font-bold text-green-600">{{ present }}</span>
+            <p class="text-xs font-bold text-slate-500 uppercase mt-1">Days Present</p>
+        </div>
     </div>
-    <div class="stat-card" style="border-top: 3px solid var(--clr-absent); border-radius: var(--radius-xl);">
-        <div class="stat-value" style="color: var(--clr-absent);">{{ absent }}</div>
-        <div class="stat-label">Days Absent</div>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-red-500 transition-colors">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-600">
+                <span class="material-symbols-outlined">person_off</span>
+            </div>
+        </div>
+        <div>
+            <span class="text-3xl font-serif font-bold text-red-600">{{ absent }}</span>
+            <p class="text-xs font-bold text-slate-500 uppercase mt-1">Days Absent</p>
+        </div>
     </div>
-    <div class="stat-card stat-card--gold">
-        <div class="stat-value" style="color: var(--clr-late);">{{ late }}</div>
-        <div class="stat-label">Days Late</div>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-amber-500 transition-colors">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500">
+                <span class="material-symbols-outlined">schedule</span>
+            </div>
+        </div>
+        <div>
+            <span class="text-3xl font-serif font-bold text-amber-500">{{ late }}</span>
+            <p class="text-xs font-bold text-slate-500 uppercase mt-1">Days Late</p>
+        </div>
     </div>
 </div>
 
 <!-- ═══════════ CALENDAR ═══════════ -->
-<div class="cal-container" id="attendanceGrid" data-records='{{ att_map | tojson | safe }}'>
-    <div class="cal-header">
-        <button class="cal-nav-btn" id="calPrev" aria-label="Previous month">
-            <i class="fas fa-chevron-left"></i>
+<div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-hidden">
+    <div class="px-8 py-6 border-b border-primary/5 flex justify-between items-center bg-bone-white/30">
+        <button id="calPrev" class="w-10 h-10 rounded-full hover:bg-white flex items-center justify-center text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-transparent hover:border-primary/10 shadow-sm" aria-label="Previous month">
+            <span class="material-symbols-outlined">chevron_left</span>
         </button>
-        <div class="cal-title" id="calTitle">Loading...</div>
-        <button class="cal-nav-btn" id="calNext" aria-label="Next month">
-            <i class="fas fa-chevron-right"></i>
+        <h3 id="calTitle" class="font-serif text-2xl font-bold text-primary tracking-tight">Loading...</h3>
+        <button id="calNext" class="w-10 h-10 rounded-full hover:bg-white flex items-center justify-center text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-transparent hover:border-primary/10 shadow-sm" aria-label="Next month">
+            <span class="material-symbols-outlined">chevron_right</span>
         </button>
     </div>
 
-    <div class="cal-grid" id="calGrid">
-        <!-- Day name headers -->
-        <div class="cal-day-name">Sun</div>
-        <div class="cal-day-name">Mon</div>
-        <div class="cal-day-name">Tue</div>
-        <div class="cal-day-name">Wed</div>
-        <div class="cal-day-name">Thu</div>
-        <div class="cal-day-name">Fri</div>
-        <div class="cal-day-name">Sat</div>
-        <!-- JS will inject day cells here -->
-    </div>
+    <!-- Data container for JS -->
+    <div id="attendanceGrid" data-records='{{ att_map | tojson | safe }}' class="hidden"></div>
 
-    <div class="cal-legend">
-        <div class="legend-item">
-            <div class="legend-dot legend-dot--present"></div>
-            Present
+    <div class="p-8">
+        <!-- Calendar Grid -->
+        <div class="grid grid-cols-7 gap-2 sm:gap-4 lg:gap-6" id="calGrid">
+            <!-- Day Headers -->
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Sun</div>
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Mon</div>
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Tue</div>
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Wed</div>
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Thu</div>
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Fri</div>
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 cal-day-name">Sat</div>
+            <!-- Cells injected via JS -->
         </div>
-        <div class="legend-item">
-            <div class="legend-dot legend-dot--absent"></div>
-            Absent
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot legend-dot--late"></div>
-            Late
-        </div>
-        <div class="legend-item" style="margin-left: auto; font-size: 0.72rem; color: var(--clr-text-muted);">
-            {{ total }} school days recorded
+
+        <!-- Legend -->
+        <div class="mt-8 pt-6 border-t border-primary/5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                    <span class="text-xs font-bold text-slate-600">Present</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                    <span class="text-xs font-bold text-slate-600">Absent</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                    <span class="text-xs font-bold text-slate-600">Late</span>
+                </div>
+            </div>
+            <div class="text-xs font-bold text-slate-500 tracking-widest uppercase">
+                {{ total }} school days recorded
+            </div>
         </div>
     </div>
 </div>
@@ -78,91 +129,108 @@
 
 {% block extra_js %}
 <script>
-// Attendance data from server
-const attendanceMap = JSON.parse(document.getElementById('attendanceGrid').dataset.records || '{}');
-
-const today = new Date();
-let viewYear  = today.getFullYear();
-let viewMonth = today.getMonth(); // 0-indexed
-
-const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-function renderCalendar(year, month) {
-    document.getElementById('calTitle').textContent = `${monthNames[month]} ${year}`;
-
-    const grid = document.getElementById('calGrid');
-    // Keep the 7 day-name headers
-    const dayNames = grid.querySelectorAll('.cal-day-name');
-    grid.innerHTML = '';
-    dayNames.forEach(d => grid.appendChild(d.cloneNode(true)));
-
-    const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    // Empty cells before first day
-    for (let i = 0; i < firstDay; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'cal-day empty';
-        grid.appendChild(cell);
-    }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-        const status = attendanceMap[dateStr];
-        const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
-
-        const cell = document.createElement('div');
-        cell.className = 'cal-day';
-        if (isToday) cell.classList.add('today');
-        if (status === 'present') cell.classList.add('present');
-        else if (status === 'absent') cell.classList.add('absent');
-        else if (status === 'late') cell.classList.add('late');
-
-        cell.innerHTML = `<span>${day}</span>`;
-        if (status) {
-            const dot = document.createElement('div');
-            dot.className = 'cal-day-dot';
-            cell.appendChild(dot);
-        }
-        grid.appendChild(cell);
-    }
-
-    // Update button states
-    const prevMonth = new Date(year, month - 1, 1);
-    const nextMonth = new Date(year, month + 1, 1);
-    document.getElementById('calPrev').disabled = prevMonth.getFullYear() < 2024;
-    document.getElementById('calNext').disabled = nextMonth > today;
-}
-
-document.getElementById('calPrev').addEventListener('click', () => {
-    if (viewMonth === 0) { viewMonth = 11; viewYear--; }
-    else { viewMonth--; }
-    renderCalendar(viewYear, viewMonth);
-});
-
-document.getElementById('calNext').addEventListener('click', () => {
-    if (viewMonth === 11) { viewMonth = 0; viewYear++; }
-    else { viewMonth++; }
-    renderCalendar(viewYear, viewMonth);
-});
-
 document.addEventListener('DOMContentLoaded', () => {
+    const dataContainer = document.getElementById('attendanceGrid');
+    if(!dataContainer) return;
+    
+    // Default JS object if empty
+    const attendanceMap = JSON.parse(dataContainer.dataset.records || '{}');
+
+    const today = new Date();
+    let viewYear  = today.getFullYear();
+    let viewMonth = today.getMonth(); // 0-indexed
+
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    function renderCalendar(year, month) {
+        document.getElementById('calTitle').textContent = `${monthNames[month]} ${year}`;
+
+        const grid = document.getElementById('calGrid');
+        const dayNames = grid.querySelectorAll('.cal-day-name');
+        
+        // Keep only day names
+        grid.innerHTML = '';
+        dayNames.forEach(d => grid.appendChild(d.cloneNode(true)));
+
+        const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Empty cells before first day
+        for (let i = 0; i < firstDay; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'aspect-square rounded-xl opacity-0';
+            grid.appendChild(cell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            const status = attendanceMap[dateStr];
+            const isToday = (year === today.getFullYear() && month === today.getMonth() && day === today.getDate());
+
+            const cell = document.createElement('div');
+            
+            // Base classes
+            let classes = "aspect-square rounded-xl flex items-center justify-center font-bold text-sm sm:text-base relative transition-all ";
+            
+            if (isToday) {
+                // Today styling
+                classes += " ring-2 ring-primary ring-offset-2 ";
+            }
+            
+            if (status === 'present') {
+                classes += "bg-green-50 text-green-700 hover:bg-green-100 cursor-default";
+            } else if (status === 'absent') {
+                classes += "bg-red-50 text-red-700 hover:bg-red-100 cursor-default";
+            } else if (status === 'late') {
+                classes += "bg-amber-50 text-amber-700 hover:bg-amber-100 cursor-default";
+            } else {
+                classes += "bg-bone-white/30 text-slate-500 border border-primary/5";
+            }
+
+            cell.className = classes;
+            cell.innerText = day;
+            
+            // Status Dot
+            if (status) {
+                const dot = document.createElement('div');
+                dot.className = `absolute right-1 bottom-1 w-1.5 h-1.5 rounded-full ${status === 'present' ? 'bg-green-500' : status === 'absent' ? 'bg-red-500' : 'bg-amber-500'}`;
+                cell.appendChild(dot);
+            }
+            grid.appendChild(cell);
+        }
+
+        // Fill remaining spaces to complete a 7-column grid
+        const totalRendered = firstDay + daysInMonth;
+        const remainder = 7 - (totalRendered % 7);
+        if (remainder < 7) {
+            for(let i=0; i<remainder; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'aspect-square rounded-xl opacity-0';
+                grid.appendChild(cell);
+            }
+        }
+
+        // Update button states
+        const prevMonth = new Date(year, month - 1, 1);
+        const nextMonth = new Date(year, month + 1, 1);
+        document.getElementById('calPrev').disabled = prevMonth.getFullYear() < 2024;
+        document.getElementById('calNext').disabled = nextMonth > today;
+    }
+
+    document.getElementById('calPrev').addEventListener('click', () => {
+        if (viewMonth === 0) { viewMonth = 11; viewYear--; }
+        else { viewMonth--; }
+        renderCalendar(viewYear, viewMonth);
+    });
+
+    document.getElementById('calNext').addEventListener('click', () => {
+        if (viewMonth === 11) { viewMonth = 0; viewYear++; }
+        else { viewMonth++; }
+        renderCalendar(viewYear, viewMonth);
+    });
+
+    // Initial render
     renderCalendar(viewYear, viewMonth);
-
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navDrawer');
-    const overlay = document.getElementById('menuOverlay');
-    if (btn) btn.addEventListener('click', () => { nav.classList.toggle('open'); overlay.classList.toggle('open'); });
-    if (overlay) overlay.addEventListener('click', () => { nav.classList.remove('open'); overlay.classList.remove('open'); });
-
-    window.showToast = function(msg, category) {
-        const c = document.getElementById('toastContainer');
-        const t = document.createElement('div');
-        t.className = `toast toast--${category}`;
-        t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
-        c.appendChild(t);
-        setTimeout(() => t.remove(), 5000);
-    };
 });
 </script>
 {% endblock %}

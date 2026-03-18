@@ -71,10 +71,43 @@ def dashboard():
     test_count = len(upcoming_tests)
     hw_pending = sum(1 for hw in upcoming_homework if not hw.get('submission_status') or hw['submission_status'] != 'Submitted')
 
+    # ── Integrated Data Blocks ──────────────────────────────────
+    
+    # 1. Recent School Notices (Samvaad Hub)
+    notices = query(
+        "SELECT * FROM notices ORDER BY posted_at DESC LIMIT 5"
+    ) or []
+
+    # 2. Teacher Remarks (Academic Hub - Digital Diary)
+    remarks = query(
+        """SELECT r.*, CONCAT(t.first_name, ' ', t.last_name) as teacher_name
+           FROM student_remarks r
+           JOIN teachers t ON r.teacher_id = t.id
+           WHERE r.student_id = %s
+           ORDER BY r.date DESC
+           LIMIT 2""",
+        (student['id'],)
+    ) or []
+
+    # 3. Library Status (Vidya Hub extension)
+    borrowed_books = query(
+        """SELECT b.title, bw.due_date, bw.status
+           FROM borrowings bw
+           JOIN books b ON bw.book_id = b.id
+           JOIN library_members lm ON bw.member_id = lm.id
+           WHERE lm.user_id = %s AND bw.status != 'Returned'
+           ORDER BY bw.due_date ASC
+           LIMIT 3""",
+        (session['user_id'],)
+    ) or []
+
     return render_template('student/dashboard.html',
         student=student,
         upcoming_tests=upcoming_tests,
         upcoming_homework=upcoming_homework,
+        notices=notices,
+        remarks=remarks,
+        borrowed_books=borrowed_books,
         attendance_pct=att_pct,
         test_count=test_count,
         hw_pending=hw_pending,
@@ -96,7 +129,7 @@ def assignments():
     all_homework = query(
         """SELECT h.id, h.title, h.description, h.deadline, h.assigned_date,
                   s.name as subject_name,
-                  hs.status as submission_status, hs.submitted_at
+                  hs.status as submission_status, hs.submitted_at, hs.teacher_comment, hs.grade
            FROM homework h
            JOIN subjects s ON h.subject_id = s.id
            LEFT JOIN homework_submissions hs

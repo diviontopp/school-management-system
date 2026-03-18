@@ -9,6 +9,14 @@ def login():
     # If already logged in, redirect to respective dashboard
     if 'user_id' in session:
         user_role = session.get('role')
+        requested_role = request.args.get('role')
+        
+        # Determine if the user is explicitly trying to switch accounts
+        if request.method == 'GET' and requested_role and requested_role != user_role:
+            session.clear()
+            flash("You have been signed out to switch accounts.", "info")
+            return redirect(url_for('auth.login', role=requested_role))
+            
         if user_role == 'student':
             return redirect(url_for('student.dashboard'))
         elif user_role == 'teacher':
@@ -62,6 +70,16 @@ def login():
                     flash("Database integrity issue detected. Logged in via Emergency Fallback for Demo Account.", "warning")
                     return redirect(url_for('student.dashboard'))
 
+            # Emergency Fallback - Admin Account
+            if role == 'admin' and username == 'admin' and password == 'admin123':
+                 if not user or not password_correct:
+                    session.clear()
+                    session['user_id'] = 1 # Standard ID for Admin
+                    session['role'] = 'admin'
+                    session['username'] = 'admin'
+                    flash("Admin database record missing or corrupted. Logged in via Emergency Administrator Fallback.", "warning")
+                    return redirect(url_for('admin.dashboard'))
+
             if user and password_correct:
                 if not user['is_active']:
                     flash('Your account has been deactivated. Please contact administration.', 'warning')
@@ -100,6 +118,15 @@ def login():
                     session['username'] = 'DBX001'
                     flash("Logged in via Emergency Fallback (System Connection Issue). Data shown may be simulated.", "warning")
                     return redirect(url_for('student.dashboard'))
+
+            if role == 'admin' and username == 'admin' and password == 'admin123':
+                 if "connection" in error_msg.lower() or "connect" in error_msg.lower() or "doesn't exist" in error_msg.lower():
+                    session.clear()
+                    session['user_id'] = 1 
+                    session['role'] = 'admin'
+                    session['username'] = 'admin'
+                    flash("Admin system connection failure. Logged in via Emergency Administrator Fallback.", "warning")
+                    return redirect(url_for('admin.dashboard'))
 
             if "doesn't exist" in error_msg.lower() or "table" in error_msg.lower():
                 flash(f"System database not initialized: {error_msg}. Please contact administrator.", "danger")

@@ -4,249 +4,292 @@
 
 {% block content %}
 {% if not student %}
-<div class="empty-state">
-    <i class="fas fa-exclamation-triangle"></i>
-    <p>Student record not found. Please contact administration.</p>
+<div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
+    <span class="material-symbols-outlined text-3xl">error</span>
+    <div>
+        <h3 class="font-bold text-lg">Student record not found</h3>
+        <p class="text-sm">Please contact administration.</p>
+    </div>
 </div>
 {% else %}
 
-<!-- Welcome Banner -->
-<div class="welcome-banner">
-    <div class="welcome-text">
-        <h2>Welcome back, {{ student.first_name }}! 👋</h2>
-        <p>{{ student.class_name }} &nbsp;·&nbsp; Roll #{{ student.roll_number }} &nbsp;·&nbsp; Academic Year 2025–26</p>
-    </div>
-    <div class="welcome-date">
-        <i class="fas fa-calendar-alt"></i>
-        {{ today.strftime('%d %B %Y') }}
-    </div>
-</div>
-
-<!-- Quick Stats -->
-<div class="stats-grid">
-    <div class="stat-card stat-card--green">
-        <div class="stat-value">{{ attendance_pct }}%</div>
-        <div class="stat-label">Attendance</div>
-    </div>
-    <div class="stat-card stat-card--blue">
-        <div class="stat-value">{{ test_count }}</div>
-        <div class="stat-label">Upcoming Tests</div>
-    </div>
-    <div class="stat-card stat-card--gold">
-        <div class="stat-value">{{ hw_pending }}</div>
-        <div class="stat-label">Pending Homework</div>
-    </div>
-    <div class="stat-card stat-card--purple">
-        <div class="stat-value">{{ student.class_name }}</div>
-        <div class="stat-label">Your Class</div>
-    </div>
-</div>
-
-<!-- ═══════════ UPCOMING TESTS CAROUSEL ═══════════ -->
-<div class="carousel-section">
-    <div class="section-header">
-        <div class="section-bar"></div>
-        <h3>Upcoming Tests</h3>
-        <span class="section-badge">{{ upcoming_tests|length }}</span>
-    </div>
-
-    {% if upcoming_tests %}
-    <div class="carousel-wrapper" id="testsCarousel">
-        <div class="carousel-track-container">
-            <div class="carousel-track" id="testsTrack">
-                {% set subject_colors = {
-                    'Mathematics': '#6366f1', 'Maths': '#6366f1',
-                    'English': '#ec4899',
-                    'Science': '#10b981', 'Physics': '#10b981', 'Chemistry': '#84cc16', 'Biology': '#22c55e',
-                    'History': '#f59e0b', 'Geography': '#3b82f6',
-                    'Computer Science': '#8b5cf6', 'Art': '#14b8a6',
-                    'Physical Education': '#f97316', 'Hindi': '#ef4444'
-                } %}
-                {% for test in upcoming_tests %}
-                {% set color = subject_colors.get(test.subject_name, '#64748b') %}
-                {% set days_until = (test.test_date - today).days %}
-                <div class="task-card" style="--card-accent: {{ color }};">
-                    <div class="task-card-subject">
-                        <div class="subject-dot"></div>
-                        <span class="subject-label">{{ test.subject_name }}</span>
-                    </div>
-                    <div class="task-card-title">{{ test.name }}</div>
-                    {% if test.portions %}
-                    <div class="task-card-detail">{{ test.portions[:90] }}{% if test.portions|length > 90 %}…{% endif %}</div>
-                    {% endif %}
-                    <div class="task-card-footer">
-                        <span class="due-chip {% if days_until > 3 %}due-chip--safe{% elif days_until >= 1 %}due-chip--warn{% else %}due-chip--danger{% endif %}">
-                            <i class="fas fa-calendar"></i>
-                            {% if days_until == 0 %}Today!
-                            {% elif days_until == 1 %}Tomorrow
-                            {% else %}in {{ days_until }} days{% endif %}
-                        </span>
-                        <span class="type-chip">{{ test.test_type }}</span>
-                        <span class="due-chip due-chip--safe" style="background: rgba(100,116,139,0.1); color: #475569;">
-                            {{ test.max_marks }} marks
-                        </span>
-                    </div>
-                </div>
-                {% endfor %}
+<!-- Hero Greeting -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+    <div>
+        <p class="text-accent-gold font-bold tracking-widest uppercase text-xs mb-3">Welcome Back</p>
+        <h2 class="font-serif text-5xl md:text-7xl text-primary font-bold mb-4 tracking-tight">Welcome, {{ student.first_name }}!</h2>
+        <div class="flex items-center gap-4 text-slate-500">
+            <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-primary/5 shadow-sm">
+                <span class="material-symbols-outlined text-sm text-accent-gold">school</span>
+                <span class="text-sm font-medium">Roll #{{ student.roll_number }} • Class {{ student.class_name }}</span>
             </div>
-        </div>
-        <div class="carousel-controls">
-            <button class="carousel-btn" id="testsPrev" aria-label="Previous tests" disabled>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <span class="carousel-indicator" id="testsIndicator">1 / {{ ((upcoming_tests|length) / 3)|round(0,'ceil')|int }}</span>
-            <button class="carousel-btn" id="testsNext" aria-label="Next tests">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+            <span class="w-1 h-1 bg-primary/20 rounded-full"></span>
+            <p class="text-sm font-medium">{{ today.strftime('%A, %d %B %Y') }}</p>
         </div>
     </div>
-    {% else %}
-    <div class="empty-state">
-        <i class="fas fa-clipboard-check"></i>
-        <p>No upcoming tests — great, relax! 🎉</p>
-    </div>
-    {% endif %}
-</div>
+</section>
 
-<!-- ═══════════ UPCOMING HOMEWORK CAROUSEL ═══════════ -->
-<div class="carousel-section">
-    <div class="section-header">
-        <div class="section-bar"></div>
-        <h3>Upcoming Homework</h3>
-        <span class="section-badge">{{ upcoming_homework|length }}</span>
-    </div>
-
-    {% if upcoming_homework %}
-    <div class="carousel-wrapper" id="hwCarousel">
-        <div class="carousel-track-container">
-            <div class="carousel-track" id="hwTrack">
-                {% for hw in upcoming_homework %}
-                {% set color = subject_colors.get(hw.subject_name, '#64748b') %}
-                {% set is_done = hw.submission_status == 'Submitted' %}
-                {% if not is_done %}
-                    {% set days_left = (hw.deadline - today).days %}
-                {% endif %}
-                <div class="task-card" style="--card-accent: {{ color }}; {% if is_done %}opacity: 0.7;{% endif %}">
-                    <div class="task-card-subject">
-                        <div class="subject-dot"></div>
-                        <span class="subject-label">{{ hw.subject_name }}</span>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+    
+    <!-- Left Column (Main content area) -->
+    <div class="col-span-12 xl:col-span-9 space-y-12">
+        
+        <!-- School Notice Board (Samvaad Hub) -->
+        <section class="bg-primary p-8 rounded-3xl text-white shadow-xl shadow-primary/20 relative overflow-hidden mb-12 group">
+            <div class="relative z-10 flex flex-col md:flex-row justify-between gap-8">
+                <div class="md:w-1/3">
+                    <div class="flex items-center gap-2 text-accent-gold mb-2">
+                        <span class="material-symbols-outlined">campaign</span>
+                        <span class="text-xs font-bold uppercase tracking-widest">Samvaad Hub</span>
                     </div>
-                    <div class="task-card-title">{{ hw.title }}</div>
-                    {% if hw.description %}
-                    <div class="task-card-detail">{{ hw.description[:90] }}{% if hw.description|length > 90 %}…{% endif %}</div>
+                    <h3 class="font-serif text-3xl font-bold mb-4">Notice Board</h3>
+                    <p class="text-white/70 text-sm leading-relaxed antialiased">Stay updated with official school circulars and local events.</p>
+                </div>
+                
+                <div class="md:w-2/3 space-y-4">
+                    {% if notices %}
+                        {% for notice in notices[:3] %}
+                        <div class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all cursor-pointer">
+                            <div class="flex items-center gap-4">
+                                <div class="w-2 h-2 rounded-full bg-accent-gold shadow-sm shadow-accent-gold"></div>
+                                <span class="font-bold text-sm tracking-wide">{{ notice.title }}</span>
+                            </div>
+                            <span class="text-[10px] font-bold text-white/50 uppercase">{{ notice.posted_at.strftime('%d %b') if notice.posted_at else 'Active' }}</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="p-6 border border-dashed border-white/20 rounded-2xl text-center text-white/40 italic">
+                            No active circulars at the moment.
+                        </div>
                     {% endif %}
-                    <div class="task-card-footer">
+                </div>
+            </div>
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-accent-gold/10 rounded-full blur-3xl group-hover:bg-accent-gold/20 transition-colors"></div>
+        </section>
+
+        <!-- Academic Hub: Upcoming Homework (Vidya) -->
+        <section>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Homework</h3>
+                <a href="{{ url_for('student.assignments') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+            </div>
+            
+            {% if upcoming_homework %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for hw in upcoming_homework[:3] %}
+                {% set days_left = (hw.deadline - today).days %}
+                {% set is_done = hw.submission_status == 'Submitted' %}
+                
+                <div class="bg-white p-6 rounded-xl border-t-4 {% if is_done %}border-status-success opacity-70{% elif days_left <= 1 %}border-status-danger{% elif days_left <= 3 %}border-status-warning{% else %}border-status-info{% endif %} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <span class="material-symbols-outlined text-6xl">menu_book</span>
+                    </div>
+                    
+                    {% if is_done %}
+                    <span class="inline-block px-2 py-1 rounded bg-status-success-bg text-[10px] font-extrabold text-status-success mb-3 uppercase tracking-widest">Submitted</span>
+                    {% elif days_left < 0 %}
+                    <span class="inline-block px-2 py-1 rounded bg-status-danger-bg text-[10px] font-extrabold text-status-danger mb-3 uppercase tracking-widest">Overdue</span>
+                    {% elif days_left <= 1 %}
+                    <span class="inline-block px-2 py-1 rounded bg-status-danger-bg text-[10px] font-extrabold text-status-danger mb-3 uppercase tracking-widest">Urgent</span>
+                    {% elif days_left <= 3 %}
+                    <span class="inline-block px-2 py-1 rounded bg-status-warning-bg text-[10px] font-extrabold text-status-warning mb-3 uppercase tracking-widest">Approaching</span>
+                    {% else %}
+                    <span class="inline-block px-2 py-1 rounded bg-status-info-bg text-[10px] font-extrabold text-status-info mb-3 uppercase tracking-widest">Upcoming</span>
+                    {% endif %}
+                    
+                    <h4 class="font-bold text-lg text-slate-800 mb-1" title="{{ hw.subject_name }}">{{ hw.subject_name }}</h4>
+                    <p class="text-slate-500 text-sm mb-4 truncate" title="{{ hw.title }}">{{ hw.title }}</p>
+                    
+                    <div class="flex items-center gap-2 {% if is_done %}text-status-success{% elif days_left <= 1 %}text-status-danger{% elif days_left <= 3 %}text-status-warning{% else %}text-status-info{% endif %} text-xs font-bold mt-auto">
+                        <span class="material-symbols-outlined text-sm">schedule</span>
                         {% if is_done %}
-                        <span class="done-chip"><i class="fas fa-check-circle"></i> Submitted</span>
+                        Completed
+                        {% elif days_left < 0 %}
+                        Overdue
+                        {% elif days_left == 0 %}
+                        Due Today
+                        {% elif days_left == 1 %}
+                        Due Tomorrow
                         {% else %}
-                        <span class="due-chip {% if days_left > 3 %}due-chip--safe{% elif days_left >= 1 %}due-chip--warn{% else %}due-chip--danger{% endif %}">
-                            <i class="fas fa-clock"></i>
-                            Due {{ hw.deadline.strftime('%d %b') }}
-                        </span>
+                        Due in {{ days_left }} days
                         {% endif %}
                     </div>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-        <div class="carousel-controls">
-            <button class="carousel-btn" id="hwPrev" aria-label="Previous homework" disabled>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <span class="carousel-indicator" id="hwIndicator">1 / {{ ((upcoming_homework|length) / 3)|round(0,'ceil')|int }}</span>
-            <button class="carousel-btn" id="hwNext" aria-label="Next homework">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
+            {% else %}
+            <div class="p-8 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
+                <span class="material-symbols-outlined text-5xl text-green-400 mb-3">task_alt</span>
+                <p class="text-slate-600 font-medium">No pending homework — enjoy your free time! 🎉</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Upcoming Tests -->
+        <section>
+            <div class="flex justify-between items-center mb-6 pt-6 border-t border-primary/5 md:border-none md:pt-0">
+                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Tests & Vivas</h3>
+                 <a href="{{ url_for('student.grades') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+            </div>
+            
+            {% if upcoming_tests %}
+            <div class="space-y-2">
+                {% for test in upcoming_tests[:3] %}
+                <div class="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 hover:bg-slate-50 transition-colors rounded-2xl border border-transparent hover:border-slate-200/60">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 shrink-0 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:scale-105 transition-transform">
+                            <span class="material-symbols-outlined">quiz</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-lg group-hover:text-primary">{{ test.name }}</h4>
+                            <p class="text-slate-500 text-sm font-medium">{{ test.subject_name }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-6 md:gap-12 md:text-right">
+                        <div>
+                            <span class="block text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-0.5">Date</span>
+                            <span class="font-medium text-slate-800">{{ test.test_date.strftime('%B %d') }}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-0.5">Type</span>
+                            <span class="font-medium text-slate-800 uppercase text-sm tracking-wide">{{ test.test_type }}</span>
+                        </div>
+                        <div class="bg-primary/5 px-4 py-2 rounded-xl text-center min-w-[80px]">
+                            <span class="block text-[10px] font-bold text-primary/60 tracking-widest uppercase mb-0.5">Marks</span>
+                            <span class="font-bold text-primary text-lg leading-none">{{ test.max_marks }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% if not loop.last %}<div class="h-px bg-slate-100 mx-4"></div>{% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="p-8 bg-slate-50 rounded-2xl text-center border border-slate-100">
+                <span class="material-symbols-outlined text-5xl text-blue-300 mb-3">celebration</span>
+                <p class="text-slate-600 font-medium">No upcoming tests right now.</p>
+            </div>
+            {% endif %}
+        <!-- Insightful Feedback (Digital Diary - Samvaad) -->
+        <section class="border-t border-primary/5 pt-12">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="size-10 rounded-2xl bg-accent-gold/10 flex items-center justify-center text-accent-gold">
+                    <span class="material-symbols-outlined">chat_bubble</span>
+                </div>
+                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Academic Insights</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {% if remarks %}
+                    {% for remark in remarks %}
+                    <div class="bg-bone-white/50 rounded-2xl p-6 border border-primary/5 shadow-sm hover:shadow-md transition-all relative group">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold text-accent-gold uppercase tracking-widest px-3 py-1 bg-accent-gold/10 rounded-full">{{ remark.remark_type }}</span>
+                            <span class="text-[10px] font-medium text-slate-400 uppercase">{{ remark.date.strftime('%d %b, %Y') }}</span>
+                        </div>
+                        <p class="text-slate-700 text-sm leading-relaxed italic mb-4">"{{ remark.remark }}"</p>
+                        <div class="flex items-center gap-3 pt-4 border-t border-primary/5">
+                            <div class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                                {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-primary">{{ remark.teacher_name }}</h5>
+                                <p class="text-[10px] text-slate-400 uppercase tracking-tighter">Academic Head</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-span-full p-8 border border-dashed border-primary/10 rounded-3xl text-center bg-white/30">
+                        <span class="material-symbols-outlined text-4xl text-primary/20 mb-3">lightbulb</span>
+                        <p class="text-slate-500 font-medium italic">Your teachers haven't posted any feedback yet. Keep up the good work!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+        
     </div>
-    {% else %}
-    <div class="empty-state">
-        <i class="fas fa-book-open"></i>
-        <p>No pending homework — enjoy your free time! 📚</p>
-    </div>
-    {% endif %}
+    
+    <!-- Right Sidebar (Stats & Quick Access) -->
+    <aside class="col-span-12 xl:col-span-3 bg-slate-50 rounded-3xl p-8 space-y-10 border border-slate-200/50">
+        
+        <!-- Attendance Gauge -->
+        <div class="text-center">
+            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Attendance Target</h4>
+            <div class="relative w-full max-w-[12rem] mx-auto aspect-square">
+                <svg class="w-full h-full transform -rotate-90" aria-label="Attendance Gauge at {{ attendance_pct|round|int }}%" role="img" viewBox="0 0 160 160">
+                    <title>Attendance is at {{ attendance_pct|round|int }}%</title>
+                    <circle class="text-white drop-shadow-sm" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+                    <circle class="{% if attendance_pct >= 85 %}text-status-success{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-status-danger{% endif %}" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 - (440 * attendance_pct / 100) }}" stroke-linecap="round" stroke-width="12"></circle>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span class="text-4xl font-serif font-black text-primary">{{ attendance_pct|round|int }}%</span>
+                    <span class="text-[10px] font-bold {% if attendance_pct >= 85 %}text-status-success{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-status-danger{% endif %} uppercase tracking-widest">
+                        {% if attendance_pct >= 85 %}Excellent
+                        {% elif attendance_pct >= 75 %}Good
+                        {% else %}Needs Attention{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini Stats Summary -->
+        <div class="space-y-6 pt-6 border-t border-slate-200">
+            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pb-2">Quick Stats</h4>
+            
+            <a href="{{ url_for('student.assignments') }}" class="flex justify-between items-center group cursor-pointer hover:bg-white p-3 -mx-3 rounded-xl transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <div class="flex items-center gap-4">
+                    <span class="material-symbols-outlined text-blue-500">assignment</span>
+                    <span class="text-sm font-bold text-slate-700">Pending HW</span>
+                </div>
+                <span class="text-lg font-bold text-primary">{{ hw_pending }}</span>
+            </a>
+            
+            <a href="{{ url_for('student.grades') }}" class="flex justify-between items-center group cursor-pointer hover:bg-white p-3 -mx-3 rounded-xl transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <div class="flex items-center gap-4">
+                    <span class="material-symbols-outlined text-amber-500">quiz</span>
+                    <span class="text-sm font-bold text-slate-700">Upcoming Tests</span>
+                </div>
+                <span class="text-lg font-bold text-primary">{{ test_count }}</span>
+            </a>
+        </div>
+        
+        <!-- Vidya Hub: Library status -->
+        <div class="border-t border-primary/5 pt-8">
+            <div class="flex items-center gap-2 text-primary/60 mb-6">
+                <span class="material-symbols-outlined text-sm">local_library</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Vidya Hub</span>
+            </div>
+            <h4 class="font-serif text-xl font-bold text-primary mb-6">Borrowed Books</h4>
+            
+            <div class="space-y-4">
+                {% if borrowed_books %}
+                    {% for book in borrowed_books %}
+                    <div class="p-4 bg-white rounded-2xl border border-primary/5 shadow-sm">
+                        <h5 class="text-sm font-bold text-slate-800 mb-1 leading-tight">{{ book.title }}</h5>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[12px] text-slate-400">event</span>
+                            <span class="text-[10px] font-bold {% if book.due_date and (book.due_date - today).days < 0 %}text-status-danger{% else %}text-slate-500{% endif %} uppercase">
+                                Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="p-6 border border-dashed border-primary/10 rounded-2xl text-center bg-white/30">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">No books borrowed</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <a href="#" class="block w-full mt-6 py-4 rounded-full border border-primary/10 text-center text-xs font-bold text-primary hover:bg-white transition-all">
+                Search Library
+            </a>
+        </div>
+
+    </aside>
 </div>
 
 {% endif %}
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// Generic carousel factory
-function initCarousel(trackId, prevId, nextId, indicatorId, itemsPerSlide) {
-    const track = document.getElementById(trackId);
-    const prev  = document.getElementById(prevId);
-    const next  = document.getElementById(nextId);
-    const ind   = document.getElementById(indicatorId);
-    if (!track) return;
-
-    const cards = Array.from(track.children);
-    const total = Math.ceil(cards.length / itemsPerSlide);
-    let current = 0;
-
-    function go(idx) {
-        current = Math.max(0, Math.min(idx, total - 1));
-        // Each card is 33.333% wide with 16px gap between
-        // Offset = current * (3 cards width + 2 gaps) = current * (100% + 32px)
-        const cardPct = 100 / itemsPerSlide;
-        const offset = current * (cardPct * itemsPerSlide);
-        track.style.transform = `translateX(calc(-${current * 100}% - ${current * 32}px))`;
-        if (ind) ind.textContent = `${current + 1} / ${total}`;
-        if (prev) prev.disabled = current === 0;
-        if (next) next.disabled = current === total - 1;
-    }
-
-    // Recalculate based on container width
-    function recalc() {
-        const container = track.parentElement;
-        const w = container.offsetWidth;
-        const gap = 16;
-        const perSlide = w < 600 ? 1 : w < 900 ? 2 : 3;
-        const cardW = (w - gap * (perSlide - 1)) / perSlide;
-        cards.forEach(c => { c.style.flexBasis = cardW + 'px'; c.style.flex = `0 0 ${cardW}px`; });
-        track.style.transition = 'none';
-        current = 0;
-        track.style.transform = 'translateX(0)';
-        setTimeout(() => { track.style.transition = ''; }, 50);
-        if (ind) {
-            const newTotal = Math.ceil(cards.length / perSlide);
-            ind.textContent = `1 / ${newTotal}`;
-        }
-    }
-
-    if (prev) prev.addEventListener('click', () => go(current - 1));
-    if (next) next.addEventListener('click', () => go(current + 1));
-    go(0);
-    window.addEventListener('resize', recalc);
-    recalc();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initCarousel('testsTrack', 'testsPrev', 'testsNext', 'testsIndicator', 3);
-    initCarousel('hwTrack', 'hwPrev', 'hwNext', 'hwIndicator', 3);
-
-    // Mobile hamburger
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navDrawer');
-    const overlay = document.getElementById('menuOverlay');
-    if (btn) btn.addEventListener('click', () => {
-        nav.classList.toggle('open');
-        overlay.classList.toggle('open');
-    });
-    if (overlay) overlay.addEventListener('click', () => {
-        nav.classList.remove('open');
-        overlay.classList.remove('open');
-    });
-
-    // Toast function
-    window.showToast = function(msg, category) {
-        const c = document.getElementById('toastContainer');
-        const t = document.createElement('div');
-        t.className = `toast toast--${category === 'danger' ? 'danger' : category === 'success' ? 'success' : 'warning'}`;
-        t.innerHTML = `<i class="fas fa-${category === 'success' ? 'check-circle' : category === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i> ${msg}`;
-        c.appendChild(t);
-        setTimeout(() => t.remove(), 5000);
-    };
-});
-</script>
 {% endblock %}

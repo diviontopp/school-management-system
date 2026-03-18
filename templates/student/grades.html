@@ -1,115 +1,139 @@
 {% extends "student/student_base.html" %}
 {% block title %}Grades — Scholaris Student Portal{% endblock %}
-{% block page_title %}Grades{% endblock %}
+{% block page_title %}Grades & Analytics{% endblock %}
 
 {% block content %}
 {% if not student %}
-<div class="empty-state">
-    <i class="fas fa-exclamation-triangle"></i>
-    <p>Student record not found.</p>
+<div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
+    <span class="material-symbols-outlined text-3xl">error</span>
+    <div>
+        <h3 class="font-bold text-lg">Student record not found</h3>
+        <p class="text-sm">Please contact administration.</p>
+    </div>
 </div>
 {% else %}
 
-{% set subject_colors = {
-    'Mathematics': '#6366f1', 'Maths': '#6366f1',
-    'English': '#ec4899',
-    'Science': '#10b981', 'Physics': '#10b981', 'Chemistry': '#84cc16', 'Biology': '#22c55e',
-    'History': '#f59e0b', 'Geography': '#3b82f6',
-    'Computer Science': '#8b5cf6', 'Art': '#14b8a6',
-    'Physical Education': '#f97316', 'Hindi': '#ef4444'
-} %}
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="max-w-2xl">
+        <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Performance Hub</span>
+        <h1 class="font-serif text-5xl text-primary font-bold mt-2 tracking-tight">Exams</h1>
+        <p class="text-slate-600 text-lg mt-3 font-medium">Analyze your academic performance across all subjects.</p>
+    </div>
+</div>
 
-{% set subject_icons = {
-    'Mathematics': 'fa-calculator', 'Maths': 'fa-calculator',
-    'English': 'fa-book-open',
-    'Science': 'fa-flask', 'Physics': 'fa-atom', 'Chemistry': 'fa-vial', 'Biology': 'fa-leaf',
-    'History': 'fa-landmark', 'Geography': 'fa-globe',
-    'Computer Science': 'fa-laptop-code', 'Art': 'fa-palette',
-    'Physical Education': 'fa-running', 'Hindi': 'fa-language'
-} %}
-
-<!-- Grades Header -->
 {% if scores %}
-{% set total_pct = namespace(v=0, count=0) %}
-{% for s in scores %}
-{% if s.max_marks > 0 %}
-{% set total_pct.v = total_pct.v + (s.marks_obtained / s.max_marks * 100) %}
-{% set total_pct.count = total_pct.count + 1 %}
-{% endif %}
-{% endfor %}
-{% set avg_pct = (total_pct.v / total_pct.count)|round|int if total_pct.count > 0 else 0 %}
-{% set avg_grade = 'A+' if avg_pct >= 90 else ('A' if avg_pct >= 80 else ('B+' if avg_pct >= 75 else ('B' if avg_pct >= 65 else ('C+' if avg_pct >= 55 else 'C')))) %}
-
-<div class="grades-header">
-    <div class="gpa-circle">
-        <div class="gpa-value">{{ avg_grade }}</div>
-        <div class="gpa-label">Average</div>
-    </div>
-    <div class="grades-summary-text">
-        <h3>{{ student.first_name }}'s Academic Report</h3>
-        <p>{{ avg_pct }}% overall · {{ scores|length }} tests graded · {{ by_subject|length }} subjects</p>
-    </div>
-</div>
-{% endif %}
-
-{% if by_subject %}
-    {% for subject, subject_scores in by_subject.items() %}
-    {% set color = subject_colors.get(subject, '#64748b') %}
-    {% set icon = subject_icons.get(subject, 'fa-book') %}
-
-    <div class="subject-grade-card" style="--card-accent: {{ color }};">
-        <div class="subject-grade-header" style="background: linear-gradient(90deg, {{ color }}25, {{ color }}08);">
-            <div class="subject-icon" style="background: {{ color }}; color: #fff;">
-                <i class="fas {{ icon }}"></i>
-            </div>
-            <div class="subject-grade-title" style="color: var(--clr-text-main);">{{ subject }}</div>
-            {% set subj_scores_list = subject_scores %}
-            {% set ns = namespace(total=0, max=0, count=0) %}
-            {% for s in subj_scores_list %}
-                {% if s.max_marks > 0 %}
-                    {% set ns.total = ns.total + s.marks_obtained %}
-                    {% set ns.max = ns.max + s.max_marks %}
-                    {% set ns.count = ns.count + 1 %}
-                {% endif %}
-            {% endfor %}
-            {% if ns.max > 0 %}
-            <span class="status-badge status-badge--pending" style="margin-left: auto; font-size: 0.72rem;">
-                {{ (ns.total / ns.max * 100)|round|int }}% avg
-            </span>
-            {% endif %}
-        </div>
-
-        {% for s in subject_scores %}
-        {% set pct = (s.marks_obtained / s.max_marks * 100)|round|int if s.max_marks > 0 else 0 %}
-        {% set grade_class = 'grade-pill--A' if s.grade and s.grade[0] == 'A' else ('grade-pill--B' if s.grade and s.grade[0] == 'B' else ('grade-pill--C' if s.grade and s.grade[0] == 'C' else 'grade-pill--D')) %}
-        <div class="grade-score-row">
-            <div class="grade-test-info">
-                <div class="grade-test-name">{{ s.test_name }}</div>
-                <div class="grade-test-meta">
-                    <span><i class="fas fa-tag" style="font-size:0.65rem;"></i> {{ s.test_type }}</span>
-                    <span><i class="fas fa-calendar" style="font-size:0.65rem;"></i> {{ s.test_date.strftime('%d %b %Y') }}</span>
-                </div>
-            </div>
-            <div class="grade-progress-wrap">
-                <div class="grade-progress-bar">
-                    <div class="grade-progress-fill" style="width: {{ pct }}%; background: {{ color }};" data-width="{{ pct }}"></div>
-                </div>
-                <div class="grade-progress-text">{{ s.marks_obtained }} / {{ s.max_marks }}</div>
-            </div>
-            {% if s.grade %}
-            <span class="grade-pill {{ grade_class }}">{{ s.grade }}</span>
-            {% else %}
-            <span class="grade-pill" style="background: var(--border-color); color: var(--clr-text-muted);">—</span>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
+    <!-- Calculate overall average -->
+    {% set total_pct = namespace(v=0, count=0) %}
+    {% for s in scores %}
+        {% if s.max_marks > 0 %}
+            {% set total_pct.v = total_pct.v + (s.marks_obtained / s.max_marks * 100) %}
+            {% set total_pct.count = total_pct.count + 1 %}
+        {% endif %}
     {% endfor %}
+    {% set avg_pct = (total_pct.v / total_pct.count)|round|int if total_pct.count > 0 else 0 %}
+    {% set avg_grade = 'A+' if avg_pct >= 90 else ('A' if avg_pct >= 80 else ('B+' if avg_pct >= 75 else ('B' if avg_pct >= 65 else ('C+' if avg_pct >= 55 else 'C')))) %}
+
+    <!-- Overall Overview -->
+    <section class="bg-primary p-8 rounded-xl text-white shadow-xl shadow-primary/20 relative overflow-hidden mb-12 flex flex-col md:flex-row items-center gap-8">
+        <div class="relative z-10 hidden md:block opacity-20 absolute right-8 top-1/2 -translate-y-1/2">
+            <span class="material-symbols-outlined text-[150px]">workspace_premium</span>
+        </div>
+        
+        <div class="w-32 h-32 rounded-full border-[6px] border-white/20 flex flex-col items-center justify-center bg-white/10 shrink-0 relative z-20">
+            <span class="text-4xl font-serif font-black">{{ avg_grade }}</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-accent-gold mt-1">Average</span>
+        </div>
+        
+        <div class="relative z-20">
+            <h3 class="font-serif text-3xl font-bold mb-2">{{ student.first_name }}'s Academic Report</h3>
+            <p class="text-white/80 font-medium mb-4">You have achieved an overall average of <strong class="text-accent-gold">{{ avg_pct }}%</strong>. Keep striving for excellence!</p>
+            <div class="flex gap-4">
+                <div class="bg-white/10 px-4 py-2 rounded-lg border border-white/20">
+                    <span class="block text-[10px] uppercase tracking-widest text-white/50 font-bold mb-1">Total Tests</span>
+                    <span class="text-lg font-bold">{{ scores|length }}</span>
+                </div>
+                <div class="bg-white/10 px-4 py-2 rounded-lg border border-white/20">
+                    <span class="block text-[10px] uppercase tracking-widest text-white/50 font-bold mb-1">Subjects Analyzed</span>
+                    <span class="text-lg font-bold">{{ by_subject.keys()|length }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Subject breakdown -->
+    <div class="space-y-8">
+        <h3 class="font-serif text-2xl font-bold text-primary tracking-tight mb-6">Subject Breakdown</h3>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {% for subject, subject_scores in by_subject.items() %}
+            <div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-hidden hover:shadow-md transition-shadow">
+                <!-- Subject Header -->
+                <div class="bg-bone-white/30 px-6 py-4 border-b border-primary/5 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">menu_book</span>
+                        </div>
+                        <h4 class="font-bold text-lg text-primary">{{ subject }}</h4>
+                    </div>
+                    {% set ns = namespace(total=0, max=0, count=0) %}
+                    {% for s in subject_scores %}
+                        {% if s.max_marks > 0 %}
+                            {% set ns.total = ns.total + s.marks_obtained %}
+                            {% set ns.max = ns.max + s.max_marks %}
+                            {% set ns.count = ns.count + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if ns.max > 0 %}
+                    <div class="text-right">
+                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Subject Avg</span>
+                        <span class="px-3 py-1 bg-accent-gold/10 text-accent-gold font-bold text-sm rounded-full">{{ (ns.total / ns.max * 100)|round|int }}%</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Individual Test Scores list -->
+                <div class="p-6 space-y-6">
+                    {% for s in subject_scores %}
+                    {% set pct = (s.marks_obtained / s.max_marks * 100)|round|int if s.max_marks > 0 else 0 %}
+                    <div class="group">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h5 class="font-bold text-slate-800 text-sm group-hover:text-primary transition-colors">{{ s.test_name }}</h5>
+                                <p class="text-xs text-slate-500 font-medium">{{ s.test_type }} • {{ s.test_date.strftime('%d %b %Y') }}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-serif font-bold text-primary text-lg">{{ s.marks_obtained }}</span>
+                                <span class="text-xs text-slate-500 font-medium">/ {{ s.max_marks }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress bar and Grade -->
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1 bg-bone-white h-2 rounded-full overflow-hidden">
+                                <div class="bg-{% if pct >= 80 %}green-500{% elif pct >= 65 %}blue-500{% elif pct >= 50 %}amber-500{% else %}red-500{% endif %} h-full rounded-full transition-all duration-1000 w-0" data-width="{{ pct }}"></div>
+                            </div>
+                            {% if s.grade %}
+                            <span class="w-8 h-8 shrink-0 rounded bg-{% if s.grade in ['A+', 'A'] %}green-100 text-green-700{% elif s.grade in ['B+', 'B'] %}blue-100 text-blue-700{% elif s.grade in ['C+', 'C'] %}amber-100 text-amber-700{% else %}red-100 text-red-700{% endif %} flex items-center justify-center font-bold text-xs uppercase">{{ s.grade }}</span>
+                            {% else %}
+                            <span class="w-8 h-8 shrink-0 rounded bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs">—</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if not loop.last %}
+                    <div class="h-[1px] w-full bg-primary/5"></div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
 {% else %}
-<div class="empty-state">
-    <i class="fas fa-chart-bar"></i>
-    <p>No test scores available yet.</p>
+<div class="p-12 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
+    <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">analytics</span>
+    <h3 class="font-serif text-2xl text-primary font-bold mb-2">No Records Found</h3>
+    <p class="text-slate-500 font-medium">Test scores will appear here once graded.</p>
 </div>
 {% endif %}
 
@@ -118,29 +142,14 @@
 
 {% block extra_js %}
 <script>
-// Animate progress bars on scroll/load
 document.addEventListener('DOMContentLoaded', () => {
-    const bars = document.querySelectorAll('.grade-progress-fill');
-    bars.forEach(bar => {
-        const w = bar.dataset.width;
-        bar.style.width = '0%';
-        setTimeout(() => { bar.style.width = w + '%'; }, 200);
-    });
-
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navDrawer');
-    const overlay = document.getElementById('menuOverlay');
-    if (btn) btn.addEventListener('click', () => { nav.classList.toggle('open'); overlay.classList.toggle('open'); });
-    if (overlay) overlay.addEventListener('click', () => { nav.classList.remove('open'); overlay.classList.remove('open'); });
-
-    window.showToast = function(msg, category) {
-        const c = document.getElementById('toastContainer');
-        const t = document.createElement('div');
-        t.className = `toast toast--${category}`;
-        t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
-        c.appendChild(t);
-        setTimeout(() => t.remove(), 5000);
-    };
+    // Animate progress bars
+    const bars = document.querySelectorAll('[data-width]');
+    setTimeout(() => {
+        bars.forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+        });
+    }, 100);
 });
 </script>
 {% endblock %}

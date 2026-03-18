@@ -1,150 +1,257 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="light">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Scholaris Student Portal{% endblock %}</title>
-
-    <meta name="description" content="Scholaris Student Portal — Your academic dashboard.">
-    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/icon.jpg') }}">
-
-    <!-- Premium Fonts: Plus Jakarta Sans + Fraunces -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Student Portal CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/student.css') }}">
-
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300;400;500;600,0..1&display=swap" rel="stylesheet">
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f4c81", // Navy Blue
+                        "accent-gold": "#C5A028",  // Gold
+                        "bone-white": "#F1F4E4", // Bone White
+                        "background-light": "#F1F4E4",
+                        "background-dark": "#0a1f33",
+                        "status-success": "#22c55e",
+                        "status-success-bg": "#f0fdf4",
+                        "status-warning": "#f59e0b",
+                        "status-warning-bg": "#fffbeb",
+                        "status-danger": "#ef4444",
+                        "status-danger-bg": "#fef2f2",
+                        "status-info": "#3b82f6",
+                        "status-info-bg": "#eff6ff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #F1F4E4; }
+        .glass {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15, 76, 129, 0.1);
+        }
+        .sidebar-glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(15, 76, 129, 0.05);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
-
-<body>
-    <!-- ═══════════ MOBILE MENU TOGGLE ═══════════ -->
-    <button class="mobile-toggle" id="hamburgerBtn" aria-label="Open navigation menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <!-- ═══════════ OVERLAY ═══════════ -->
-    <div class="menu-overlay" id="menuOverlay"></div>
-
-    <div class="portal-layout">
-
-        <!-- ═══════════ SIDEBAR ═══════════ -->
-        <aside class="portal-sidebar-nav" id="navDrawer" aria-label="Student portal navigation">
-            <!-- Brand -->
-            <div class="ps-brand">
-                <div class="ps-brand-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="ps-brand-text">
-                    <span class="ps-brand-name">Scholaris</span>
-                    <span class="ps-brand-sub">Student Portal</span>
-                </div>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="ps-nav">
-                <span class="ps-nav-label">Menu</span>
-                <a href="{{ url_for('student.dashboard') }}" class="ps-nav-item {% if active_page == 'dashboard' %}active{% endif %}">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ url_for('student.assignments') }}" class="ps-nav-item {% if active_page == 'assignments' %}active{% endif %}">
-                    <i class="fas fa-tasks"></i>
-                    <span>Assignments</span>
-                </a>
-                <a href="{{ url_for('student.attendance') }}" class="ps-nav-item {% if active_page == 'attendance' %}active{% endif %}">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Attendance</span>
-                </a>
-                <a href="{{ url_for('student.grades') }}" class="ps-nav-item {% if active_page == 'grades' %}active{% endif %}">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Grades</span>
-                </a>
-                <a href="{{ url_for('student.timetable') }}" class="ps-nav-item {% if active_page == 'timetable' %}active{% endif %}">
-                    <i class="fas fa-clock"></i>
-                    <span>Timetable</span>
-                </a>
-                <a href="{{ url_for('student.profile') }}" class="ps-nav-item {% if active_page == 'profile' %}active{% endif %}">
-                    <i class="fas fa-user-circle"></i>
-                    <span>My Profile</span>
-                </a>
-            </nav>
-
-            <!-- Footer -->
-            <div class="ps-sidebar-footer">
-                <div class="ps-divider"></div>
-                <a href="{{ url_for('public.index') }}" class="ps-nav-item ps-nav-item--muted">
-                    <i class="fas fa-globe"></i>
-                    <span>School Website</span>
-                </a>
-                <a href="{{ url_for('auth.logout') }}" class="ps-nav-item ps-nav-item--danger">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
-        </aside>
-
-        <!-- ═══════════ MAIN CONTENT ═══════════ -->
-        <main class="portal-main">
-            <!-- Sticky Header -->
-            <header class="portal-topbar">
-                <div class="topbar-left">
-                    <h1 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
-                </div>
-                <div class="topbar-right">
-                    {% if student %}
-                    <div class="topbar-user">
-                        <div class="topbar-avatar">{{ student.first_name[0] }}{{ student.last_name[0] }}</div>
-                        <div class="topbar-user-meta">
-                            <span class="topbar-user-name">{{ student.first_name }} {{ student.last_name }}</span>
-                            <span class="topbar-user-class">{{ student.class_name }}</span>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </header>
-
-            <!-- Page Body -->
-            <section class="portal-body">
-                {% block content %}{% endblock %}
-            </section>
-        </main>
-    </div>
-
-    <!-- Toast Container -->
-    <div id="toastContainer" class="toast-container"></div>
-
-    <!-- Flash Message Data (for JS toasts) -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    <div id="flash-data" data-messages='{{ messages | tojson | safe }}' style="display: none;"></div>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen selection:bg-primary/20">
+    
+    <!-- Flash Messages Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+    {%ith messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="flash-data" style="display: none;" data-messages='{{ messages | tojson | safe }}'></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const flashEl = document.getElementById("flash-data");
+                if (flashEl) {
+                    try {
+                        const msgs = JSON.parse(flashEl.dataset.messages || "[]");
+                        const container = document.getElementById("toastContainer");
+                        msgs.forEach(([category, msg]) => {
+                            const toast = document.createElement("div");
+                            toast.className = `p-4 rounded-xl shadow-lg font-medium text-sm transition-all transform flex items-center gap-3 ${
+                                category === 'error' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'
+                            }`;
+                            toast.innerHTML = `<span class="material-symbols-outlined">${category === 'error' ? 'error' : 'check_circle'}</span> ${msg}`;
+                            container.appendChild(toast);
+                            setTimeout(() => {
+                                toast.style.opacity = '0';
+                                setTimeout(() => toast.remove(), 300);
+                            }, 5000);
+                        });
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            });
+        </script>
+      {% endif %}
     {% endwith %}
 
+    <!-- Mobile Header/Toggle (Hidden on LG) -->
+    <div class="lg:hidden flex items-center justify-between p-4 bg-primary text-white glass z-50 sticky top-0">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-2xl">school</span>
+            <span class="font-serif font-bold text-lg">Scholaris</span>
+        </div>
+        <button id="mobileMenuBtn" aria-label="Toggle Navigation Menu" class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-lg">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" aria-label="Main Navigation" class="fixed top-0 left-0 h-screen w-64 sidebar-glass z-[60] flex flex-col p-6 transition-transform transform -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none bg-white lg:bg-transparent">
+        <div class="flex items-center gap-3 mb-10 mt-2">
+            <div class="bg-primary p-2 rounded-full text-white">
+                <span class="material-symbols-outlined text-2xl">school</span>
+            </div>
+            <div>
+                <h1 class="font-serif text-xl font-bold text-primary leading-tight">Scholaris</h1>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Student Portal</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 space-y-2 overflow-y-auto">
+            <!-- Dashboard -->
+            <a href="{{ url_for('student.dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'dashboard' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+                <div class="flex flex-col">
+                    <span class="leading-none">Dashboard</span>
+                    <span class="text-[10px] {% if active_page == 'dashboard' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Overview</span>
+                </div>
+            </a>
+            
+            <!-- Assignments -->
+            <a href="{{ url_for('student.assignments') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'assignments' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">assignment</span>
+                <div class="flex flex-col">
+                    <span class="leading-none">Assignments</span>
+                    <span class="text-[10px] {% if active_page == 'assignments' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Tasks</span>
+                </div>
+            </a>
+
+            <!-- Timetable -->
+            <a href="{{ url_for('student.timetable') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'timetable' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">edit_calendar</span>
+                <div class="flex flex-col">
+                    <span class="leading-none">Timetable</span>
+                    <span class="text-[10px] {% if active_page == 'timetable' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Schedule</span>
+                </div>
+            </a>
+
+            <!-- Grades -->
+            <a href="{{ url_for('student.grades') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'grades' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">grading</span>
+                <div class="flex flex-col">
+                    <span class="leading-none">Grades</span>
+                    <span class="text-[10px] {% if active_page == 'grades' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Exams</span>
+                </div>
+            </a>
+
+            <!-- Attendance -->
+            <a href="{{ url_for('student.attendance') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'attendance' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">how_to_reg</span>
+                <div class="flex flex-col">
+                    <span class="leading-none">Attendance</span>
+                    <span class="text-[10px] {% if active_page == 'attendance' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Records</span>
+                </div>
+            </a>
+
+            <!-- My Profile -->
+            <a href="{{ url_for('student.profile') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'profile' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">person_pin</span>
+                <div class="flex flex-col">
+                    <span class="leading-none">My Profile</span>
+                    <span class="text-[10px] {% if active_page == 'profile' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Identity</span>
+                </div>
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-primary/5">
+            <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-bone-white bg-white/50 rounded-xl transition-colors mb-2 text-primary font-medium text-sm leading-tight border border-primary/5">
+                <span class="material-symbols-outlined text-lg">public</span>
+                Main Website
+            </a>
+            <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium text-sm leading-tight border border-red-50">
+                <span class="material-symbols-outlined text-lg">logout</span>
+                Secure Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden"></div>
+
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const flashEl = document.getElementById('flash-data');
-        if (flashEl) {
-          try {
-            const messages = JSON.parse(flashEl.dataset.messages || '[]');
-            messages.forEach(function(m) {
-              if (window.showToast) window.showToast(m[1], m[0]);
-            });
-          } catch (e) { console.error("Flash parse error:", e); }
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
         }
-      });
+
+        menuBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
     </script>
 
-    <!-- Student Portal JS -->
-    <script src="{{ url_for('static', filename='js/student.js') }}"></script>
+    <!-- Main Content Wrapper -->
+    <div class="lg:pl-64 flex flex-col min-h-screen">
+        <!-- Top Navigation -->
+        <nav class="sticky top-0 z-40 glass px-6 lg:px-8 py-3 lg:py-4 flex items-center justify-between">
+            <div class="flex items-center gap-12 flex-1">
+                <h2 class="font-serif text-2xl text-primary font-bold hidden md:block">{% block page_title %}Dashboard{% endblock %}</h2>
+                <!-- Global Search -->
+                <div class="relative w-full max-w-md group hidden sm:block">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">search</span>
+                    <input type="text" placeholder="Search resources..." class="w-full pl-12 pr-4 py-2.5 bg-white/50 border border-primary/5 rounded-full outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:bg-white transition-all text-sm">
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-500 border border-slate-300 px-1.5 py-0.5 rounded-md uppercase tracking-tighter hidden lg:block">CMD + K</div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 lg:gap-6 shrink-0">
+                <button aria-label="Notifications" class="relative p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-slate-500 hover:text-primary transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-bone-white"></span>
+                </button>
+                <div class="h-8 w-[1px] bg-primary/10 hidden sm:block"></div>
+                
+                {% if student %}
+                <!-- Profile Area -->
+                <a href="{{ url_for('student.profile') }}" class="flex items-center gap-3 bg-white/80 border border-primary/10 rounded-full pl-1.5 pr-4 py-1.5 hover:shadow-md transition-all">
+                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/20 text-sm">
+                        {{ student.first_name[0] }}{{ student.last_name[0] }}
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="text-xs font-bold leading-none text-slate-700">{{ student.first_name }} {{ student.last_name }}</p>
+                        <p class="text-[10px] text-slate-500 leading-none mt-1">{{ student.class_name }}</p>
+                    </div>
+                </a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <!-- Main Workspace -->
+        <main class="flex-1 w-full max-w-[1440px] mx-auto p-4 lg:p-8">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full px-8 py-6 border-t border-primary/10 mt-auto bg-background-light">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-sm">school</span>
+                    <p class="text-xs font-bold text-primary">Scholaris Academic Portal</p>
+                </div>
+                <p class="text-xs text-slate-500 font-medium">&copy; 2026 Don Bosco School of Excellence, Egmore. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
 
     {% block extra_js %}{% endblock %}
 </body>
-
 </html>

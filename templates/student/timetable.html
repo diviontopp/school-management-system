@@ -4,79 +4,87 @@
 
 {% block content %}
 {% if not student %}
-<div class="empty-state">
-    <i class="fas fa-exclamation-triangle"></i>
-    <p>Student record not found.</p>
+<div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
+    <span class="material-symbols-outlined text-3xl">error</span>
+    <div>
+        <h3 class="font-bold text-lg">Student record not found</h3>
+        <p class="text-sm">Please contact administration.</p>
+    </div>
 </div>
 {% else %}
 
-{% set subject_colors = {
-    'Mathematics': '#6366f1', 'Maths': '#6366f1',
-    'English': '#ec4899',
-    'Science': '#10b981', 'Physics': '#10b981', 'Chemistry': '#84cc16', 'Biology': '#22c55e',
-    'History': '#f59e0b', 'Geography': '#3b82f6',
-    'Computer Science': '#8b5cf6', 'Art': '#14b8a6',
-    'Physical Education': '#f97316', 'Hindi': '#ef4444'
-} %}
-
-<div class="section-header">
-    <div class="section-bar"></div>
-    <h3>Weekly Timetable</h3>
-    <span class="section-badge">{{ student.class_name }}</span>
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="max-w-2xl">
+        <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Routine</span>
+        <h1 class="font-serif text-5xl text-primary font-bold mt-2 tracking-tight">Timetable</h1>
+        <p class="text-slate-600 text-lg mt-3 font-medium">Your daily academic schedule.</p>
+    </div>
+    <div class="bg-white px-4 py-2 border border-primary/10 rounded-full shadow-sm flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-sm font-bold text-primary">{{ today_name }} <span class="text-slate-500 font-normal">| Class {{ student.class_name }}</span></span>
+    </div>
 </div>
 
 {% if grid %}
-{# Build list of unique periods for column headers #}
 {% set period_nums = grid.keys()|sort %}
 
-<div class="timetable-wrapper">
-    <table class="timetable">
+<div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-x-auto">
+    <table class="w-full text-left border-collapse min-w-[800px]">
         <thead>
-            <tr>
-                <th>Day</th>
+            <tr class="bg-bone-white/30 text-primary border-b-2 border-primary/10">
+                <th class="p-6 w-32 font-bold font-serif text-lg sticky left-0 bg-bone-white/95 backdrop-blur z-10 border-r border-primary/5">Day</th>
                 {% for pn in period_nums %}
-                {% set p = grid[pn]['period'] %}
-                {% if not p.is_break %}
-                <th class="period-col" data-period="{{ pn }}">
-                    P{{ p.period_number }}
-                    <span class="period-header-info">{{ p.start_time|format_time }}</span>
-                </th>
-                {% endif %}
+                    {% set p = grid[pn]['period'] %}
+                    {% if not p.is_break %}
+                    <th class="p-4 text-center border-r border-primary/5 last:border-r-0 min-w-[140px]">
+                        <span class="block text-sm font-bold text-slate-800 mb-1">Period {{ p.period_number }}</span>
+                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white rounded-full py-0.5 px-2 w-max mx-auto shadow-sm border border-slate-100">
+                            {{ p.start_time|format_time }}
+                        </span>
+                    </th>
+                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
-        <tbody>
-            {% set today_day = today_name %}
+        <tbody class="divide-y divide-primary/5">
             {% for day in days %}
-            <tr class="{% if day == today_day %}today-row{% endif %}">
-                <td>
-                    <span class="day-name">{{ day[:3] }}</span>
-                    <span style="font-size: 0.7rem; color: var(--clr-text-muted); font-weight: 400; display: block;">{{ day }}</span>
-                    {% if day == today_day %}
-                    <span style="font-size: 0.65rem; background: var(--clr-gold); color: #0a3558; padding: 1px 7px; border-radius: 20px; font-weight: 700; display: inline-block; margin-top: 3px;">Today</span>
-                    {% endif %}
+            <tr class="group hover:bg-slate-50/50 transition-colors {% if day == today_name %}bg-accent-gold/5{% endif %}">
+                <td class="p-6 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-primary/5 {% if day == today_name %}!bg-accent-gold/10 border-l-4 border-l-accent-gold{% endif %}">
+                    <span class="block font-bold text-lg {% if day == today_name %}text-accent-gold{% else %}text-slate-700{% endif %}">{{ day[:3] }}</span>
+                    <span class="block text-xs font-medium text-slate-500">{{ day }}</span>
                 </td>
+                
                 {% for pn in period_nums %}
-                {% set p = grid[pn]['period'] %}
-                {% if not p.is_break %}
-                {% set slot = grid[pn]['slots'].get(day) %}
-                <td {% if day == today_day %}style="background: rgba(197,160,40,0.06);"{% endif %}>
-                    {% if slot and slot.subject_name %}
-                    {% set color = subject_colors.get(slot.subject_name, '#64748b') %}
-                    <div class="subject-cell">
-                        <span class="subject-name" style="color: {{ color }};">{{ slot.subject_name }}</span>
-                        {% if slot.teacher_name %}
-                        <span class="teacher-name">{{ slot.teacher_name }}</span>
+                    {% set p = grid[pn]['period'] %}
+                    {% if not p.is_break %}
+                    {% set slot = grid[pn]['slots'].get(day) %}
+                    
+                    <td class="p-3 border-r border-primary/5 last:border-r-0 align-top">
+                        {% if slot and slot.subject_name %}
+                        <div class="h-full bg-white border border-slate-100 rounded-lg p-3 shadow-sm hover:shadow group-hover:border-primary/20 transition-all">
+                            <h4 class="font-bold text-slate-800 text-sm mb-1 line-clamp-1" title="{{ slot.subject_name }}">{{ slot.subject_name }}</h4>
+                            
+                            {% if slot.teacher_name %}
+                            <div class="flex items-center gap-1 text-xs text-slate-500 mt-2 truncate font-medium" title="{{ slot.teacher_name }}">
+                                <span class="material-symbols-outlined text-[14px]">person</span>
+                                {{ slot.teacher_name }}
+                            </div>
+                            {% endif %}
+                            
+                            {% if slot.room %}
+                            <div class="flex items-center gap-1 text-xs text-slate-500 mt-1 truncate">
+                                <span class="material-symbols-outlined text-[14px]">meeting_room</span>
+                                Room {{ slot.room }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <div class="h-full w-full flex items-center justify-center p-4">
+                            <span class="w-8 h-[2px] bg-slate-200 rounded-full"></span>
+                        </div>
                         {% endif %}
-                        {% if slot.room %}
-                        <span class="teacher-name"><i class="fas fa-door-open" style="font-size:0.6rem;"></i> {{ slot.room }}</span>
-                        {% endif %}
-                    </div>
-                    {% else %}
-                    <span style="color: var(--clr-text-muted); font-size: 0.8rem;">—</span>
+                    </td>
                     {% endif %}
-                </td>
-                {% endif %}
                 {% endfor %}
             </tr>
             {% endfor %}
@@ -84,49 +92,40 @@
     </table>
 </div>
 
-<!-- Break times shown separately below table as info chips -->
-{% set has_breaks = [] %}
+<!-- Breaks Legend -->
+{% set break_periods = [] %}
 {% for pn in period_nums %}
-{% if grid[pn]['period'].is_break %}{% set _ = has_breaks.append(grid[pn]['period']) %}{% endif %}
+    {% if grid[pn]['period'].is_break %}
+        {% set _ = break_periods.append(grid[pn]['period']) %}
+    {% endif %}
 {% endfor %}
-{% if has_breaks %}
-<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center;">
-    <span style="font-size: 0.75rem; font-weight: 600; color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Breaks:</span>
-    {% for brk in has_breaks %}
-    <span style="background: var(--clr-surface); border: 1px solid var(--border-color); border-radius: 20px; padding: 5px 14px; font-size: 0.78rem; font-weight: 600; color: var(--clr-text-secondary);">
-        ☕ {{ brk.break_name or 'Break' }} · {{ brk.start_time|format_time }} – {{ brk.end_time|format_time }}
-    </span>
-    {% endfor %}
+
+{% if break_periods %}
+<div class="mt-8 bg-white p-6 rounded-xl border border-primary/5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">local_cafe</span>
+        </div>
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Scheduled Breaks</span>
+    </div>
+    <div class="flex flex-wrap gap-3">
+        {% for brk in break_periods %}
+        <div class="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg text-sm">
+            <span class="font-bold text-slate-700">{{ brk.break_name or 'Break' }}</span>
+            <span class="text-slate-500 font-medium text-xs">{{ brk.start_time|format_time }} – {{ brk.end_time|format_time }}</span>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endif %}
 
 {% else %}
-<div class="empty-state">
-    <i class="fas fa-clock"></i>
-    <p>No timetable data available for your class.</p>
+<div class="p-12 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
+    <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">event_busy</span>
+    <h3 class="font-serif text-2xl text-primary font-bold mb-2">No Timetable Set</h3>
+    <p class="text-slate-500 font-medium">Your class schedule has not been configured yet.</p>
 </div>
 {% endif %}
 
 {% endif %}
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('navDrawer');
-    const overlay = document.getElementById('menuOverlay');
-    if (btn) btn.addEventListener('click', () => { nav.classList.toggle('open'); overlay.classList.toggle('open'); });
-    if (overlay) overlay.addEventListener('click', () => { nav.classList.remove('open'); overlay.classList.remove('open'); });
-
-    window.showToast = function(msg, category) {
-        const c = document.getElementById('toastContainer');
-        const t = document.createElement('div');
-        t.className = `toast toast--${category}`;
-        t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
-        c.appendChild(t);
-        setTimeout(() => t.remove(), 5000);
-    };
-});
-</script>
 {% endblock %}
