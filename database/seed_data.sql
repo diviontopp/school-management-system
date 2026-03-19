@@ -122,3 +122,30 @@ SELECT (SELECT id FROM students WHERE admission_number='DBX001'), DATE_SUB(CURDA
 
 INSERT IGNORE INTO student_attendance (student_id, date, status, marked_by) 
 SELECT (SELECT id FROM students WHERE admission_number='DBX001'), DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'Absent', 1;
+
+-- ── Notices (Samvaad Hub) ──────────────────────────────────
+INSERT IGNORE INTO notices (title, content, posted_by, posted_at, is_active) VALUES
+('Annual Sports Meet 2026', 'The annual sports meet will be held on April 15th. All students are requested to participate.', (SELECT id FROM teachers LIMIT 1), DATE_SUB(NOW(), INTERVAL 1 DAY), TRUE),
+('Science Fair Postponed', 'The Science Fair scheduled for next week is postponed to May 5th due to unforeseen circumstances.', (SELECT id FROM teachers LIMIT 1), DATE_SUB(NOW(), INTERVAL 2 DAY), TRUE),
+('New Library Rules', 'Students are now allowed to borrow up to 5 books. Please return current books on time.', (SELECT id FROM teachers LIMIT 1), DATE_SUB(NOW(), INTERVAL 5 DAY), TRUE);
+
+-- ── Student Remarks (Digital Diary) ────────────────────────
+INSERT IGNORE INTO student_remarks (student_id, teacher_id, remark, remark_type, date) VALUES
+((SELECT id FROM students WHERE admission_number='DBX001'), (SELECT id FROM teachers LIMIT 1), 'Excellent progress in Mathematics. Keep up the good work!', 'Academic', DATE_SUB(CURDATE(), INTERVAL 2 DAY)),
+((SELECT id FROM students WHERE admission_number='DBX001'), (SELECT id FROM teachers LIMIT 1), 'Participated actively in the class discussion today.', 'General', DATE_SUB(CURDATE(), INTERVAL 5 DAY));
+
+-- ── Library Borrowings (Vidya Hub) ─────────────────────────
+-- First ensure books exist
+INSERT IGNORE INTO books (title, author, category, available_copies, total_copies) VALUES
+('The Art of Computer Programming', 'Donald Knuth', 'Computer Science', 5, 5),
+('A Brief History of Time', 'Stephen Hawking', 'Science', 3, 3),
+('Introduction to Algorithms', 'CLRS', 'Computer Science', 2, 2);
+
+-- First create a library member for DBX001
+INSERT IGNORE INTO library_members (user_id, member_type)
+SELECT user_id, 'Student' FROM students WHERE admission_number = 'DBX001';
+
+-- Then create borrowings
+INSERT IGNORE INTO borrowings (book_id, member_id, borrow_date, due_date, status) VALUES
+((SELECT id FROM books WHERE title='The Art of Computer Programming' LIMIT 1), (SELECT lm.id FROM library_members lm JOIN users u ON lm.user_id = u.id WHERE u.username = 'DBX001' LIMIT 1), DATE_SUB(CURDATE(), INTERVAL 7 DAY), DATE_ADD(CURDATE(), INTERVAL 7 DAY), 'Borrowed'),
+((SELECT id FROM books WHERE title='A Brief History of Time' LIMIT 1), (SELECT lm.id FROM library_members lm JOIN users u ON lm.user_id = u.id WHERE u.username = 'DBX001' LIMIT 1), DATE_SUB(CURDATE(), INTERVAL 10 DAY), DATE_SUB(CURDATE(), INTERVAL 1 DAY), 'Borrowed');

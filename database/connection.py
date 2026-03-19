@@ -54,7 +54,7 @@ def get_pool():
                     kwargs['ssl_verify_cert'] = False
 
             _pool = pooling.MySQLConnectionPool(**kwargs)
-            print(f"✓ Connection pool created successfully!", flush=True)
+            print(f"[OK] Connection pool created successfully!", flush=True)
             return _pool
         except Exception as e:
             last_exception = e
@@ -145,7 +145,7 @@ def initialize_database():
     
     def process_and_execute(file_path, label):
         if not os.path.exists(file_path):
-            print(f"✗ {label} not found at {file_path}!", flush=True)
+            print(f"[ERROR] {label} not found at {file_path}!", flush=True)
             return
 
         print(f"Executing {label} from {file_path}...", flush=True)
@@ -161,10 +161,10 @@ def initialize_database():
         
         try:
             execute_script(content)
-            print(f"✓ {label} initialized successfully.", flush=True)
+            print(f"[OK] {label} initialized successfully.", flush=True)
             return True
         except Exception as e:
-            print(f"✗ ERROR executing {label}: {e}", flush=True)
+            print(f"[ERROR] executing {label}: {e}", flush=True)
             return False
 
     try:
@@ -183,7 +183,7 @@ def initialize_database():
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         """
         execute_script(enquiry_sql)
-        print("✓ 'enquiries' table verified/created.", flush=True)
+        print("[OK] 'enquiries' table verified/created.", flush=True)
 
         # 1. Execute full Schema
         process_and_execute(schema_path, "Full Schema")
@@ -200,7 +200,7 @@ def initialize_database():
         try:
             # We use a direct query to ensure DBX001 and admin are fixed if they got corrupted/truncated
             query("UPDATE users SET password_hash = %s WHERE username IN ('DBX001', 'admin')", (correct_hash,), commit=True)
-            print("✓ Demo credentials healed (set to 'admin123').", flush=True)
+            print("[OK] Demo credentials healed (set to 'admin123').", flush=True)
             
             # 4. Heal Student Link (Ensures record matches user ID)
             dbx_user = query("SELECT id FROM users WHERE username = 'DBX001'", fetch_one=True)
@@ -210,10 +210,10 @@ def initialize_database():
                 
                 # Fix the user_id link for Meera Patel / DBX001
                 query("UPDATE students SET user_id = %s WHERE admission_number = 'DBX001'", (dbx_user['id'],), commit=True)
-                print(f"✓ Student DBX001 record verified and linked (User ID: {dbx_user['id']}).", flush=True)
+                print(f"[OK] Student DBX001 record verified and linked (User ID: {dbx_user['id']}).", flush=True)
         except Exception as heal_err:
-            print(f"⚠️  Could not heal records: {heal_err}", flush=True)
+            print(f"Warning: Could not heal records: {heal_err}", flush=True)
 
         print("--- DATABASE INITIALIZATION COMPLETED ---", flush=True)
     except Exception as e:
-        print(f"✗ CRITICAL ERROR during initialization: {e}", flush=True)
+        print(f"[CRITICAL ERROR] during initialization: {e}", flush=True)

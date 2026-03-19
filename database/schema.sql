@@ -436,3 +436,17 @@ CREATE TABLE IF NOT EXISTS enquiries (
     status       ENUM('New','Contacted','Enrolled','Closed') DEFAULT 'New',
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================
+-- 17. SCHOOL NOTICES (Samvaad Hub)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS notices (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    title       VARCHAR(200) NOT NULL,
+    content     TEXT         NOT NULL,
+    posted_by   INT          NOT NULL,
+    posted_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active   BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (posted_by) REFERENCES teachers(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
