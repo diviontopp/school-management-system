@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS books (
     shelf_location   VARCHAR(20),
     cover_image_url  VARCHAR(255),
     description      TEXT,
-    added_date       DATE DEFAULT (CURRENT_DATE),
+    added_date       DATE,
     is_recommended   BOOLEAN DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -322,7 +322,7 @@ CREATE TABLE IF NOT EXISTS library_members (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     user_id         INT NOT NULL,
     member_type     ENUM('Student','Teacher','Staff') NOT NULL,
-    membership_date DATE DEFAULT (CURRENT_DATE),
+    membership_date DATE,
     is_active       BOOLEAN DEFAULT TRUE,
     max_books       INT DEFAULT 3,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -332,7 +332,7 @@ CREATE TABLE IF NOT EXISTS borrowings (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     book_id      INT            NOT NULL,
     member_id    INT            NOT NULL,
-    borrow_date  DATE           NOT NULL DEFAULT (CURRENT_DATE),
+    borrow_date  DATE           NOT NULL,
     due_date     DATE           NOT NULL,
     return_date  DATE,
     fine_amount  DECIMAL(10,2)  DEFAULT 0.00,
@@ -364,7 +364,7 @@ CREATE TABLE IF NOT EXISTS club_members (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     club_id      INT NOT NULL,
     student_id   INT NOT NULL,
-    joined_date  DATE DEFAULT (CURRENT_DATE),
+    joined_date  DATE,
     role         ENUM('Member','Lead','Co-Lead') DEFAULT 'Member',
     is_active    BOOLEAN DEFAULT TRUE,
     UNIQUE KEY uq_club_student (club_id, student_id),

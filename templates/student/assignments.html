@@ -108,9 +108,9 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            {% if hw.teacher_comment %}
+                            {% if hw.feedback %}
                                 <div class="p-3 bg-bone-white/40 rounded-lg border border-primary/5 italic prose-sm text-slate-600">
-                                    "{{ hw.teacher_comment }}"
+                                    "{{ hw.feedback }}"
                                 </div>
                             {% else %}
                                 <span class="text-slate-400 italic text-xs">Awaiting feedback</span>
@@ -118,8 +118,6 @@
                         </td>
                         <td class="px-6 py-4 font-bold text-primary">{{ hw.grade or '—' }}</td>
                     </tr>
-{% if not loop.last %}
-{% endif %}
                     {% endfor %}
                 </tbody>
             </table>

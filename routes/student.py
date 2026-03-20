@@ -22,80 +22,6 @@ def _get_student(user_id):
 @login_required
 @role_required('student')
 def dashboard():
-    # Emergency Heal: Ensure notices table exists before querying it
-    # This prevents the 500 error if someone reaches this route before the table is created
-    query("""
-        CREATE TABLE IF NOT EXISTS notices (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(200) NOT NULL,
-            content TEXT NOT NULL,
-            posted_by INT NOT NULL,
-            posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_active BOOLEAN DEFAULT TRUE,
-            FOREIGN KEY (posted_by) REFERENCES teachers(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    """, commit=True)
-    
-    # Ensure other new tables also exist (Digital Diary & library)
-    query("""
-        CREATE TABLE IF NOT EXISTS student_remarks (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            student_id INT NOT NULL,
-            teacher_id INT NOT NULL,
-            remark TEXT NOT NULL,
-            remark_type ENUM('Academic','Behavioral','Appreciation','General') NOT NULL,
-            date DATE NOT NULL,
-            is_visible_to_parent BOOLEAN DEFAULT TRUE,
-            FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
-            FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    """, commit=True)
-
-    query("""
-        CREATE TABLE IF NOT EXISTS books (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(200) NOT NULL,
-            author VARCHAR(200) NOT NULL,
-            isbn VARCHAR(20) UNIQUE,
-            publisher VARCHAR(100),
-            category VARCHAR(50),
-            total_copies INT NOT NULL DEFAULT 1,
-            available_copies INT NOT NULL DEFAULT 1,
-            shelf_location VARCHAR(20),
-            cover_image_url VARCHAR(255),
-            description TEXT,
-            added_date DATE DEFAULT (CURRENT_DATE),
-            is_recommended BOOLEAN DEFAULT FALSE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    """, commit=True)
-
-    query("""
-        CREATE TABLE IF NOT EXISTS library_members (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            member_type ENUM('Student','Teacher','Staff') NOT NULL,
-            membership_date DATE DEFAULT (CURRENT_DATE),
-            is_active BOOLEAN DEFAULT TRUE,
-            max_books INT DEFAULT 3,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    """, commit=True)
-
-    query("""
-        CREATE TABLE IF NOT EXISTS borrowings (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            book_id INT NOT NULL,
-            member_id INT NOT NULL,
-            borrow_date DATE NOT NULL DEFAULT (CURRENT_DATE),
-            due_date DATE NOT NULL,
-            return_date DATE,
-            fine_amount DECIMAL(10,2) DEFAULT 0.00,
-            status ENUM('Borrowed','Returned','Overdue') DEFAULT 'Borrowed',
-            FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE RESTRICT,
-            FOREIGN KEY (member_id) REFERENCES library_members(id) ON DELETE RESTRICT
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    """, commit=True)
-    
     student = _get_student(session['user_id'])
     if not student:
         print(f">>> CRITICAL: Student record missing for user_id={session['user_id']} (username={session.get('username')})", flush=True)
@@ -146,34 +72,48 @@ def dashboard():
     hw_pending = sum(1 for hw in upcoming_homework if not hw.get('submission_status') or hw['submission_status'] != 'Submitted')
 
     # ── Integrated Data Blocks ──────────────────────────────────
-    
+    # These are wrapped in try/except so a missing table never crashes the core dashboard.
+
     # 1. Recent School Notices (Samvaad Hub)
-    notices = query(
-        "SELECT * FROM notices ORDER BY posted_at DESC LIMIT 5"
-    ) or []
+    try:
+        notices = query(
+            "SELECT id, title, posted_at FROM notices WHERE is_active = 1 ORDER BY posted_at DESC LIMIT 5"
+        ) or []
+    except Exception as e:
+        print(f">>> WARN: notices query failed: {e}", flush=True)
+        notices = []
 
     # 2. Teacher Remarks (Academic Hub - Digital Diary)
-    remarks = query(
-        """SELECT r.*, CONCAT(t.first_name, ' ', t.last_name) as teacher_name
-           FROM student_remarks r
-           JOIN teachers t ON r.teacher_id = t.id
-           WHERE r.student_id = %s
-           ORDER BY r.date DESC
-           LIMIT 2""",
-        (student['id'],)
-    ) or []
+    try:
+        remarks = query(
+            """SELECT r.id, r.remark, r.remark_type, r.date,
+                      CONCAT(t.first_name, ' ', t.last_name) as teacher_name
+               FROM student_remarks r
+               JOIN teachers t ON r.teacher_id = t.id
+               WHERE r.student_id = %s
+               ORDER BY r.date DESC
+               LIMIT 2""",
+            (student['id'],)
+        ) or []
+    except Exception as e:
+        print(f">>> WARN: student_remarks query failed: {e}", flush=True)
+        remarks = []
 
     # 3. Library Status (Vidya Hub extension)
-    borrowed_books = query(
-        """SELECT b.title, bw.due_date, bw.status
-           FROM borrowings bw
-           JOIN books b ON bw.book_id = b.id
-           JOIN library_members lm ON bw.member_id = lm.id
-           WHERE lm.user_id = %s AND bw.status != 'Returned'
-           ORDER BY bw.due_date ASC
-           LIMIT 3""",
-        (session['user_id'],)
-    ) or []
+    try:
+        borrowed_books = query(
+            """SELECT b.title, bw.due_date, bw.status
+               FROM borrowings bw
+               JOIN books b ON bw.book_id = b.id
+               JOIN library_members lm ON bw.member_id = lm.id
+               WHERE lm.user_id = %s AND bw.status != 'Returned'
+               ORDER BY bw.due_date ASC
+               LIMIT 3""",
+            (session['user_id'],)
+        ) or []
+    except Exception as e:
+        print(f">>> WARN: borrowings query failed: {e}", flush=True)
+        borrowed_books = []
 
     return render_template('student/dashboard.html',
         student=student,
@@ -203,7 +143,7 @@ def assignments():
     all_homework = query(
         """SELECT h.id, h.title, h.description, h.deadline, h.assigned_date,
                   s.name as subject_name,
-                  hs.status as submission_status, hs.submitted_at, hs.teacher_comment, hs.grade
+                  hs.status as submission_status, hs.submitted_at, hs.feedback, hs.grade
            FROM homework h
            JOIN subjects s ON h.subject_id = s.id
            LEFT JOIN homework_submissions hs
