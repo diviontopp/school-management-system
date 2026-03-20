@@ -184,8 +184,8 @@
                     <circle class="{% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 - (440 * attendance_pct / 100) }}" stroke-linecap="round" stroke-width="12"></circle>
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span class="text-4xl font-serif font-black {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}">{{ attendance_pct|round|int }}%&nbsp;&nbsp;</span>
-                    <span class="text-[10px] font-bold {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} uppercase tracking-widest">
+                    <span class="text-4xl font-display font-black {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}">{{ attendance_pct|round|int }}%</span>
+                    <span class="text-[10px] font-bold {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} uppercase tracking-widest leading-none mt-1">
                         {% if attendance_pct >= 85 %}On Track{% elif attendance_pct >= 75 %}Good{% else %}Warning{% endif %}
                     </span>
                 </div>
