@@ -22,7 +22,7 @@
                 <p class="text-accent-gold font-bold tracking-widest uppercase text-xs mb-3">Welcome Back</p>
                 <h2 class="shadcn-h1 text-primary mb-4">Hello, {{ student.first_name }}!</h2>
                 <div class="flex items-center gap-4 text-slate-500">
-                    <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-primary/5">
+                    <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-slate-200">
                         <span class="material-symbols-outlined text-sm text-accent-gold">wb_cloudy</span>
                         <span class="text-sm font-medium">Class {{ student.class_name }} • Roll #{{ student.roll_number }}</span>
                     </div>
@@ -57,15 +57,15 @@
                     </div>
                     
                     {% if is_done %}
-                    <span class="inline-block px-2 py-1 rounded bg-status-success-bg text-[10px] font-extrabold text-status-success mb-3 uppercase tracking-widest">Submitted</span>
+                    <span class="inline-block px-2 py-1 rounded bg-status-success-bg text-xs font-extrabold text-status-success mb-3 uppercase tracking-widest">Submitted</span>
                     {% elif days_left < 0 %}
-                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-[10px] font-extrabold text-red-600 mb-3 uppercase tracking-widest">Overdue</span>
+                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-xs font-extrabold text-red-600 mb-3 uppercase tracking-widest">Overdue</span>
                     {% elif days_left <= 1 %}
-                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-[10px] font-extrabold text-red-600 mb-3 uppercase tracking-widest">Urgent</span>
+                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-xs font-extrabold text-red-600 mb-3 uppercase tracking-widest">Urgent</span>
                     {% elif days_left <= 3 %}
-                    <span class="inline-block px-2 py-1 rounded bg-amber-50 text-[10px] font-extrabold text-amber-600 mb-3 uppercase tracking-widest">Ongoing</span>
+                    <span class="inline-block px-2 py-1 rounded bg-amber-50 text-xs font-extrabold text-amber-600 mb-3 uppercase tracking-widest">Ongoing</span>
                     {% else %}
-                    <span class="inline-block px-2 py-1 rounded bg-blue-50 text-[10px] font-extrabold text-blue-600 mb-3 uppercase tracking-widest">Upcoming</span>
+                    <span class="inline-block px-2 py-1 rounded bg-blue-50 text-xs font-extrabold text-blue-600 mb-3 uppercase tracking-widest">Upcoming</span>
                     {% endif %}
                     
                     <h4 class="font-bold text-lg text-slate-800 mb-1" title="{{ hw.subject_name }}">{{ hw.subject_name }}</h4>
@@ -89,7 +89,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="p-8 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
+            <div class="p-8 bg-white border border-slate-200 rounded-xl text-center shadow-sm">
                 <span class="material-symbols-outlined text-5xl text-green-400 mb-3">task_alt</span>
                 <p class="text-slate-600 font-medium">No pending homework — enjoy your free time! 🎉</p>
             </div>
@@ -106,7 +106,7 @@
             {% if upcoming_tests %}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for test in upcoming_tests[:3] %}
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-primary/20 transition-colors">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between hover:border-slate-300 transition-colors">
                     <div>
                         <div class="flex justify-between items-start mb-4">
                             {% set test_colors = [('bg-primary/5', 'text-primary'), ('bg-accent-gold/5', 'text-accent-gold'), ('bg-green-50', 'text-green-600')] %}
@@ -114,19 +114,19 @@
                             <div class="w-10 h-10 rounded-lg {{ test_colors[color_idx][0] }} flex items-center justify-center {{ test_colors[color_idx][1] }}">
                                 <span class="material-symbols-outlined">quiz</span>
                             </div>
-                            <span class="text-xs font-bold text-slate-400">{{ test.test_date.strftime('%b %d') }}</span>
+                            <span class="text-xs font-bold text-slate-500">{{ test.test_date.strftime('%b %d') }}</span>
                         </div>
                         <h4 class="font-bold text-slate-800 mb-1 line-clamp-1" title="{{ test.name }}">{{ test.name }}</h4>
                         <p class="text-slate-500 text-sm mb-4 flex items-center gap-1">
                             <span class="material-symbols-outlined text-sm">menu_book</span> {{ test.subject_name }}
                         </p>
                     </div>
-                    <div class="text-xs font-medium text-slate-400 italic">Type: {{ test.test_type }}</div>
+                    <div class="text-xs font-medium text-slate-500 italic">Type: {{ test.test_type }}</div>
                 </div>
                 {% endfor %}
             </div>
             {% else %}
-            <div class="p-8 bg-white border border-primary/5 rounded-xl text-center shadow-sm max-w-2xl">
+            <div class="p-8 bg-white border border-slate-200 rounded-xl text-center shadow-sm max-w-2xl">
                 <span class="material-symbols-outlined text-5xl text-blue-300 mb-3">event_available</span>
                 <p class="text-slate-600 font-medium">No upcoming tests scheduled.</p>
             </div>
@@ -134,7 +134,7 @@
         </section>
 
         <!-- Academic Insights (Remarks) from Samvaad -->
-        <section class="border-t border-primary/5 pt-12">
+        <section class="border-t border-slate-200 pt-12">
             <div class="flex items-center gap-3 mb-8">
                 <div class="size-10 rounded-2xl bg-accent-gold/10 flex items-center justify-center text-accent-gold">
                     <span class="material-symbols-outlined">chat_bubble</span>
@@ -145,19 +145,19 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {% if remarks %}
                     {% for remark in remarks %}
-                    <div class="bg-white/50 rounded-2xl p-6 border border-primary/5 shadow-sm hover:shadow-md transition-all relative group">
+                    <div class="bg-white/50 rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all relative group">
                         <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold text-accent-gold uppercase tracking-widest px-3 py-1 bg-accent-gold/10 rounded-full">{{ remark.remark_type }}</span>
-                            <span class="text-[10px] font-medium text-slate-400 uppercase">{{ remark.date.strftime('%d %b, %Y') }}</span>
+                            <span class="text-xs font-bold text-accent-gold uppercase tracking-widest px-3 py-1 bg-accent-gold/10 rounded-full">{{ remark.remark_type }}</span>
+                            <span class="text-xs font-medium text-slate-500 uppercase">{{ remark.date.strftime('%d %b, %Y') }}</span>
                         </div>
                         <p class="text-slate-700 text-sm leading-relaxed italic mb-4">"{{ remark.remark }}"</p>
-                        <div class="flex items-center gap-3 pt-4 border-t border-primary/5">
+                        <div class="flex items-center gap-3 pt-4 border-t border-slate-200">
                             <div class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
                                 {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-primary">{{ remark.teacher_name }}</h5>
-                                <p class="text-[10px] text-slate-400 uppercase tracking-tighter">Academic Head</p>
+                                <p class="text-xs text-slate-500 uppercase tracking-tighter">Academic Head</p>
                             </div>
                         </div>
                     </div>
@@ -176,8 +176,8 @@
     <!-- Right Sidebar -->
     <aside class="col-span-12 lg:col-span-3 space-y-8">
         <!-- Attendance Gauge -->
-        <div class="bg-white p-8 rounded-xl shadow-sm border border-primary/5 text-center">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Attendance</h4>
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 text-center">
+            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Attendance</h4>
             <div class="relative w-40 h-40 mx-auto">
                 <svg class="w-full h-full transform -rotate-90">
                     <circle class="text-bone-white" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
@@ -185,7 +185,7 @@
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center">
                     <span class="text-4xl font-display font-black {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}">{{ attendance_pct|round|int }}%</span>
-                    <span class="text-[10px] font-bold {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} uppercase tracking-widest leading-none mt-1">
+                    <span class="text-xs font-bold {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} uppercase tracking-widest leading-none mt-1">
                         {% if attendance_pct >= 85 %}On Track{% elif attendance_pct >= 75 %}Good{% else %}Warning{% endif %}
                     </span>
                 </div>
@@ -206,7 +206,7 @@
                     {% for book in borrowed_books[:2] %}
                     <div class="w-full py-4 px-4 bg-white/10 text-white rounded-xl text-left border border-white/20">
                         <p class="text-xs font-bold leading-tight line-clamp-1" title="{{ book.title }}">{{ book.title }}</p>
-                        <p class="text-[10px] text-white/50 mt-1 uppercase tracking-wider">Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}</p>
+                        <p class="text-xs text-white/50 mt-1 uppercase tracking-wider">Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -219,9 +219,9 @@
         </div>
 
         <!-- Notice Ticker -->
-        <div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-hidden">
-            <div class="px-6 py-4 border-b border-primary/5 flex items-center justify-between">
-                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Recent School Notices</h4>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Recent School Notices</h4>
                 <span class="material-symbols-outlined text-slate-300 text-lg">campaign</span>
             </div>
             <div class="p-6">
@@ -233,12 +233,12 @@
                             <div class="w-2 h-2 mt-2 rounded-full {{ notice_colors[loop.index0 % 3] }} flex-shrink-0"></div>
                             <div>
                                 <p class="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors leading-tight">{{ notice.title }}</p>
-                                <p class="text-[10px] text-slate-400 font-medium mt-1 uppercase">{{ notice.posted_at.strftime('%b %d') if notice.posted_at else 'Active' }}</p>
+                                <p class="text-xs text-slate-500 font-medium mt-1 uppercase">{{ notice.posted_at.strftime('%b %d') if notice.posted_at else 'Active' }}</p>
                             </div>
                         </div>
                         {% endfor %}
                     {% else %}
-                        <div class="text-center text-slate-400 text-xs italic">No active circulars.</div>
+                        <div class="text-center text-slate-500 text-xs italic">No active circulars.</div>
                     {% endif %}
                 </div>
             </div>
