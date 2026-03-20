@@ -13,95 +13,65 @@
 </div>
 {% else %}
 
-<!-- Hero Greeting -->
-<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
-    <div>
-        <p class="text-accent-gold font-bold tracking-widest uppercase text-xs mb-3">Welcome Back</p>
-        <h2 class="font-serif text-5xl md:text-7xl text-primary font-bold mb-4 tracking-tight">Welcome, {{ student.first_name }}!</h2>
-        <div class="flex items-center gap-4 text-slate-500">
-            <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-primary/5 shadow-sm">
-                <span class="material-symbols-outlined text-sm text-accent-gold">school</span>
-                <span class="text-sm font-medium">Roll #{{ student.roll_number }} • Class {{ student.class_name }}</span>
-            </div>
-            <span class="w-1 h-1 bg-primary/20 rounded-full"></span>
-            <p class="text-sm font-medium">{{ today.strftime('%A, %d %B %Y') }}</p>
-        </div>
-    </div>
-</section>
-
-<!-- Main Grid Layout -->
 <div class="grid grid-cols-12 gap-8">
-    
-    <!-- Left Column (Main content area) -->
-    <div class="col-span-12 xl:col-span-9 space-y-12">
-        
-        <!-- School Notice Board (Samvaad Hub) -->
-        <section class="bg-primary p-8 rounded-3xl text-white shadow-xl shadow-primary/20 relative overflow-hidden mb-12 group">
-            <div class="relative z-10 flex flex-col md:flex-row justify-between gap-8">
-                <div class="md:w-1/3">
-                    <div class="flex items-center gap-2 text-accent-gold mb-2">
-                        <span class="material-symbols-outlined">campaign</span>
-                        <span class="text-xs font-bold uppercase tracking-widest">Samvaad Hub</span>
+    <!-- Left Column: Main Content -->
+    <div class="col-span-12 lg:col-span-9 space-y-12">
+        <!-- Hero Greeting -->
+        <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+                <p class="text-accent-gold font-bold tracking-widest uppercase text-xs mb-3">Welcome Back</p>
+                <h2 class="font-serif text-5xl md:text-7xl text-primary font-bold mb-4 tracking-tight">Hello, {{ student.first_name }}!</h2>
+                <div class="flex items-center gap-4 text-slate-500">
+                    <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-primary/5">
+                        <span class="material-symbols-outlined text-sm text-accent-gold">wb_cloudy</span>
+                        <span class="text-sm font-medium">Class {{ student.class_name }} • Roll #{{ student.roll_number }}</span>
                     </div>
-                    <h3 class="font-serif text-3xl font-bold mb-4">Notice Board</h3>
-                    <p class="text-white/70 text-sm leading-relaxed antialiased">Stay updated with official school circulars and local events.</p>
-                </div>
-                
-                <div class="md:w-2/3 space-y-4">
-                    {% if notices %}
-                        {% for notice in notices[:3] %}
-                        <div class="flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all cursor-pointer">
-                            <div class="flex items-center gap-4">
-                                <div class="w-2 h-2 rounded-full bg-accent-gold shadow-sm shadow-accent-gold"></div>
-                                <span class="font-bold text-sm tracking-wide">{{ notice.title }}</span>
-                            </div>
-                            <span class="text-[10px] font-bold text-white/50 uppercase">{{ notice.posted_at.strftime('%d %b') if notice.posted_at else 'Active' }}</span>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="p-6 border border-dashed border-white/20 rounded-2xl text-center text-white/40 italic">
-                            No active circulars at the moment.
-                        </div>
-                    {% endif %}
+                    <span class="w-1 h-1 bg-primary/20 rounded-full"></span>
+                    <p class="text-sm font-medium">{{ today.strftime('%A, %d %B %Y') }}</p>
                 </div>
             </div>
-            <div class="absolute -right-16 -top-16 w-64 h-64 bg-accent-gold/10 rounded-full blur-3xl group-hover:bg-accent-gold/20 transition-colors"></div>
+            <div class="flex gap-3">
+                <button class="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <span class="material-symbols-outlined text-sm">edit_calendar</span>
+                    Schedule Meeting
+                </button>
+            </div>
         </section>
 
-        <!-- Academic Hub: Upcoming Homework (Vidya) -->
+        <!-- Upcoming Assignments -->
         <section>
             <div class="flex justify-between items-center mb-6">
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Homework</h3>
+                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Assignments</h3>
                 <a href="{{ url_for('student.assignments') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
             </div>
             
             {% if upcoming_homework %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for hw in upcoming_homework[:3] %}
                 {% set days_left = (hw.deadline - today).days %}
                 {% set is_done = hw.submission_status == 'Submitted' %}
                 
-                <div class="bg-white p-6 rounded-xl border-t-4 {% if is_done %}border-status-success opacity-70{% elif days_left <= 1 %}border-status-danger{% elif days_left <= 3 %}border-status-warning{% else %}border-status-info{% endif %} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div class="bg-white p-6 rounded-xl border-t-4 {% if is_done %}border-status-success opacity-70{% elif days_left <= 1 %}border-red-500{% elif days_left <= 3 %}border-amber-500{% else %}border-blue-500{% endif %} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <span class="material-symbols-outlined text-6xl">menu_book</span>
+                        <span class="material-symbols-outlined text-6xl">{% if is_done %}task_alt{% else %}menu_book{% endif %}</span>
                     </div>
                     
                     {% if is_done %}
                     <span class="inline-block px-2 py-1 rounded bg-status-success-bg text-[10px] font-extrabold text-status-success mb-3 uppercase tracking-widest">Submitted</span>
                     {% elif days_left < 0 %}
-                    <span class="inline-block px-2 py-1 rounded bg-status-danger-bg text-[10px] font-extrabold text-status-danger mb-3 uppercase tracking-widest">Overdue</span>
+                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-[10px] font-extrabold text-red-600 mb-3 uppercase tracking-widest">Overdue</span>
                     {% elif days_left <= 1 %}
-                    <span class="inline-block px-2 py-1 rounded bg-status-danger-bg text-[10px] font-extrabold text-status-danger mb-3 uppercase tracking-widest">Urgent</span>
+                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-[10px] font-extrabold text-red-600 mb-3 uppercase tracking-widest">Urgent</span>
                     {% elif days_left <= 3 %}
-                    <span class="inline-block px-2 py-1 rounded bg-status-warning-bg text-[10px] font-extrabold text-status-warning mb-3 uppercase tracking-widest">Approaching</span>
+                    <span class="inline-block px-2 py-1 rounded bg-amber-50 text-[10px] font-extrabold text-amber-600 mb-3 uppercase tracking-widest">Ongoing</span>
                     {% else %}
-                    <span class="inline-block px-2 py-1 rounded bg-status-info-bg text-[10px] font-extrabold text-status-info mb-3 uppercase tracking-widest">Upcoming</span>
+                    <span class="inline-block px-2 py-1 rounded bg-blue-50 text-[10px] font-extrabold text-blue-600 mb-3 uppercase tracking-widest">Upcoming</span>
                     {% endif %}
                     
                     <h4 class="font-bold text-lg text-slate-800 mb-1" title="{{ hw.subject_name }}">{{ hw.subject_name }}</h4>
                     <p class="text-slate-500 text-sm mb-4 truncate" title="{{ hw.title }}">{{ hw.title }}</p>
                     
-                    <div class="flex items-center gap-2 {% if is_done %}text-status-success{% elif days_left <= 1 %}text-status-danger{% elif days_left <= 3 %}text-status-warning{% else %}text-status-info{% endif %} text-xs font-bold mt-auto">
+                    <div class="flex items-center gap-2 {% if is_done %}text-status-success{% elif days_left <= 1 %}text-red-600{% elif days_left <= 3 %}text-amber-600{% else %}text-blue-600{% endif %} text-xs font-bold mt-auto">
                         <span class="material-symbols-outlined text-sm">schedule</span>
                         {% if is_done %}
                         Completed
@@ -110,9 +80,9 @@
                         {% elif days_left == 0 %}
                         Due Today
                         {% elif days_left == 1 %}
-                        Due Tomorrow
+                        Tomorrow, 11:59 PM
                         {% else %}
-                        Due in {{ days_left }} days
+                        {{ hw.deadline.strftime('%b %d, %Y') }}
                         {% endif %}
                     </div>
                 </div>
@@ -126,64 +96,56 @@
             {% endif %}
         </section>
 
-        <!-- Upcoming Tests -->
+        <!-- Upcoming Tests & Vivas -->
         <section>
-            <div class="flex justify-between items-center mb-6 pt-6 border-t border-primary/5 md:border-none md:pt-0">
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Tests & Vivas</h3>
-                 <a href="{{ url_for('student.grades') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Tests</h3>
+                 <a href="{{ url_for('student.grades') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
             </div>
             
             {% if upcoming_tests %}
-            <div class="space-y-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for test in upcoming_tests[:3] %}
-                <div class="group flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 hover:bg-slate-50 transition-colors rounded-2xl border border-transparent hover:border-slate-200/60">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 shrink-0 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:scale-105 transition-transform">
-                            <span class="material-symbols-outlined">quiz</span>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-primary/20 transition-colors">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            {% set test_colors = [('bg-primary/5', 'text-primary'), ('bg-accent-gold/5', 'text-accent-gold'), ('bg-green-50', 'text-green-600')] %}
+                            {% set color_idx = loop.index0 % 3 %}
+                            <div class="w-10 h-10 rounded-lg {{ test_colors[color_idx][0] }} flex items-center justify-center {{ test_colors[color_idx][1] }}">
+                                <span class="material-symbols-outlined">quiz</span>
+                            </div>
+                            <span class="text-xs font-bold text-slate-400">{{ test.test_date.strftime('%b %d') }}</span>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-lg group-hover:text-primary">{{ test.name }}</h4>
-                            <p class="text-slate-500 text-sm font-medium">{{ test.subject_name }}</p>
-                        </div>
+                        <h4 class="font-bold text-slate-800 mb-1 line-clamp-1" title="{{ test.name }}">{{ test.name }}</h4>
+                        <p class="text-slate-500 text-sm mb-4 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">menu_book</span> {{ test.subject_name }}
+                        </p>
                     </div>
-                    
-                    <div class="flex items-center gap-6 md:gap-12 md:text-right">
-                        <div>
-                            <span class="block text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-0.5">Date</span>
-                            <span class="font-medium text-slate-800">{{ test.test_date.strftime('%B %d') }}</span>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-0.5">Type</span>
-                            <span class="font-medium text-slate-800 uppercase text-sm tracking-wide">{{ test.test_type }}</span>
-                        </div>
-                        <div class="bg-primary/5 px-4 py-2 rounded-xl text-center min-w-[80px]">
-                            <span class="block text-[10px] font-bold text-primary/60 tracking-widest uppercase mb-0.5">Marks</span>
-                            <span class="font-bold text-primary text-lg leading-none">{{ test.max_marks }}</span>
-                        </div>
-                    </div>
+                    <div class="text-xs font-medium text-slate-400 italic">Type: {{ test.test_type }}</div>
                 </div>
-                {% if not loop.last %}<div class="h-px bg-slate-100 mx-4"></div>{% endif %}
                 {% endfor %}
             </div>
             {% else %}
-            <div class="p-8 bg-slate-50 rounded-2xl text-center border border-slate-100">
-                <span class="material-symbols-outlined text-5xl text-blue-300 mb-3">celebration</span>
-                <p class="text-slate-600 font-medium">No upcoming tests right now.</p>
+            <div class="p-8 bg-white border border-primary/5 rounded-xl text-center shadow-sm max-w-2xl">
+                <span class="material-symbols-outlined text-5xl text-blue-300 mb-3">event_available</span>
+                <p class="text-slate-600 font-medium">No upcoming tests scheduled.</p>
             </div>
             {% endif %}
-        <!-- Insightful Feedback (Digital Diary - Samvaad) -->
+        </section>
+
+        <!-- Academic Insights (Remarks) from Samvaad -->
         <section class="border-t border-primary/5 pt-12">
             <div class="flex items-center gap-3 mb-8">
                 <div class="size-10 rounded-2xl bg-accent-gold/10 flex items-center justify-center text-accent-gold">
                     <span class="material-symbols-outlined">chat_bubble</span>
                 </div>
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Academic Insights</h3>
+                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Teacher Remarks</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {% if remarks %}
                     {% for remark in remarks %}
-                    <div class="bg-bone-white/50 rounded-2xl p-6 border border-primary/5 shadow-sm hover:shadow-md transition-all relative group">
+                    <div class="bg-white/50 rounded-2xl p-6 border border-primary/5 shadow-sm hover:shadow-md transition-all relative group">
                         <div class="flex justify-between items-start mb-4">
                             <span class="text-[10px] font-bold text-accent-gold uppercase tracking-widest px-3 py-1 bg-accent-gold/10 rounded-full">{{ remark.remark_type }}</span>
                             <span class="text-[10px] font-medium text-slate-400 uppercase">{{ remark.date.strftime('%d %b, %Y') }}</span>
@@ -208,86 +170,79 @@
                 {% endif %}
             </div>
         </section>
-        
+
     </div>
-    
-    <!-- Right Sidebar (Stats & Quick Access) -->
-    <aside class="col-span-12 xl:col-span-3 bg-slate-50 rounded-3xl p-8 space-y-10 border border-slate-200/50">
-        
+
+    <!-- Right Sidebar -->
+    <aside class="col-span-12 lg:col-span-3 space-y-8">
         <!-- Attendance Gauge -->
-        <div class="text-center">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Attendance Target</h4>
-            <div class="relative w-full max-w-[12rem] mx-auto aspect-square">
-                <svg class="w-full h-full transform -rotate-90" aria-label="Attendance Gauge at {{ attendance_pct|round|int }}%" role="img" viewBox="0 0 160 160">
-                    <title>Attendance is at {{ attendance_pct|round|int }}%</title>
-                    <circle class="text-white drop-shadow-sm" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
-                    <circle class="{% if attendance_pct >= 85 %}text-status-success{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-status-danger{% endif %}" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 - (440 * attendance_pct / 100) }}" stroke-linecap="round" stroke-width="12"></circle>
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-primary/5 text-center">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Attendance</h4>
+            <div class="relative w-40 h-40 mx-auto">
+                <svg class="w-full h-full transform -rotate-90">
+                    <circle class="text-bone-white" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+                    <circle class="{% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 - (440 * attendance_pct / 100) }}" stroke-linecap="round" stroke-width="12"></circle>
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span class="text-4xl font-serif font-black text-primary">{{ attendance_pct|round|int }}%</span>
-                    <span class="text-[10px] font-bold {% if attendance_pct >= 85 %}text-status-success{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-status-danger{% endif %} uppercase tracking-widest">
-                        {% if attendance_pct >= 85 %}Excellent
-                        {% elif attendance_pct >= 75 %}Good
-                        {% else %}Needs Attention{% endif %}
+                    <span class="text-4xl font-serif font-black {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}">{{ attendance_pct|round|int }}%&nbsp;&nbsp;</span>
+                    <span class="text-[10px] font-bold {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} uppercase tracking-widest">
+                        {% if attendance_pct >= 85 %}On Track{% elif attendance_pct >= 75 %}Good{% else %}Warning{% endif %}
                     </span>
                 </div>
             </div>
         </div>
 
-        <!-- Mini Stats Summary -->
-        <div class="space-y-6 pt-6 border-t border-slate-200">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest pb-2">Quick Stats</h4>
-            
-            <a href="{{ url_for('student.assignments') }}" class="flex justify-between items-center group cursor-pointer hover:bg-white p-3 -mx-3 rounded-xl transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <div class="flex items-center gap-4">
-                    <span class="material-symbols-outlined text-blue-500">assignment</span>
-                    <span class="text-sm font-bold text-slate-700">Pending HW</span>
-                </div>
-                <span class="text-lg font-bold text-primary">{{ hw_pending }}</span>
-            </a>
-            
-            <a href="{{ url_for('student.grades') }}" class="flex justify-between items-center group cursor-pointer hover:bg-white p-3 -mx-3 rounded-xl transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <div class="flex items-center gap-4">
-                    <span class="material-symbols-outlined text-amber-500">quiz</span>
-                    <span class="text-sm font-bold text-slate-700">Upcoming Tests</span>
-                </div>
-                <span class="text-lg font-bold text-primary">{{ test_count }}</span>
-            </a>
-        </div>
-        
-        <!-- Vidya Hub: Library status -->
-        <div class="border-t border-primary/5 pt-8">
-            <div class="flex items-center gap-2 text-primary/60 mb-6">
-                <span class="material-symbols-outlined text-sm">local_library</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest">Vidya Hub</span>
+        <!-- Grade Summary Mini Widget (Library placeholder from before, but let's use Vidya Hub books here instead of Fees since it's connected to DB) -->
+        <div class="bg-primary text-white p-8 rounded-xl shadow-xl shadow-primary/20 relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 opacity-10">
+                <span class="material-symbols-outlined text-9xl">library_books</span>
             </div>
-            <h4 class="font-serif text-xl font-bold text-primary mb-6">Borrowed Books</h4>
-            
-            <div class="space-y-4">
-                {% if borrowed_books %}
-                    {% for book in borrowed_books %}
-                    <div class="p-4 bg-white rounded-2xl border border-primary/5 shadow-sm">
-                        <h5 class="text-sm font-bold text-slate-800 mb-1 leading-tight">{{ book.title }}</h5>
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-[12px] text-slate-400">event</span>
-                            <span class="text-[10px] font-bold {% if book.due_date and (book.due_date - today).days < 0 %}text-status-danger{% else %}text-slate-500{% endif %} uppercase">
-                                Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}
-                            </span>
-                        </div>
+            <h4 class="text-xs font-bold text-white/60 uppercase tracking-widest mb-2">Borrowed Library Books</h4>
+            {% if borrowed_books %}
+                <div class="flex items-baseline gap-1 mb-8 relative z-10">
+                    <span class="text-5xl font-serif font-bold tracking-tight">{{ borrowed_books|length }}</span>
+                </div>
+                <div class="space-y-3 relative z-10">
+                    {% for book in borrowed_books[:2] %}
+                    <div class="w-full py-4 px-4 bg-white/10 text-white rounded-xl text-left border border-white/20">
+                        <p class="text-xs font-bold leading-tight line-clamp-1" title="{{ book.title }}">{{ book.title }}</p>
+                        <p class="text-[10px] text-white/50 mt-1 uppercase tracking-wider">Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}</p>
                     </div>
                     {% endfor %}
-                {% else %}
-                    <div class="p-6 border border-dashed border-primary/10 rounded-2xl text-center bg-white/30">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">No books borrowed</p>
-                    </div>
-                {% endif %}
-            </div>
-            
-            <a href="#" class="block w-full mt-6 py-4 rounded-full border border-primary/10 text-center text-xs font-bold text-primary hover:bg-white transition-all">
-                Search Library
-            </a>
+                </div>
+            {% else %}
+                <div class="flex items-baseline gap-1 mb-8 relative z-10">
+                    <span class="text-5xl font-serif font-bold tracking-tight">0</span>
+                </div>
+                <p class="text-xs text-white/60 relative z-10 mb-6">No books currently borrowed from Vidya Hub.</p>
+            {% endif %}
         </div>
 
+        <!-- Notice Ticker -->
+        <div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-hidden">
+            <div class="px-6 py-4 border-b border-primary/5 flex items-center justify-between">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Recent School Notices</h4>
+                <span class="material-symbols-outlined text-slate-300 text-lg">campaign</span>
+            </div>
+            <div class="p-6">
+                <div class="space-y-6">
+                    {% if notices %}
+                        {% for notice in notices[:3] %}
+                        {% set notice_colors = ['bg-accent-gold', 'bg-primary', 'bg-slate-200'] %}
+                        <div class="flex gap-4 group cursor-pointer">
+                            <div class="w-2 h-2 mt-2 rounded-full {{ notice_colors[loop.index0 % 3] }} flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors leading-tight">{{ notice.title }}</p>
+                                <p class="text-[10px] text-slate-400 font-medium mt-1 uppercase">{{ notice.posted_at.strftime('%b %d') if notice.posted_at else 'Active' }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-slate-400 text-xs italic">No active circulars.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </aside>
 </div>
 

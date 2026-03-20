@@ -2,6 +2,37 @@
 {% block title %}Timetable — Scholaris Student Portal{% endblock %}
 {% block page_title %}Timetable{% endblock %}
 
+{% block extra_css %}
+<style>
+    .serif-font { font-family: 'Playfair Display', serif; }
+    .display-font { font-family: 'Outfit', sans-serif; }
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(15, 76, 129, 0.1);
+    }
+    {% if grid %}
+    {% set period_nums = grid.keys()|list %}
+    .timetable-grid {
+        display: grid;
+        grid-template-columns: 120px repeat({{ period_nums|length }}, minmax(65px, 1fr));
+    }
+    {% else %}
+    .timetable-grid {
+        display: grid;
+        grid-template-columns: 120px repeat(8, 1fr);
+    }
+    {% endif %}
+    .premium-text-shadow { text-shadow: 0 2px 4px rgba(15, 76, 129, 0.05); }
+    .period-header {
+        font-family: 'Playfair Display', serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 {% if not student %}
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
@@ -13,119 +44,92 @@
 </div>
 {% else %}
 
-<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<!-- Header Section -->
+<header class="mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
     <div class="max-w-2xl">
-        <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Routine</span>
-        <h1 class="font-serif text-5xl text-primary font-bold mt-2 tracking-tight">Timetable</h1>
-        <p class="text-slate-600 text-lg mt-3 font-medium">Your daily academic schedule.</p>
+        <span class="inline-block px-4 py-1 rounded-full bg-primary text-bone-white text-xs font-black uppercase tracking-[0.3em] mb-6">Academic Year 2026</span>
+        <h2 class="display-font text-6xl md:text-8xl font-medium leading-[0.9] mb-8 tracking-tighter">Your <span class="serif-font italic font-medium text-accent-gold">Daily Schedule</span></h2>
+        <p class="text-xl opacity-80 leading-relaxed font-medium">Class {{ student.class_name }}. Your daily schedule is designed to balance study and breaks.</p>
     </div>
-    <div class="bg-white px-4 py-2 border border-primary/10 rounded-full shadow-sm flex items-center gap-3">
-        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-        <span class="text-sm font-bold text-primary">{{ today_name }} <span class="text-slate-500 font-normal">| Class {{ student.class_name }}</span></span>
+    <div class="flex flex-col items-end gap-4">
+        <p class="serif-font text-4xl italic font-semibold">{{ today_name }}, Class Schedule</p>
     </div>
-</div>
+</header>
 
-{% if grid %}
-{% set period_nums = grid.keys()|sort %}
-
-<div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-x-auto">
-    <table class="w-full text-left border-collapse min-w-[800px]">
-        <thead>
-            <tr class="bg-bone-white/30 text-primary border-b-2 border-primary/10">
-                <th class="p-6 w-32 font-bold font-serif text-lg sticky left-0 bg-bone-white/95 backdrop-blur z-10 border-r border-primary/5">Day</th>
-                {% for pn in period_nums %}
-                    {% set p = grid[pn]['period'] %}
-                    {% if not p.is_break %}
-                    <th class="p-4 text-center border-r border-primary/5 last:border-r-0 min-w-[140px]">
-                        <span class="block text-sm font-bold text-slate-800 mb-1">Period {{ p.period_number }}</span>
-                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white rounded-full py-0.5 px-2 w-max mx-auto shadow-sm border border-slate-100">
-                            {{ p.start_time|format_time }}
-                        </span>
-                    </th>
+<!-- Timetable Grid -->
+<section class="mb-20 overflow-x-auto">
+    <div class="min-w-[1000px] bg-white rounded-2xl p-6 shadow-2xl shadow-primary/5 border border-primary/5">
+        
+        {% if grid %}
+        {% set period_nums = grid.keys()|sort %}
+        
+        <!-- Grid Header (Periods) -->
+        <div class="timetable-grid border-b-2 border-primary pb-6 mb-6">
+            <div class="flex items-center justify-center serif-font font-black italic opacity-30 text-lg">Days</div>
+            {% for pn in period_nums %}
+                {% set p = grid[pn]['period'] %}
+                <div class="px-1 text-center">
+                    <p class="text-[9px] font-black uppercase tracking-tighter opacity-50 whitespace-nowrap">{{ p.start_time|format_time }}<br>{{ p.end_time|format_time }}</p>
+                    {% if p.is_break %}
+                    <p class="period-header text-lg text-accent-gold">{{ p.break_name[:3]|upper if p.break_name else 'BRK' }}</p>
+                    {% else %}
+                    <p class="period-header text-lg">P{{ p.period_number }}</p>
                     {% endif %}
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-primary/5">
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Days Rows -->
+        <div class="space-y-4">
             {% for day in days %}
-            <tr class="group hover:bg-slate-50/50 transition-colors {% if day == today_name %}bg-accent-gold/5{% endif %}">
-                <td class="p-6 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-primary/5 {% if day == today_name %}!bg-accent-gold/10 border-l-4 border-l-accent-gold{% endif %}">
-                    <span class="block font-bold text-lg {% if day == today_name %}text-accent-gold{% else %}text-slate-700{% endif %}">{{ day[:3] }}</span>
-                    <span class="block text-xs font-medium text-slate-500">{{ day }}</span>
-                </td>
+            <div class="timetable-grid {% if day == today_name %}group bg-accent-gold/5 rounded-xl{% else %}opacity-70 hover:opacity-100 transition-opacity{% endif %}">
+                <div class="flex items-center display-font font-black text-xs tracking-[0.2em] uppercase py-4 pl-4 border-r-2 border-primary/10">{{ day }}</div>
                 
                 {% for pn in period_nums %}
                     {% set p = grid[pn]['period'] %}
-                    {% if not p.is_break %}
-                    {% set slot = grid[pn]['slots'].get(day) %}
                     
-                    <td class="p-3 border-r border-primary/5 last:border-r-0 align-top">
+                    {% if p.is_break %}
+                        <div class="p-1"><div class="h-full rounded-lg bg-accent-gold/10 text-accent-gold flex items-center justify-center text-[8px] font-black uppercase">{{ p.break_name[:5] if p.break_name else 'BRK' }}</div></div>
+                    {% else %}
+                        {% set slot = grid[pn]['slots'].get(day) %}
                         {% if slot and slot.subject_name %}
-                        <div class="h-full bg-white border border-slate-100 rounded-lg p-3 shadow-sm hover:shadow group-hover:border-primary/20 transition-all">
-                            <h4 class="font-bold text-slate-800 text-sm mb-1 line-clamp-1" title="{{ slot.subject_name }}">{{ slot.subject_name }}</h4>
+                            {% set is_lab = 'Lab' in slot.subject_name %}
+                            {% set bg_class = 'bg-primary text-bone-white border-primary' if (loop.index0 % 3 == 0) else ('bg-white border-2 border-primary/20 text-slate-800' if not is_lab else 'bg-green-50 text-green-700 border-2 border-green-200') %}
                             
-                            {% if slot.teacher_name %}
-                            <div class="flex items-center gap-1 text-xs text-slate-500 mt-2 truncate font-medium" title="{{ slot.teacher_name }}">
-                                <span class="material-symbols-outlined text-[14px]">person</span>
-                                {{ slot.teacher_name }}
+                            <div class="p-1">
+                                <div class="h-full rounded-lg {{ bg_class }} p-2 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer shadow-sm group-hover:border-primary/40 relative overflow-hidden" title="{{ slot.subject_name }} with {{ slot.teacher_name or 'TBA' }}">
+                                    <span class="text-[11px] font-bold line-clamp-1 leading-tight">{{ slot.subject_name[:8] }}</span>
+                                    {% if slot.room %}
+                                    <span class="text-[9px] opacity-60 mt-1 block">{{ slot.room[:6] }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                            {% endif %}
-                            
-                            {% if slot.room %}
-                            <div class="flex items-center gap-1 text-xs text-slate-500 mt-1 truncate">
-                                <span class="material-symbols-outlined text-[14px]">meeting_room</span>
-                                Room {{ slot.room }}
-                            </div>
-                            {% endif %}
-                        </div>
                         {% else %}
-                        <div class="h-full w-full flex items-center justify-center p-4">
-                            <span class="w-8 h-[2px] bg-slate-200 rounded-full"></span>
-                        </div>
+                            <div class="p-1">
+                                <div class="h-full rounded-lg border-2 border-dashed border-slate-200 p-2 text-slate-300 flex items-center justify-center">
+                                    <span class="text-xs">—</span>
+                                </div>
+                            </div>
                         {% endif %}
-                    </td>
                     {% endif %}
                 {% endfor %}
-            </tr>
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<!-- Breaks Legend -->
-{% set break_periods = [] %}
-{% for pn in period_nums %}
-    {% if grid[pn]['period'].is_break %}
-        {% set _ = break_periods.append(grid[pn]['period']) %}
-    {% endif %}
-{% endfor %}
-
-{% if break_periods %}
-<div class="mt-8 bg-white p-6 rounded-xl border border-primary/5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-4">
-    <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center">
-            <span class="material-symbols-outlined text-[18px]">local_cafe</span>
         </div>
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Scheduled Breaks</span>
-    </div>
-    <div class="flex flex-wrap gap-3">
-        {% for brk in break_periods %}
-        <div class="flex items-center gap-2 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg text-sm">
-            <span class="font-bold text-slate-700">{{ brk.break_name or 'Break' }}</span>
-            <span class="text-slate-500 font-medium text-xs">{{ brk.start_time|format_time }} – {{ brk.end_time|format_time }}</span>
+        
+        {% else %}
+        <div class="p-12 text-center text-slate-500 italic">
+            <span class="material-symbols-outlined text-5xl mb-3 text-slate-300">event_busy</span>
+            <br>
+            Class schedule is not configured for this academic period.
         </div>
-        {% endfor %}
+        {% endif %}
+        
     </div>
-</div>
-{% endif %}
+</section>
 
-{% else %}
-<div class="p-12 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
-    <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">event_busy</span>
-    <h3 class="font-serif text-2xl text-primary font-bold mb-2">No Timetable Set</h3>
-    <p class="text-slate-500 font-medium">Your class schedule has not been configured yet.</p>
-</div>
-{% endif %}
+<!-- Additional visual spacer matching Stitch UI elements -->
+<div class="h-24"></div>
 
 {% endif %}
 {% endblock %}

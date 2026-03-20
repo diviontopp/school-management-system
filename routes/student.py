@@ -357,3 +357,25 @@ def profile():
         hw_done=hw_done,
         active_page='profile'
     )
+
+
+# ── Communication (Samvaad) ──────────────────────────────────
+@student_bp.route('/communication')
+@login_required
+@role_required('student')
+def communication():
+    student = _get_student(session['user_id'])
+    if not student:
+        return render_template('student/communication.html', student=None)
+    
+    sid = student.get('id')
+    notices = query("SELECT * FROM notices WHERE is_active = 1 ORDER BY posted_at DESC LIMIT 10") or []
+    remarks = query("SELECT r.remark, r.date, CONCAT(t.first_name, ' ', t.last_name) as teacher_name, s.name as subject_name FROM student_remarks r JOIN teachers t ON r.teacher_id = t.id JOIN subjects s ON r.subject_id = s.id WHERE r.student_id = %s ORDER BY r.date DESC LIMIT 10", (sid,)) or []
+    
+    return render_template('student/communication.html',
+        student=student,
+        notices=notices,
+        remarks=remarks,
+        active_page='communication',
+        today=date.today()
+    )

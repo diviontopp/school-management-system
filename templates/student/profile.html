@@ -2,6 +2,46 @@
 {% block title %}My Profile — Scholaris Student Portal{% endblock %}
 {% block page_title %}My Profile{% endblock %}
 
+{% block extra_css %}
+<style>
+    .font-serif-title { font-family: 'Playfair Display', serif; }
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(15, 76, 129, 0.05);
+    }
+    .gold-path {
+        background: linear-gradient(90deg, #C5A028 0%, #E2C285 50%, #C5A028 100%);
+        height: 1px;
+        position: relative;
+    }
+    .gold-path::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: -4px;
+        width: 8px;
+        height: 8px;
+        background: #C5A028;
+        border-radius: 50%;
+        box-shadow: 0 0 15px #C5A028;
+    }
+    .hero-mask {
+        clip-path: inset(0 0 0 0 round 2.5rem);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .micro-interaction:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -10px rgba(15, 76, 129, 0.15);
+    }
+    .premium-text-gradient {
+        background: linear-gradient(180deg, #0f4c81 0%, rgba(15, 76, 129, 0.7) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 {% if not student %}
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
@@ -13,139 +53,189 @@
 </div>
 {% else %}
 
-<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-    <div class="max-w-2xl">
-        <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Identity Profile</span>
-        <h1 class="font-serif text-5xl text-primary font-bold mt-2 tracking-tight">Profile</h1>
-        <p class="text-slate-600 text-lg mt-3 font-medium">Your personal and academic identity.</p>
+<!-- Hero Section -->
+<section class="relative mb-24 grid grid-cols-1 items-center gap-16 lg:grid-cols-2 mt-8">
+    <div class="relative order-2 lg:order-1">
+        <div class="flex flex-col gap-4 mb-8">
+            <span class="inline-flex w-fit items-center rounded-full bg-accent-gold/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-accent-gold">Scholar ID #{{ student.admission_number }}</span>
+            <h2 class="font-serif-title text-5xl md:text-7xl lg:text-[100px] font-black tracking-tighter text-primary leading-[0.85] premium-text-gradient">
+                {{ student.first_name }} <br/>
+                <span class="italic font-normal">{{ student.last_name }}</span>
+            </h2>
+        </div>
+        <p class="max-w-md text-lg leading-relaxed text-primary/60 mb-10 font-light">
+            Enrolled in Class <span class="font-bold text-primary">{{ student.class_name }}</span>. 
+            Academic Session 2026.
+        </p>
+        <div class="flex flex-wrap gap-6">
+            <a href="{{ url_for('student.grades') }}" class="micro-interaction flex h-14 items-center justify-center gap-3 rounded-full bg-primary px-10 text-[11px] font-bold uppercase tracking-[0.2em] text-bone-white shadow-2xl shadow-primary/20 transition-all">
+                <span class="material-symbols-outlined text-sm">visibility</span>
+                View Transcript
+            </a>
+            <a href="{{ url_for('student.assignments') }}" class="micro-interaction flex h-14 items-center justify-center gap-3 rounded-full border border-primary/10 bg-white/50 px-10 text-[11px] font-bold uppercase tracking-[0.2em] text-primary transition-all hover:bg-white">
+                <span class="material-symbols-outlined text-sm">assignment</span>
+                Check Tasks
+            </a>
+        </div>
     </div>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-    
-    <!-- Left Column: Hero & Badges -->
-    <div class="md:col-span-12 xl:col-span-4 space-y-8">
-        
-        <!-- Profile Identity Card -->
-        <div class="bg-primary rounded-2xl p-8 text-white shadow-xl shadow-primary/20 relative overflow-hidden group">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-accent-gold/20 rounded-full blur-2xl group-hover:bg-accent-gold/30 transition-colors"></div>
-            
-            <div class="relative z-10 flex flex-col items-center">
-                <div class="w-32 h-32 rounded-full border-4 border-white/20 mb-6 bg-white/10 flex items-center justify-center relative shadow-inner">
-                    <span class="font-serif text-5xl font-black">{{ student.first_name[0] }}{{ student.last_name[0] }}</span>
-                </div>
-                
-                <h2 class="font-serif text-3xl font-bold mb-2 text-center leading-tight">{{ student.first_name }} <br>{{ student.last_name }}</h2>
-                
-                <div class="bg-white/10 px-4 py-1.5 rounded-full border border-white/20 text-xs font-bold uppercase tracking-widest mb-6 backdrop-blurflex items-center gap-2">
-                    <span class="text-accent-gold">Role:</span> Student
-                </div>
-                
-                <div class="w-full space-y-3 pt-6 border-t border-white/10">
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-white/60 font-medium tracking-wide">Class</span>
-                        <span class="font-bold">{{ student.class_name }}</span>
+    <div class="relative order-1 flex justify-center lg:order-2 lg:justify-end">
+        <div class="group relative h-[350px] w-full max-w-[320px] lg:h-[450px] lg:max-w-[400px]">
+            <!-- Decorative elements -->
+            <div class="absolute -left-12 -top-12 h-64 w-64 rounded-full bg-accent-gold/5 blur-[80px]"></div>
+            <div class="absolute -bottom-12 -right-12 h-64 w-64 rounded-full bg-primary/5 blur-[80px]"></div>
+            <!-- Main Photo with framing (Initials fallback) -->
+            <div class="hero-mask relative h-full w-full overflow-hidden bg-white/60 shadow-[0_40px_80px_-15px_rgba(15,76,129,0.1)] transition-transform duration-1000 group-hover:scale-[1.02] flex items-center justify-center border-4 border-white">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent-gold/10"></div>
+                <span class="font-serif-title text-8xl font-black text-primary/20">{{ student.first_name[0] }}{{ student.last_name[0] }}</span>
+            </div>
+            <!-- Float Badge -->
+            <div class="absolute -bottom-8 -left-8 glass-panel rounded-3xl p-6 shadow-2xl weighted-silk group-hover:-translate-y-2 bg-white/80">
+                <div class="flex items-center gap-4">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-accent-gold text-white shadow-lg">
+                        <span class="material-symbols-outlined text-xl">how_to_reg</span>
                     </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-white/60 font-medium tracking-wide">Roll Number</span>
-                        <span class="font-bold">{{ student.roll_number or '—' }}</span>
-                    </div>
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-white/60 font-medium tracking-wide">Admission No.</span>
-                        <span class="font-bold">{{ student.admission_number }}</span>
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Attendance</p>
+                        <p class="font-serif-title text-2xl font-black text-primary">{{ attendance_pct }}%</p>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
-    
-    <!-- Right Column: Details & Stats -->
-    <div class="md:col-span-12 xl:col-span-8 space-y-8">
-        
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <a href="{{ url_for('student.attendance') }}" class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:border-green-500 transition-colors text-center group cursor-pointer block">
-                <div class="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined">how_to_reg</span>
-                </div>
-                <div class="text-3xl font-serif font-bold text-green-600 mb-1">{{ attendance_pct }}%</div>
-                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">Attendance</div>
-            </a>
-            
-            <a href="{{ url_for('student.grades') }}" class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:border-blue-500 transition-colors text-center group cursor-pointer block">
-                <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined">quiz</span>
-                </div>
-                <div class="text-3xl font-serif font-bold text-blue-600 mb-1">{{ scores_count }}</div>
-                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">Tests Taken</div>
-            </a>
-            
-            <a href="{{ url_for('student.assignments') }}" class="bg-white p-6 rounded-xl border border-primary/5 shadow-sm hover:border-accent-gold transition-colors text-center group cursor-pointer block">
-                <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined">task_alt</span>
-                </div>
-                <div class="text-3xl font-serif font-bold text-accent-gold mb-1">{{ hw_done }}</div>
-                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">Homeworks<br>Done</div>
-            </a>
-        </div>
-        
-        <!-- Personal Information Card -->
-        <div class="bg-white rounded-xl border border-primary/5 shadow-sm overflow-hidden">
-            <div class="px-8 py-6 border-b border-primary/5 bg-bone-white/30 flex items-center gap-3">
-                <span class="material-symbols-outlined text-primary">contact_mail</span>
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Personal Details</h3>
+</section>
+
+<!-- Curated Portfolio Sections -->
+<div class="grid grid-cols-1 gap-16 lg:grid-cols-12 pb-16">
+    <div class="lg:col-span-8 space-y-16">
+
+        <!-- Academic Portfolio -->
+        <section>
+            <div class="mb-12 flex items-center justify-between border-b border-primary/5 pb-6">
+                <h3 class="font-serif-title text-4xl font-bold tracking-tight text-primary italic">Academic Record</h3>
+                <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-primary/30 hidden sm:block">Curated Snapshot</span>
             </div>
             
-            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Data Field Layout Module -->
-                <div class="flex flex-col border-l-2 border-primary/10 pl-4 py-1 hover:border-primary transition-colors">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">cake</span> Date of Birth
-                    </span>
-                    <span class="font-medium text-slate-800">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="group relative flex flex-col gap-6 rounded-[2rem] border border-primary/5 bg-white/60 p-10 transition-all hover:border-accent-gold/30 hover:-translate-y-1">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-bone-white text-primary">
+                        <span class="material-symbols-outlined">class</span>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mb-2">Class Assignment</h4>
+                        <p class="font-serif-title text-2xl font-bold text-primary">Grade {{ student.class_name }}</p>
+                    </div>
                 </div>
-                
-                <div class="flex flex-col border-l-2 border-primary/10 pl-4 py-1 hover:border-primary transition-colors">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">mail</span> Email Address
-                    </span>
-                    <span class="font-medium text-slate-800 break-all">{{ student.email or '—' }}</span>
-                </div>
-                
-                <div class="flex flex-col border-l-2 border-primary/10 pl-4 py-1 hover:border-primary transition-colors">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">call</span> Phone Number
-                    </span>
-                    <span class="font-medium text-slate-800">{{ student.phone or '—' }}</span>
-                </div>
-
-                <div class="flex flex-col border-l-2 border-primary/10 pl-4 py-1 hover:border-primary transition-colors">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">accessibility_new</span> Gender
-                    </span>
-                    <span class="font-medium text-slate-800">
-                        {% if student.gender == 'M' %}Male{% elif student.gender == 'F' %}Female{% else %}{{ student.gender or '—' }}{% endif %}
-                    </span>
-                </div>
-
-                <div class="flex flex-col border-l-2 border-primary/10 pl-4 py-1 hover:border-primary transition-colors">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">calendar_month</span> Admission Date
-                    </span>
-                    <span class="font-medium text-slate-800">{{ student.admission_date.strftime('%d %B %Y') if student.admission_date else '—' }}</span>
-                </div>
-                
-                <div class="flex flex-col border-l-2 border-primary/10 pl-4 py-1 md:col-span-2 hover:border-primary transition-colors">
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">location_on</span> Residential Address
-                    </span>
-                    <span class="font-medium text-slate-800 leading-relaxed">{{ student.address or '—' }}</span>
+                <div class="group relative flex flex-col gap-6 rounded-[2rem] border border-primary/5 bg-white/60 p-10 transition-all hover:border-accent-gold/30 hover:-translate-y-1">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-bone-white text-primary">
+                        <span class="material-symbols-outlined">pin</span>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mb-2">Roll Number</h4>
+                        <p class="font-serif-title text-2xl font-bold text-primary">{{ student.roll_number or 'Pending' }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
+            
+            <div class="mt-12 flex flex-wrap gap-8 items-center justify-around rounded-[2.5rem] bg-primary/5 p-10 md:py-12 md:px-6">
+                <div class="text-center w-full sm:w-auto">
+                    <p class="text-5xl font-serif-title font-black text-primary tracking-tighter">{{ scores_count }}</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mt-3">Tests Taken</p>
+                </div>
+                <div class="h-px w-full sm:h-14 sm:w-px bg-primary/10"></div>
+                <div class="text-center w-full sm:w-auto">
+                    <p class="text-5xl font-serif-title font-black text-primary tracking-tighter">{{ hw_done }}</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mt-3">Tasks Done</p>
+                </div>
+                <div class="h-px w-full sm:h-14 sm:w-px bg-primary/10"></div>
+                <div class="text-center w-full sm:w-auto">
+                    <p class="text-5xl font-serif-title font-black text-accent-gold tracking-tighter">{{ attendance_pct }}%</p>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mt-3">Presence</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Career Pathing Narrative (Adapted to generic student narrative) -->
+        <section class="glass-panel relative overflow-hidden rounded-[2.5rem] p-10 md:p-16 bg-white/50">
+            <div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-accent-gold/5 to-transparent"></div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="material-symbols-outlined text-accent-gold text-3xl">trending_up</span>
+                    <h3 class="font-serif-title text-3xl font-bold italic tracking-tight text-primary">Academic Record</h3>
+                </div>
+                <p class="mb-12 max-w-xl text-lg leading-relaxed text-primary/70 font-medium">
+                    Consistently working towards academic proficiency. Track your milestones and maintain steady progress through the curriculum.
+                </p>
+                <div class="relative py-8">
+                    <div class="gold-path w-full"></div>
+                    <div class="mt-8 grid grid-cols-3 gap-6">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-accent-gold">Term I</span>
+                            <span class="text-sm font-bold text-primary">Foundation</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-accent-gold">Term II</span>
+                            <span class="text-sm font-bold text-primary">Core Concepts</span>
+                        </div>
+                        <div class="flex flex-col gap-2 text-right">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40">Finals</span>
+                            <span class="text-sm font-bold text-primary/40">Advancement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
+
+    <!-- Right Sidebar: Personal Info -->
+    <aside class="lg:col-span-4">
+        <div class="sticky top-32 space-y-12">
+            
+            <section class="bg-white/60 p-8 rounded-[2rem] border border-primary/5">
+                <h3 class="mb-8 text-[12px] font-bold uppercase tracking-[0.4em] text-accent-gold">Personal Data</h3>
+                <div class="space-y-6">
+                    <div class="group border-b border-primary/5 pb-6">
+                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Email Address</p>
+                        <p class="text-sm font-bold text-primary group-hover:text-accent-gold transition-colors break-all">{{ student.email or '—' }}</p>
+                    </div>
+                    <div class="group border-b border-primary/5 pb-6">
+                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Phone Contact</p>
+                        <p class="text-sm font-bold text-primary">{{ student.phone or '—' }}</p>
+                    </div>
+                    <div class="group border-b border-primary/5 pb-6">
+                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Date of Birth</p>
+                        <p class="text-sm font-bold text-primary">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</p>
+                    </div>
+                    <div class="group border-b border-primary/5 pb-6">
+                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Gender</p>
+                        <p class="text-sm font-bold text-primary">{% if student.gender == 'M' %}Male{% elif student.gender == 'F' %}Female{% else %}{{ student.gender or '—' }}{% endif %}</p>
+                    </div>
+                    <div class="group">
+                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Residential Address</p>
+                        <p class="text-sm font-bold text-primary leading-relaxed">{{ student.address or '—' }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel space-y-6 rounded-[2rem] p-8 bg-white/40">
+                <h4 class="text-[11px] font-bold uppercase tracking-[0.3em] text-primary/40 mb-4">Account Status</h4>
+                <div class="flex items-center justify-between text-xs font-bold">
+                    <span class="text-primary/70">Portal Access</span>
+                    <span class="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-emerald-600">Active</span>
+                </div>
+                <div class="flex items-center justify-between text-xs font-bold mt-4">
+                    <span class="text-primary/70">Admission Date</span>
+                    <span class="text-primary font-medium">{{ student.admission_date.strftime('%b %Y') if student.admission_date else '—' }}</span>
+                </div>
+            </section>
+
+            <a href="{{ url_for('auth.logout') }}" class="flex w-full items-center justify-center gap-3 rounded-full py-5 text-[11px] font-black uppercase tracking-[0.4em] text-red-500 transition-all hover:bg-red-50 border border-red-100 bg-white">
+                <span class="material-symbols-outlined text-base">logout</span>
+                End Session
+            </a>
+            
+        </div>
+    </aside>
 </div>
 
 {% endif %}

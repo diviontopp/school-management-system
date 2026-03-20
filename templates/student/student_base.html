@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Scholaris Student Portal{% endblock %}</title>
-    
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300;400;500;600,0..1&display=swap" rel="stylesheet">
-    
-    <script id="tailwind-config">
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>{% block title %}Scholaris Student Portal{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,700;0,800;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -38,8 +34,10 @@
             },
         }
     </script>
-    <style>
-        body { background-color: #F1F4E4; }
+<style>
+        body {
+            background-color: #F1F4E4;
+        }
         .glass {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(12px);
@@ -50,208 +48,230 @@
             backdrop-filter: blur(20px);
             border-right: 1px solid rgba(15, 76, 129, 0.05);
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .text-gradient {
+            background: linear-gradient(to right, #0f4c81, #C5A028);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
     </style>
-    {% block extra_css %}{% endblock %}
+{% block extra_css %}{% endblock %}
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen selection:bg-primary/20">
-    
-    <!-- Flash Messages Container -->
-    <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div id="flash-data" style="display: none;" data-messages='{{ messages | tojson | safe }}'></div>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const flashEl = document.getElementById("flash-data");
-                if (flashEl) {
-                    try {
-                        const msgs = JSON.parse(flashEl.dataset.messages || "[]");
-                        const container = document.getElementById("toastContainer");
-                        msgs.forEach(([category, msg]) => {
-                            const toast = document.createElement("div");
-                            toast.className = `p-4 rounded-xl shadow-lg font-medium text-sm transition-all transform flex items-center gap-3 ${
-                                category === 'error' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'
-                            }`;
-                            toast.innerHTML = `<span class="material-symbols-outlined">${category === 'error' ? 'error' : 'check_circle'}</span> ${msg}`;
-                            container.appendChild(toast);
-                            setTimeout(() => {
-                                toast.style.opacity = '0';
-                                setTimeout(() => toast.remove(), 300);
-                            }, 5000);
-                        });
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
-            });
-        </script>
-      {% endif %}
-    {% endwith %}
 
-    <!-- Mobile Header/Toggle (Hidden on LG) -->
-    <div class="lg:hidden flex items-center justify-between p-4 bg-primary text-white glass z-50 sticky top-0">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-2xl">school</span>
-            <span class="font-serif font-bold text-lg">Scholaris</span>
-        </div>
-        <button id="mobileMenuBtn" aria-label="Toggle Navigation Menu" class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-lg">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
-    </div>
-
-    <!-- Sidebar Navigation -->
-    <aside id="sidebar" aria-label="Main Navigation" class="fixed top-0 left-0 h-screen w-64 sidebar-glass z-[60] flex flex-col p-6 transition-transform transform -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none bg-white lg:bg-transparent">
-        <div class="flex items-center gap-3 mb-10 mt-2">
-            <div class="bg-primary p-2 rounded-full text-white">
-                <span class="material-symbols-outlined text-2xl">school</span>
-            </div>
-            <div>
-                <h1 class="font-serif text-xl font-bold text-primary leading-tight">Scholaris</h1>
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Student Portal</p>
-            </div>
-        </div>
-        
-        <nav class="flex-1 space-y-2 overflow-y-auto">
-            <!-- Dashboard -->
-            <a href="{{ url_for('student.dashboard') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'dashboard' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
-                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
-                <div class="flex flex-col">
-                    <span class="leading-none">Dashboard</span>
-                    <span class="text-[10px] {% if active_page == 'dashboard' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Overview</span>
-                </div>
-            </a>
-            
-            <!-- Assignments -->
-            <a href="{{ url_for('student.assignments') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'assignments' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
-                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">assignment</span>
-                <div class="flex flex-col">
-                    <span class="leading-none">Assignments</span>
-                    <span class="text-[10px] {% if active_page == 'assignments' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Tasks</span>
-                </div>
-            </a>
-
-            <!-- Timetable -->
-            <a href="{{ url_for('student.timetable') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'timetable' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
-                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">edit_calendar</span>
-                <div class="flex flex-col">
-                    <span class="leading-none">Timetable</span>
-                    <span class="text-[10px] {% if active_page == 'timetable' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Schedule</span>
-                </div>
-            </a>
-
-            <!-- Grades -->
-            <a href="{{ url_for('student.grades') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'grades' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
-                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">grading</span>
-                <div class="flex flex-col">
-                    <span class="leading-none">Grades</span>
-                    <span class="text-[10px] {% if active_page == 'grades' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Exams</span>
-                </div>
-            </a>
-
-            <!-- Attendance -->
-            <a href="{{ url_for('student.attendance') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'attendance' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
-                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">how_to_reg</span>
-                <div class="flex flex-col">
-                    <span class="leading-none">Attendance</span>
-                    <span class="text-[10px] {% if active_page == 'attendance' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Records</span>
-                </div>
-            </a>
-
-            <!-- My Profile -->
-            <a href="{{ url_for('student.profile') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'profile' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}">
-                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">person_pin</span>
-                <div class="flex flex-col">
-                    <span class="leading-none">My Profile</span>
-                    <span class="text-[10px] {% if active_page == 'profile' %}text-white/80{% else %}text-slate-500{% endif %} font-bold uppercase tracking-widest mt-0.5">Identity</span>
-                </div>
-            </a>
-        </nav>
-
-        <div class="mt-auto pt-6 border-t border-primary/5">
-            <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-bone-white bg-white/50 rounded-xl transition-colors mb-2 text-primary font-medium text-sm leading-tight border border-primary/5">
-                <span class="material-symbols-outlined text-lg">public</span>
-                Main Website
-            </a>
-            <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium text-sm leading-tight border border-red-50">
-                <span class="material-symbols-outlined text-lg">logout</span>
-                Secure Logout
-            </a>
-        </div>
-    </aside>
-
-    <!-- Overlay for mobile sidebar -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-50 hidden lg:hidden"></div>
-
+<!-- Flash Messages Container -->
+<div id="toastContainer" class="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="flash-data" style="display: none;" data-messages='{{ messages | tojson | safe }}'></div>
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const menuBtn = document.getElementById('mobileMenuBtn');
-        
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
-
-        menuBtn.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
+        document.addEventListener("DOMContentLoaded", () => {
+            const flashEl = document.getElementById("flash-data");
+            if (flashEl) {
+                try {
+                    const msgs = JSON.parse(flashEl.dataset.messages || "[]");
+                    const container = document.getElementById("toastContainer");
+                    msgs.forEach(([category, msg]) => {
+                        const toast = document.createElement("div");
+                        toast.className = `p-4 rounded-xl shadow-lg font-medium text-sm transition-all transform flex items-center gap-3 pointer-events-auto ${
+                            category === 'error' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'
+                        }`;
+                        toast.innerHTML = `<span class="material-symbols-outlined">${category === 'error' ? 'error' : 'check_circle'}</span> ${msg}`;
+                        container.appendChild(toast);
+                        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 5000);
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        });
     </script>
+  {% endif %}
+{% endwith %}
 
-    <!-- Main Content Wrapper -->
-    <div class="lg:pl-64 flex flex-col min-h-screen">
-        <!-- Top Navigation -->
-        <nav class="sticky top-0 z-40 glass px-6 lg:px-8 py-3 lg:py-4 flex items-center justify-between">
-            <div class="flex items-center gap-12 flex-1">
-                <h2 class="font-serif text-2xl text-primary font-bold hidden md:block">{% block page_title %}Dashboard{% endblock %}</h2>
-                <!-- Global Search -->
-                <div class="relative w-full max-w-md group hidden sm:block">
-                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">search</span>
-                    <input type="text" placeholder="Search resources..." class="w-full pl-12 pr-4 py-2.5 bg-white/50 border border-primary/5 rounded-full outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:bg-white transition-all text-sm">
-                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-500 border border-slate-300 px-1.5 py-0.5 rounded-md uppercase tracking-tighter hidden lg:block">CMD + K</div>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-4 lg:gap-6 shrink-0">
-                <button aria-label="Notifications" class="relative p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-slate-500 hover:text-primary transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-bone-white"></span>
-                </button>
-                <div class="h-8 w-[1px] bg-primary/10 hidden sm:block"></div>
-                
-                {% if student %}
-                <!-- Profile Area -->
-                <a href="{{ url_for('student.profile') }}" class="flex items-center gap-3 bg-white/80 border border-primary/10 rounded-full pl-1.5 pr-4 py-1.5 hover:shadow-md transition-all">
-                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/20 text-sm">
-                        {{ student.first_name[0] }}{{ student.last_name[0] }}
-                    </div>
-                    <div class="text-left hidden sm:block">
-                        <p class="text-xs font-bold leading-none text-slate-700">{{ student.first_name }} {{ student.last_name }}</p>
-                        <p class="text-[10px] text-slate-500 leading-none mt-1">{{ student.class_name }}</p>
-                    </div>
-                </a>
-                {% endif %}
-            </div>
-        </nav>
-
-        <!-- Main Workspace -->
-        <main class="flex-1 w-full max-w-[1440px] mx-auto p-4 lg:p-8">
-            {% block content %}{% endblock %}
-        </main>
-
-        <!-- Footer -->
-        <footer class="w-full px-8 py-6 border-t border-primary/10 mt-auto bg-background-light">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary text-sm">school</span>
-                    <p class="text-xs font-bold text-primary">Scholaris Academic Portal</p>
-                </div>
-                <p class="text-xs text-slate-500 font-medium">&copy; 2026 Don Bosco School of Excellence, Egmore. All rights reserved.</p>
-            </div>
-        </footer>
+<!-- Mobile Header/Toggle (Hidden on LG) -->
+<div class="lg:hidden flex items-center justify-between p-4 bg-primary text-white glass z-[60] sticky top-0">
+    <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-2xl">school</span>
+        <span class="font-serif font-bold text-lg">Scholaris</span>
     </div>
+    <button id="mobileMenuBtn" aria-label="Toggle Navigation Menu" class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-lg">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+</div>
 
-    {% block extra_js %}{% endblock %}
-</body>
-</html>
+<!-- Left Sidebar Navigation -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 sidebar-glass z-[70] flex flex-col p-6 transition-transform transform -translate-x-full lg:translate-x-0 bg-white/95 lg:bg-transparent shadow-2xl lg:shadow-none overflow-y-auto">
+<div class="flex items-center gap-3 mb-10 shrink-0">
+<div class="bg-primary p-2 rounded-full text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">school</span>
+</div>
+<h1 class="font-serif text-xl font-bold text-primary tracking-tight">Scholaris</h1>
+</div>
+
+<nav class="flex-1 space-y-2 relative">
+    <button id="closeSidebarBtn" class="lg:hidden absolute -top-16 right-0 p-2 text-slate-500 hover:text-primary transition-colors focus:ring-2 focus:ring-primary/20 rounded-lg" aria-label="Close Navigation Menu">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium {% if active_page == 'dashboard' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'assignments' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.assignments') }}">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">assignment</span>
+<div class="flex flex-col">
+<span class="leading-none">Assignments</span>
+<span class="text-[10px] {% if active_page == 'assignments' %}text-white/70{% else %}text-slate-400{% endif %} font-bold uppercase tracking-widest mt-0.5">Homework</span>
+</div>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'timetable' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.timetable') }}">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">edit_calendar</span>
+<div class="flex flex-col">
+<span class="leading-none">Timetable</span>
+<span class="text-[10px] {% if active_page == 'timetable' %}text-white/70{% else %}text-slate-400{% endif %} font-bold uppercase tracking-widest mt-0.5">Daily Schedule</span>
+</div>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'grades' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.grades') }}">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">grade</span>
+<div class="flex flex-col">
+<span class="leading-none">Exams</span>
+<span class="text-[10px] {% if active_page == 'grades' %}text-white/70{% else %}text-slate-400{% endif %} font-bold uppercase tracking-widest mt-0.5">Results</span>
+</div>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'attendance' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.attendance') }}">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">verified_user</span>
+<div class="flex flex-col">
+<span class="leading-none">Attendance</span>
+<span class="text-[10px] {% if active_page == 'attendance' %}text-white/70{% else %}text-slate-400{% endif %} font-bold uppercase tracking-widest mt-0.5">Daily Attendance</span>
+</div>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'profile' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.profile') }}">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">account_circle</span>
+<div class="flex flex-col">
+<span class="leading-none">My Profile</span>
+<span class="text-[10px] {% if active_page == 'profile' %}text-white/70{% else %}text-slate-400{% endif %} font-bold uppercase tracking-widest mt-0.5">Personal Info</span>
+</div>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-medium group {% if active_page == 'communication' %}bg-primary text-white shadow-lg shadow-primary/20{% else %}text-slate-500 hover:bg-white/50 hover:text-primary{% endif %}" href="{{ url_for('student.communication') }}">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">forum</span>
+<div class="flex flex-col">
+<span class="leading-none">Communication</span>
+<span class="text-[10px] {% if active_page == 'communication' %}text-white/70{% else %}text-slate-400{% endif %} font-bold uppercase tracking-widest mt-0.5">Messages</span>
+</div>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-primary/5 space-y-2">
+    <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-white bg-white/40 rounded-xl transition-all text-primary border border-primary/5 hover:border-primary/10 hover:shadow-sm">
+        <span class="material-symbols-outlined text-[20px]">language</span>
+        <span class="text-xs font-bold tracking-tight">Public Website</span>
+    </a>
+    <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 hover:border-red-500 rounded-xl border border-transparent transition-all group">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        <span class="text-xs font-bold tracking-tight">Logout System</span>
+    </a>
+</div>
+</aside>
+
+<!-- Overlay for mobile sidebar -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[65] hidden lg:hidden"></div>
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const closeBtn = document.getElementById('closeSidebarBtn');
+    
+    function toggleSidebar() {
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
+        document.body.classList.toggle('overflow-hidden'); // Prevent scrolling behind overlay
+    }
+
+    menuBtn.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+    if(closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+    
+    // Auto-close on link click for mobile devices
+    const navLinks = sidebar.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        });
+    });
+</script>
+
+<!-- Adjusting Content Wrapper for Sidebar -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 glass px-6 lg:px-8 py-4 flex items-center justify-between">
+<div class="flex items-center gap-12">
+<!-- Spotlight Search -->
+<div class="relative w-full max-w-sm group hidden sm:block">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full pl-12 pr-4 py-2.5 bg-white/50 border border-primary/5 rounded-full focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm outline-none" placeholder="Search grades, schedules, or resources..." type="text">
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 border border-slate-300 px-1.5 py-0.5 rounded-md uppercase tracking-tighter hidden lg:block">CMD + K</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-8 mr-4 hidden md:flex">
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">LMS</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Library</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Events</a>
+</div>
+<button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-bone-white"></span>
+</button>
+<div class="h-8 w-[1px] bg-primary/10"></div>
+<!-- Multi-Child Toggle (Profile) -->
+{% if student %}
+<div class="relative group">
+<a href="{{ url_for('student.profile') }}" class="flex items-center gap-3 bg-white/80 border border-primary/10 rounded-full pl-2 pr-4 py-1.5 hover:shadow-md transition-all">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/20 text-sm">
+{{ student.first_name[0] }}{{ student.last_name[0] }}
+</div>
+<div class="text-left hidden sm:block">
+<p class="text-xs font-bold leading-none text-slate-700">{{ student.first_name }}</p>
+<p class="text-[10px] text-slate-400 leading-none mt-1">Class {{ student.class_name }}</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm hidden sm:block">expand_more</span>
+</a>
+</div>
+{% endif %}
+</div>
+</nav>
+
+<main class="flex-1 w-full max-w-[1440px] mx-auto p-4 lg:p-8">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="max-w-[1440px] mx-auto px-8 py-12 border-t border-primary/10 mt-12 w-full">
+<div class="flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-full text-primary">
+<span class="material-symbols-outlined text-lg">school</span>
+</div>
+<p class="text-sm font-bold text-primary serif-heading">Scholaris Academic Portal</p>
+</div>
+<div class="flex gap-10 text-xs font-bold text-slate-400 uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Contact Admin</a>
+</div>
+<p class="text-xs text-slate-400 font-medium italic">Empowering India's Future Minds.</p>
+</div>
+</footer>
+
+</div>
+{% block extra_js %}{% endblock %}
+</body></html>
