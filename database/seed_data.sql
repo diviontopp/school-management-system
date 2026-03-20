@@ -4,10 +4,10 @@
 -- ============================================================
 
 -- ── Classes ────────────────────────────────────────────────
-INSERT IGNORE INTO classes (name, grade, section, academic_year) VALUES
-('10-A', 10, 'A', '2025-2026'),
-('10-B', 10, 'B', '2025-2026'),
-('12-A', 12, 'A', '2025-2026');
+INSERT IGNORE INTO classes (id, name, grade, section, academic_year) VALUES
+(1, '10-A', 10, 'A', '2025-2026'),
+(2, '10-B', 10, 'B', '2025-2026'),
+(3, '12-A', 12, 'A', '2025-2026');
 
 -- ── Subjects ───────────────────────────────────────────────
 INSERT IGNORE INTO subjects (name, code) VALUES
@@ -46,10 +46,10 @@ INSERT IGNORE INTO teachers (user_id, employee_id, first_name, last_name, depart
 SELECT id, 'T003', 'Ananya', 'Singh', 'Science', 'ananya.singh@school.edu', 'M.Sc Physics' FROM users WHERE username = 'T003';
 
 -- ── Users: Students ────────────────────────────────────────
-INSERT INTO users (role, username, password_hash) VALUES
-('student', 'DBX001', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
-('student', 'DBX002', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
-('student', 'DBX003', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe')
+INSERT IGNORE INTO users (id, role, username, password_hash) VALUES
+(5, 'student', 'DBX001', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
+(6, 'student', 'DBX002', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe'),
+(7, 'student', 'DBX003', 'pbkdf2:sha256:600000$PBWQYYPxKtBpWBIS$46b947e3d004309dd64af6c8f0565794bd54acae20f4981a5ce9b30ce48929fe')
 ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash);
 
 -- ── Students ───────────────────────────────────────────────

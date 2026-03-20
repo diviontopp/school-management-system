@@ -22,111 +22,63 @@ def _get_student(user_id):
 @login_required
 @role_required('student')
 def dashboard():
-    student = _get_student(session['user_id'])
+    uid = session.get('user_id')
+    print(f">>> [DASH] Entering dashboard for user_id={uid}", flush=True)
+    
+    try:
+        student = _get_student(uid)
+    except Exception as e:
+        print(f">>> [DASH] CRITICAL: _get_student crashed: {e}", flush=True)
+        return "Database Error: Could not fetch student profile.", 500
+
     if not student:
-        print(f">>> CRITICAL: Student record missing for user_id={session['user_id']} (username={session.get('username')})", flush=True)
-        return render_template('student/dashboard.html', student=None, error="Student record not found.")
+        print(f">>> [DASH] User {uid} has no student record", flush=True)
+        return render_template('student/dashboard.html', student=None, error="Profile not found.")
 
-    # Upcoming tests (next 30 days)
-    upcoming_tests = query(
-        """SELECT t.id, t.name, t.test_date, t.max_marks, t.portions, t.test_type,
-                  s.name as subject_name
-           FROM tests t
-           JOIN subjects s ON t.subject_id = s.id
+    # DEFENSIVE QUERY WRAPPING
+    def safe_query(label, sql, params=()):
+        try:
+            res = query(sql, params)
+            return res or []
+        except Exception as e:
+            print(f">>> [DASH] WARN: {label} query failed: {e}", flush=True)
+            return []
+
+    cid = student.get('class_id')
+    sid = student.get('id')
+
+    upcoming_tests = safe_query("tests",
+        """SELECT t.id, t.name, t.test_date, t.max_marks, t.portions, t.test_type, s.name as subject_name
+           FROM tests t JOIN subjects s ON t.subject_id = s.id
            WHERE t.class_id = %s AND t.test_date >= CURDATE()
-           ORDER BY t.test_date ASC
-           LIMIT 6""",
-        (student['class_id'],)
-    ) or []
+           ORDER BY t.test_date ASC LIMIT 6""", (cid,))
 
-    # Upcoming homework (pending, not submitted by this student)
-    upcoming_homework = query(
-        """SELECT h.id, h.title, h.description, h.deadline, h.assigned_date,
-                  s.name as subject_name,
-                  hs.status as submission_status
-           FROM homework h
-           JOIN subjects s ON h.subject_id = s.id
-           LEFT JOIN homework_submissions hs
-                ON hs.homework_id = h.id AND hs.student_id = %s
+    upcoming_homework = safe_query("homework",
+        """SELECT h.id, h.title, h.description, h.deadline, h.assigned_date, s.name as subject_name, hs.status as submission_status
+           FROM homework h JOIN subjects s ON h.subject_id = s.id
+           LEFT JOIN homework_submissions hs ON hs.homework_id = h.id AND hs.student_id = %s
            WHERE h.class_id = %s AND h.deadline >= CURDATE()
-           ORDER BY h.deadline ASC
-           LIMIT 6""",
-        (student['id'], student['class_id'])
-    ) or []
+           ORDER BY h.deadline ASC LIMIT 6""", (sid, cid))
 
-    # Quick stats
-    # Attendance percentage
-    att_stats = query(
-        """SELECT
-             COUNT(*) as total,
-             SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) as present
-           FROM student_attendance
-           WHERE student_id = %s""",
-        (student['id'],), fetch_one=True
-    )
-    att_pct = 0
-    if att_stats and att_stats['total'] and att_stats['total'] > 0:
-        att_pct = round((att_stats['present'] / att_stats['total']) * 100)
+    try:
+        att_stats = query("SELECT COUNT(*) as total, SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) as present FROM student_attendance WHERE student_id = %s", (sid,), fetch_one=True)
+        att_pct = round((att_stats['present'] / att_stats['total']) * 100) if att_stats and att_stats.get('total', 0) > 0 else 0
+    except:
+        att_pct = 0
 
-    test_count = len(upcoming_tests)
+    notices = safe_query("notices", "SELECT id, title, posted_at FROM notices WHERE is_active = 1 ORDER BY posted_at DESC LIMIT 5")
+    remarks = safe_query("remarks", "SELECT r.remark, r.date, CONCAT(t.first_name, ' ', t.last_name) as teacher_name FROM student_remarks r JOIN teachers t ON r.teacher_id = t.id WHERE r.student_id = %s ORDER BY r.date DESC LIMIT 2", (sid,))
+    borrowed_books = safe_query("library", "SELECT b.title, bw.due_date, bw.status FROM borrowings bw JOIN books b ON bw.book_id = b.id JOIN library_members lm ON bw.member_id = lm.id WHERE lm.user_id = %s AND bw.status != 'Returned' LIMIT 3", (uid,))
+
     hw_pending = sum(1 for hw in upcoming_homework if not hw.get('submission_status') or hw['submission_status'] != 'Submitted')
 
-    # ── Integrated Data Blocks ──────────────────────────────────
-    # These are wrapped in try/except so a missing table never crashes the core dashboard.
-
-    # 1. Recent School Notices (Samvaad Hub)
-    try:
-        notices = query(
-            "SELECT id, title, posted_at FROM notices WHERE is_active = 1 ORDER BY posted_at DESC LIMIT 5"
-        ) or []
-    except Exception as e:
-        print(f">>> WARN: notices query failed: {e}", flush=True)
-        notices = []
-
-    # 2. Teacher Remarks (Academic Hub - Digital Diary)
-    try:
-        remarks = query(
-            """SELECT r.id, r.remark, r.remark_type, r.date,
-                      CONCAT(t.first_name, ' ', t.last_name) as teacher_name
-               FROM student_remarks r
-               JOIN teachers t ON r.teacher_id = t.id
-               WHERE r.student_id = %s
-               ORDER BY r.date DESC
-               LIMIT 2""",
-            (student['id'],)
-        ) or []
-    except Exception as e:
-        print(f">>> WARN: student_remarks query failed: {e}", flush=True)
-        remarks = []
-
-    # 3. Library Status (Vidya Hub extension)
-    try:
-        borrowed_books = query(
-            """SELECT b.title, bw.due_date, bw.status
-               FROM borrowings bw
-               JOIN books b ON bw.book_id = b.id
-               JOIN library_members lm ON bw.member_id = lm.id
-               WHERE lm.user_id = %s AND bw.status != 'Returned'
-               ORDER BY bw.due_date ASC
-               LIMIT 3""",
-            (session['user_id'],)
-        ) or []
-    except Exception as e:
-        print(f">>> WARN: borrowings query failed: {e}", flush=True)
-        borrowed_books = []
+    print(f">>> [DASH] Dashboard data assembled for {student.get('first_name')}", flush=True)
 
     return render_template('student/dashboard.html',
-        student=student,
-        upcoming_tests=upcoming_tests,
-        upcoming_homework=upcoming_homework,
-        notices=notices,
-        remarks=remarks,
-        borrowed_books=borrowed_books,
-        attendance_pct=att_pct,
-        test_count=test_count,
-        hw_pending=hw_pending,
-        active_page='dashboard',
-        today=date.today()
+        student=student, upcoming_tests=upcoming_tests, upcoming_homework=upcoming_homework,
+        notices=notices, remarks=remarks, borrowed_books=borrowed_books,
+        attendance_pct=att_pct, test_count=len(upcoming_tests), hw_pending=hw_pending,
+        active_page='dashboard', today=date.today()
     )
 
 

@@ -11,9 +11,8 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from whitenoise import WhiteNoise
 
 def create_app():
-    print(">>> Creating Flask App...", flush=True)
+    print(">>> [BOOT] Initializing Flask Application...", flush=True)
     
-    # Absolute paths to avoid resolution issues in production
     base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Flask(__name__, 
                 template_folder=os.path.join(base_dir, 'templates'),
@@ -22,135 +21,106 @@ def create_app():
     
     app.config.from_object(Config)
 
-    # ── Blueprint Registration (Top Priority) ──────────────
-    print(">>> BOOT: Registering Blueprints...", flush=True)
-    from routes.public import public_bp
-    from routes.auth import auth_bp
-    from routes.student import student_bp
-    from routes.teacher import teacher_bp
-    from routes.parent import parent_bp
-    from routes.admin import admin_bp
-    from routes.library import library_bp
-    from routes.clubs import clubs_bp
+    # ── Database Pre-flight ─────────────────────────────────
+    if os.getenv("INIT_DB", "False").lower() == "true":
+        print(">>> [BOOT] Database initialization requested via INIT_DB=True", flush=True)
+        try:
+            from database.connection import initialize_database
+            initialize_database()
+            print(">>> [BOOT] Database initialization successful.", flush=True)
+        except Exception as e:
+            print(f">>> [BOOT] DATABASE INIT ERROR (Non-fatal for app boot): {e}", flush=True)
 
-    app.register_blueprint(public_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(student_bp, url_prefix='/student')
-    app.register_blueprint(teacher_bp, url_prefix='/teacher')
-    app.register_blueprint(parent_bp, url_prefix='/parent')
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(library_bp, url_prefix='/library')
-    app.register_blueprint(clubs_bp, url_prefix='/clubs')
-    print(">>> BOOT: Blueprints Registered.", flush=True)
+    # ── Blueprint Registration ──────────────────────────────
+    print(">>> [BOOT] Registering route blueprints...", flush=True)
+    try:
+        from routes.public import public_bp
+        from routes.auth import auth_bp
+        from routes.student import student_bp
+        from routes.teacher import teacher_bp
+        from routes.parent import parent_bp
+        from routes.admin import admin_bp
+        from routes.library import library_bp
+        from routes.clubs import clubs_bp
+
+        app.register_blueprint(public_bp)
+        app.register_blueprint(auth_bp)
+        app.register_blueprint(student_bp, url_prefix='/student')
+        app.register_blueprint(teacher_bp, url_prefix='/teacher')
+        app.register_blueprint(parent_bp, url_prefix='/parent')
+        app.register_blueprint(admin_bp, url_prefix='/admin')
+        app.register_blueprint(library_bp, url_prefix='/library')
+        app.register_blueprint(clubs_bp, url_prefix='/clubs')
+        print(">>> [BOOT] All blueprints registered successfully.", flush=True)
+    except Exception as e:
+        print(f">>> [BOOT] CRITICAL ERROR registering blueprints: {e}", flush=True)
+        # We don't raise here yet to allow error handler to catch it if possible
 
     # ── Middleware ──────────────────────────────────────────
-    print(f">>> DEBUG: Static Folder: {app.static_folder}", flush=True)
-    print(f">>> DEBUG: Static URL Path: {app.static_url_path}", flush=True)
-    
-    # WhiteNoise for static files (CRITICAL for Gunicorn!)
-    print(">>> BOOT: Initializing WhiteNoise...", flush=True)
-    # Use the absolute static folder path explicitly
     static_dir = os.path.abspath(app.static_folder)
+    print(f">>> [BOOT] Configuring WhiteNoise for: {static_dir}", flush=True)
     app.wsgi_app = WhiteNoise(app.wsgi_app, 
                              root=static_dir, 
                              prefix='/static/',
                              index_file=True)
     
-    # Trust Railway Edge Proxy
-    print(">>> BOOT: Initializing ProxyFix...", flush=True)
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
-    print(">>> BOOT: Middleware Initialized.", flush=True)
 
-    # ── Logging ───────────────────────────────────────────
     @app.before_request
     def log_request_info():
-        print(f">>> REQUEST: {request.method} {request.path}", flush=True)
+        # High-level log for every request
+        print(f">>> [REQ] {request.method} {request.path}", flush=True)
 
-    # ── Fail-safe Core Routes ─────────────────────────────
+    # ── Fail-safe Routes ──────────────────────────────────
     @app.route('/health')
     def health():
-        return {"status": "ok", "env": "production"}, 200
-
-    @app.route('/debug-static')
-    def debug_static():
-        target = 'images/dbx_gallery/gallery_img_15.jpg'
-        full_path = os.path.join(app.static_folder, target)
-        exists = os.path.exists(full_path)
-        size = os.path.getsize(full_path) if exists else -1
-        
-        # Test if we can actually read the file content
-        content_peek = "N/A"
+        from database.connection import query
+        db_status = "unknown"
         try:
-            if exists:
-                with open(full_path, 'rb') as f:
-                    content_peek = f.read(10).hex()
+            query("SELECT 1", fetch_one=True)
+            db_status = "connected"
         except Exception as e:
-            content_peek = f"ERROR_READING: {str(e)}"
+            db_status = f"error: {str(e)}"
+        return {"status": "ok", "env": os.getenv("FLASK_ENV", "dev"), "database": db_status}, 200
 
-        contents = os.listdir(app.static_folder) if os.path.exists(app.static_folder) else "DIR_NOT_FOUND"
-        return {
-            "target": target,
-            "static_folder": app.static_folder,
-            "full_path": full_path,
-            "exists": exists,
-            "size": size,
-            "read_test": content_peek,
-            "static_contents": contents[:10],
-            "cwd": os.getcwd()
-        }
-
-    @app.route('/test-static-direct')
-    def test_static_direct():
-        return send_from_directory(os.path.join(app.root_path, 'static/images/dbx_gallery'),
-                                   'gallery_img_15.jpg')
-
-    @app.route('/favicon.ico')
-    def favicon():
-        return send_from_directory(os.path.join(app.root_path, 'static/images'),
-                                   'icon.jpg', mimetype='image/vnd.microsoft.icon')
-
-    @app.route('/sw.js')
-    def service_worker():
-        return send_from_directory(os.path.join(app.root_path, 'static/js'),
-                                   'sw.js', mimetype='application/javascript')
-
+    # ── Error Handling ─────────────────────────────────────
     from werkzeug.exceptions import HTTPException
     @app.errorhandler(Exception)
     def handle_exception(e):
-        """Pass through HTTP errors like 404, log only real crashes"""
         if isinstance(e, HTTPException):
             return e
             
         import traceback
-        print(f">>> ERROR: {str(e)}", flush=True)
-        traceback.print_exc()
-        return "Internal Server Error", 500
+        err_msg = str(e)
+        trace = traceback.format_exc()
+        
+        # Log the full stack trace for Railway
+        print("="*60, flush=True)
+        print(f">>> CRITICAL 500 ERROR: {err_msg}", flush=True)
+        print(trace, flush=True)
+        print("="*60, flush=True)
+        
+        # Return a slightly more helpful 500 in dev or if specific info exists
+        # But for security in production, keep it generic unless authorized
+        return render_template('public/base.html'), 500 # Fallback to a base template if possible
 
-    # Register context processors
+    # ── Template Utilities ────────────────────────────────
     from utils.storage import get_storage_url
     @app.context_processor
     def inject_storage():
         return dict(storage_url=get_storage_url)
 
-    # Template filter for MySQL TIME (timedelta) → "HH:MM" string
     @app.template_filter('format_time')
     def format_time_filter(td):
-        """Convert a timedelta or time object to HH:MM string."""
-        if td is None:
-            return ''
+        if td is None: return ''
         try:
-            # MySQL TIME columns return timedelta
             total_seconds = int(td.total_seconds())
-            hours = total_seconds // 3600
-            minutes = (total_seconds % 3600) // 60
+            hours, minutes = total_seconds // 3600, (total_seconds % 3600) // 60
             return f"{hours:02d}:{minutes:02d}"
-        except (AttributeError, TypeError):
-            try:
-                return td.strftime('%H:%M')
-            except Exception:
-                return str(td)
+        except:
+            return str(td)
 
-    print(">>> Flask App Created and Fully Hardened.", flush=True)
+    print(">>> [BOOT] App creation complete.", flush=True)
     return app
 
 app = create_app()

@@ -14,6 +14,8 @@ def login():
         # Determine if the user is explicitly trying to switch accounts
         if request.method == 'GET' and requested_role and requested_role != user_role:
             session.clear()
+            # Explicitly force session save after clear
+            session.modified = True
             flash("You have been signed out to switch accounts.", "info")
             return redirect(url_for('auth.login', role=requested_role))
             
@@ -90,6 +92,7 @@ def login():
                 session['role'] = user['role']
                 session['username'] = user['username']
 
+                print(f">>> DEBUG: Login successful. Session set: user_id={session['user_id']}, role={session['role']}", flush=True)
                 flash(f"Welcome back, {user['username']}!", 'success')
                 
                 # Redirect based on role
