@@ -20,7 +20,7 @@
         <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div>
                 <p class="text-accent-gold font-bold tracking-widest uppercase text-xs mb-3">Welcome Back</p>
-                <h2 class="font-serif text-5xl md:text-7xl text-primary font-bold mb-4 tracking-tight">Hello, {{ student.first_name }}!</h2>
+                <h2 class="shadcn-h1 text-primary mb-4">Hello, {{ student.first_name }}!</h2>
                 <div class="flex items-center gap-4 text-slate-500">
                     <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-primary/5">
                         <span class="material-symbols-outlined text-sm text-accent-gold">wb_cloudy</span>
@@ -41,7 +41,7 @@
         <!-- Upcoming Assignments -->
         <section>
             <div class="flex justify-between items-center mb-6">
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Assignments</h3>
+                <h3 class="shadcn-h3 text-primary">Upcoming Assignments</h3>
                 <a href="{{ url_for('student.assignments') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
             </div>
             
