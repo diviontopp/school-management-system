@@ -3,7 +3,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>{% block title %}Scholaris Student Portal{% endblock %}</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,700;0,800;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <script id="tailwind-config">
         tailwind.config = {
@@ -26,8 +27,8 @@
                         "status-info-bg": "#eff6ff",
                     },
                     fontFamily: {
-                        "display": ["Inter", "sans-serif"],
-                        "serif": ["Playfair Display", "serif"]
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "clash": ["Clash Display", "sans-serif"],
                     },
                     borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
                 },
@@ -46,12 +47,12 @@
             background-color: #ffffff;
             font-feature-settings: "rlig" 1, "calt" 1;
         }
-        .shadcn-h1 { font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.025em; font-size: 2.25rem; line-height: 2.5rem; }
-        @media (min-width: 1024px) { .shadcn-h1 { font-size: 3rem; line-height: 1; } }
+        .shadcn-h1 { font-family: 'Clash Display', sans-serif; font-weight: 700; letter-spacing: -0.02em; font-size: 2.25rem; line-height: 2.5rem; }
+        @media (min-width: 1024px) { .shadcn-h1 { font-size: 3.5rem; line-height: 1; } }
         
-        .shadcn-h2 { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.025em; font-size: 1.875rem; line-height: 2.25rem; }
-        .shadcn-h3 { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.025em; font-size: 1.5rem; line-height: 2rem; }
-        .shadcn-p { line-height: 1.75rem; margin-top: 1.5rem; }
+        .shadcn-h2 { font-family: 'Clash Display', sans-serif; font-weight: 600; letter-spacing: -0.02em; font-size: 1.875rem; line-height: 2.25rem; }
+        .shadcn-h3 { font-family: 'Clash Display', sans-serif; font-weight: 600; letter-spacing: -0.02em; font-size: 1.5rem; line-height: 2rem; }
+        .shadcn-p { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.75rem; margin-top: 1.5rem; }
         
         .glass {
             background: rgba(255, 255, 255, 0.8);
@@ -98,68 +99,68 @@
 <!-- (Mobile layout elements removed in favor of universal toggle) -->
 
 <!-- Left Sidebar Navigation -->
-<!-- ══════════ Shadcn Styled Sidebar (Radix Inspired) ══════════ -->
-<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-white border-r border-slate-200 z-[70] flex flex-col transition-all duration-300 transform lg:translate-x-0 -translate-x-full">
+<!-- ══════════ Shadcn Styled Sidebar (Radix Inspired + Custom Theme) ══════════ -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-primary border-r border-white/10 z-[70] flex flex-col transition-all duration-300 transform lg:translate-x-0 -translate-x-full">
     <!-- Sidebar Header -->
-    <div class="px-6 py-8 flex items-center gap-3 border-b border-slate-50">
-        <div class="size-9 bg-slate-900 rounded-lg flex items-center justify-center text-white shrink-0">
+    <div class="px-6 py-8 flex items-center gap-3 border-b border-white/5">
+        <div class="size-9 bg-accent-gold rounded-lg flex items-center justify-center text-primary shrink-0">
             <span class="material-symbols-outlined text-lg">school</span>
         </div>
         <div class="flex flex-col min-w-0">
-            <span class="font-bold text-sm tracking-tight text-slate-900 truncate">Scholaris</span>
-            <span class="text-[10px] text-slate-500 font-medium uppercase tracking-wider truncate">Academy Portal</span>
+            <span class="font-bold text-sm tracking-tight text-white truncate">Scholaris</span>
+            <span class="text-[10px] text-white/50 font-medium uppercase tracking-wider truncate">Academy Portal</span>
         </div>
     </div>
 
     <!-- Navigation List -->
     <div class="flex-1 overflow-y-auto px-3 py-6 space-y-1">
-        <p class="px-3 mb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Main Menu</p>
+        <p class="px-3 mb-2 text-[10px] font-semibold text-white/30 uppercase tracking-widest">Main Menu</p>
         
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'dashboard' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.dashboard') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'dashboard' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">dashboard</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'dashboard' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.dashboard') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'dashboard' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">dashboard</span>
             <span>Dashboard</span>
         </a>
         
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'assignments' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.assignments') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'assignments' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">assignment</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'assignments' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.assignments') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'assignments' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">assignment</span>
             <span>Assignments</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'timetable' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.timetable') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'timetable' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">calendar_today</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'timetable' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.timetable') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'timetable' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">calendar_today</span>
             <span>Timetable</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'grades' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.grades') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'grades' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">grade</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'grades' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.grades') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'grades' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">grade</span>
             <span>Exam Results</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'attendance' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.attendance') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'attendance' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">verified_user</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'attendance' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.attendance') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'attendance' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">verified_user</span>
             <span>Attendance</span>
         </a>
 
-        <p class="px-3 mt-8 mb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Settings</p>
+        <p class="px-3 mt-8 mb-2 text-[10px] font-semibold text-white/30 uppercase tracking-widest">Settings</p>
         
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'profile' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.profile') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'profile' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">person</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'profile' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.profile') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'profile' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">person</span>
             <span>My Profile</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'communication' %}bg-slate-100 text-slate-900{% else %}text-slate-600 hover:bg-slate-50 hover:text-slate-900{% endif %}" href="{{ url_for('student.communication') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'communication' %}text-slate-900{% else %}text-slate-400 group-hover:text-slate-600{% endif %}">mail</span>
+        <a class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all group {% if active_page == 'communication' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.communication') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'communication' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">mail</span>
             <span>Messages</span>
         </a>
     </div>
 
     <!-- Sidebar Footer -->
-    <div class="p-4 border-t border-slate-100 space-y-1">
-        <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-md transition-all">
+    <div class="p-4 border-t border-white/5 space-y-1">
+        <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-3 py-2 text-xs font-medium text-white/50 hover:bg-white/5 hover:text-white rounded-md transition-all">
             <span class="material-symbols-outlined text-[18px]">language</span>
             <span>Portal Home</span>
         </a>
-        <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 rounded-md transition-all">
+        <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-500/10 rounded-md transition-all">
             <span class="material-symbols-outlined text-[18px]">logout</span>
             <span>Log Out</span>
         </a>
@@ -169,54 +170,58 @@
 <!-- Overlay for mobile sidebar -->
 <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[65] hidden lg:hidden"></div>
 <script>
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const mainContent = document.getElementById('mainContent');
-    const toggleBtn = document.getElementById('toggleSidebar');
-    
-    function setSidebarState(isOpen) {
-        if (isOpen) {
-            sidebar.classList.remove('-translate-x-full');
-            if (window.innerWidth >= 1024) {
-                mainContent.classList.add('lg:pl-64');
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        
+        if (!sidebar || !toggleBtn) return;
+
+        function setSidebarState(isOpen) {
+            if (isOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                if (window.innerWidth >= 1024) {
+                    mainContent.classList.add('lg:pl-64');
+                } else {
+                    overlay.classList.remove('hidden');
+                    document.body.classList.add('overflow-hidden');
+                }
             } else {
-                overlay.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden');
+                sidebar.classList.add('-translate-x-full');
+                if (window.innerWidth >= 1024) {
+                    mainContent.classList.remove('lg:pl-64');
+                } else {
+                    overlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
             }
-        } else {
-            sidebar.classList.add('-translate-x-full');
-            if (window.innerWidth >= 1024) {
-                mainContent.classList.remove('lg:pl-64');
-            } else {
-                overlay.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden');
-            }
+            localStorage.setItem('sidebar-open', isOpen);
         }
-        localStorage.setItem('sidebar-open', isOpen);
-    }
 
-    toggleBtn.addEventListener('click', () => {
-        const isOpen = !sidebar.classList.contains('-translate-x-full');
-        setSidebarState(!isOpen);
-    });
-
-    overlay.addEventListener('click', () => setSidebarState(false));
-    
-    // Auto-close on link click for mobile
-    const navLinks = sidebar.querySelectorAll('nav a, div a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth < 1024) {
-                setSidebarState(false);
-            }
+        toggleBtn.addEventListener('click', () => {
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            setSidebarState(!isOpen);
         });
-    });
 
-    // Initialize state
-    const savedState = localStorage.getItem('sidebar-open');
-    if (savedState === 'false' && window.innerWidth >= 1024) {
-        setSidebarState(false);
-    }
+        overlay.addEventListener('click', () => setSidebarState(false));
+        
+        // Auto-close on link click for mobile
+        const navLinks = sidebar.querySelectorAll('nav a, div a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    setSidebarState(false);
+                }
+            });
+        });
+
+        // Initialize state
+        const savedState = localStorage.getItem('sidebar-open');
+        if (savedState === 'false' && window.innerWidth >= 1024) {
+            setSidebarState(false);
+        }
+    });
 </script>
 
 <!-- Adjusting Content Wrapper for Sidebar -->
