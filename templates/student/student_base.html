@@ -80,7 +80,7 @@
 
 <!-- Left Sidebar Navigation -->
 <!-- ══════════ Shadcn Styled Sidebar (Radix Inspired + Custom Theme) ══════════ -->
-<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-primary border-r border-white/10 z-[70] flex flex-col transition-all duration-300 transform lg:translate-x-0 -translate-x-full">
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-primary border-r border-white/10 z-[70] flex flex-col transition-all duration-300 transform -translate-x-full">
     <!-- Sidebar Header -->
     <div class="px-6 py-8 flex items-center gap-3 border-b border-white/5">
         <div class="size-9 bg-accent-gold rounded-lg flex items-center justify-center text-primary shrink-0">
@@ -159,19 +159,29 @@
         if (!sidebar || !toggleBtn) return;
 
         function setSidebarState(isOpen) {
-            if (isOpen) {
-                sidebar.classList.remove('-translate-x-full');
-                if (window.innerWidth >= 1024) {
+            const isDesktop = window.innerWidth >= 1024;
+            if (isDesktop) {
+                if (isOpen) {
+                    sidebar.classList.remove('lg:-translate-x-full');
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.add('lg:translate-x-0');
                     mainContent.classList.add('lg:pl-64');
                 } else {
+                    sidebar.classList.add('lg:-translate-x-full');
+                    sidebar.classList.remove('lg:translate-x-0');
+                    mainContent.classList.remove('lg:pl-64');
+                }
+                // Cleanup mobile classes if switching to desktop
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            } else {
+                if (isOpen) {
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.remove('lg:translate-x-0');
                     overlay.classList.remove('hidden');
                     document.body.classList.add('overflow-hidden');
-                }
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                if (window.innerWidth >= 1024) {
-                    mainContent.classList.remove('lg:pl-64');
                 } else {
+                    sidebar.classList.add('-translate-x-full');
                     overlay.classList.add('hidden');
                     document.body.classList.remove('overflow-hidden');
                 }
@@ -180,7 +190,10 @@
         }
 
         toggleBtn.addEventListener('click', () => {
-            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            const isDesktop = window.innerWidth >= 1024;
+            const isOpen = isDesktop 
+                ? !sidebar.classList.contains('lg:-translate-x-full')
+                : !sidebar.classList.contains('-translate-x-full');
             setSidebarState(!isOpen);
         });
 
@@ -198,7 +211,13 @@
 
         // Initialize state
         const savedState = localStorage.getItem('sidebar-open');
-        if (savedState === 'false' && window.innerWidth >= 1024) {
+        const isDesktop = window.innerWidth >= 1024;
+        
+        if (savedState !== null) {
+            setSidebarState(savedState === 'true');
+        } else if (isDesktop) {
+            setSidebarState(true);
+        } else {
             setSidebarState(false);
         }
     });
