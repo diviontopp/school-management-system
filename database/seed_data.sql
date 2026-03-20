@@ -37,13 +37,13 @@ ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash);
 
 -- ── Teachers ───────────────────────────────────────────────
 INSERT IGNORE INTO teachers (user_id, employee_id, first_name, last_name, department, email, qualification)
-SELECT id, 'T001', 'Priya', 'Sharma', 'Mathematics', 'priya.sharma@school.edu', 'M.Sc Mathematics' FROM users WHERE username = 'T001';
+SELECT id, 'T001', 'Priya', 'Sharma', 'Mathematics', 'priya.sharma@school.edu', 'M.Sc Mathematics' FROM users WHERE username = 'T001' LIMIT 1;
 
 INSERT IGNORE INTO teachers (user_id, employee_id, first_name, last_name, department, email, qualification)
-SELECT id, 'T002', 'Rohit', 'Verma', 'English', 'rohit.verma@school.edu', 'M.A. English' FROM users WHERE username = 'T002';
+SELECT id, 'T002', 'Rohit', 'Verma', 'English', 'rohit.verma@school.edu', 'M.A. English' FROM users WHERE username = 'T002' LIMIT 1;
 
 INSERT IGNORE INTO teachers (user_id, employee_id, first_name, last_name, department, email, qualification)
-SELECT id, 'T003', 'Ananya', 'Singh', 'Science', 'ananya.singh@school.edu', 'M.Sc Physics' FROM users WHERE username = 'T003';
+SELECT id, 'T003', 'Ananya', 'Singh', 'Science', 'ananya.singh@school.edu', 'M.Sc Physics' FROM users WHERE username = 'T003' LIMIT 1;
 
 -- ── Users: Students ────────────────────────────────────────
 INSERT IGNORE INTO users (id, role, username, password_hash) VALUES
@@ -54,15 +54,15 @@ ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash);
 
 -- ── Students ───────────────────────────────────────────────
 INSERT INTO students (user_id, admission_number, first_name, last_name, date_of_birth, gender, class_id, roll_number, email)
-SELECT id, 'DBX001', 'Meera', 'Patel', '2010-01-15', 'F', (SELECT id FROM classes WHERE name='10-A' LIMIT 1), 1, 'meera.patel@student.school.edu' FROM users WHERE username = 'DBX001'
+SELECT id, 'DBX001', 'Meera', 'Patel', '2010-01-15', 'F', (SELECT id FROM classes WHERE name='10-A' LIMIT 1), 1, 'meera.patel@student.school.edu' FROM users WHERE username = 'DBX001' LIMIT 1
 ON DUPLICATE KEY UPDATE user_id = VALUES(user_id), class_id = VALUES(class_id);
 
 INSERT INTO students (user_id, admission_number, first_name, last_name, date_of_birth, gender, class_id, roll_number, email)
-SELECT id, 'DBX002', 'Arjun', 'Kumar', '2010-03-22', 'M', (SELECT id FROM classes WHERE name='10-A' LIMIT 1), 2, 'arjun.kumar@student.school.edu' FROM users WHERE username = 'DBX002'
+SELECT id, 'DBX002', 'Arjun', 'Kumar', '2010-03-22', 'M', (SELECT id FROM classes WHERE name='10-A' LIMIT 1), 2, 'arjun.kumar@student.school.edu' FROM users WHERE username = 'DBX002' LIMIT 1
 ON DUPLICATE KEY UPDATE user_id = VALUES(user_id), class_id = VALUES(class_id);
 
 INSERT INTO students (user_id, admission_number, first_name, last_name, date_of_birth, gender, class_id, roll_number, email)
-SELECT id, 'DBX003', 'Shruti', 'Nair', '2010-07-08', 'F', (SELECT id FROM classes WHERE name='10-B' LIMIT 1), 1, 'shruti.nair@student.school.edu' FROM users WHERE username = 'DBX003'
+SELECT id, 'DBX003', 'Shruti', 'Nair', '2010-07-08', 'F', (SELECT id FROM classes WHERE name='10-B' LIMIT 1), 1, 'shruti.nair@student.school.edu' FROM users WHERE username = 'DBX003' LIMIT 1
 ON DUPLICATE KEY UPDATE user_id = VALUES(user_id), class_id = VALUES(class_id);
 
 -- ── Users: Parents ─────────────────────────────────────────
@@ -71,7 +71,7 @@ INSERT INTO users (role, username, password_hash) VALUES
 ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash);
 
 INSERT IGNORE INTO parents (user_id, first_name, last_name, phone, email, relationship) 
-SELECT id, 'Ramesh', 'Patel', '9876543210', 'ramesh.patel@gmail.com', 'Father' FROM users WHERE username = 'parent001';
+SELECT id, 'Ramesh', 'Patel', '9876543210', 'ramesh.patel@gmail.com', 'Father' FROM users WHERE username = 'parent001' LIMIT 1;
 
 INSERT IGNORE INTO parent_student (parent_id, student_id) 
 SELECT 
@@ -143,7 +143,7 @@ INSERT IGNORE INTO books (title, author, category, available_copies, total_copie
 
 -- First create a library member for DBX001
 INSERT IGNORE INTO library_members (user_id, member_type)
-SELECT user_id, 'Student' FROM students WHERE admission_number = 'DBX001';
+SELECT user_id, 'Student' FROM students WHERE admission_number = 'DBX001' LIMIT 1;
 
 -- Then create borrowings
 INSERT IGNORE INTO borrowings (book_id, member_id, borrow_date, due_date, status) VALUES

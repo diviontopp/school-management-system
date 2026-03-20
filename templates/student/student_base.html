@@ -60,7 +60,7 @@
     
     <!-- Flash Messages Container -->
     <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
-    {%ith messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div id="flash-data" style="display: none;" data-messages='{{ messages | tojson | safe }}'></div>
         <script>
