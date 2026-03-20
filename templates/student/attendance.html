@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .font-serif-title { font-family: 'Playfair Display', serif; }
+    .font-clash { font-family: 'Clash Display', sans-serif; }
     .glass-panel {
         background: rgba(255, 255, 255, 0.4);
         backdrop-filter: blur(24px);
@@ -29,74 +29,74 @@
 </div>
 {% else %}
 
-<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 transition-all duration-700">
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 transition-all duration-700">
     <div class="max-w-2xl">
-        <span class="text-accent-gold font-bold tracking-[0.3em] uppercase text-[10px]">Academic Presence</span>
-        <h1 class="font-serif-title text-5xl text-primary font-black mt-2 tracking-tight italic">Attendance Record</h1>
+        <span class="text-accent-gold font-bold tracking-[0.3em] uppercase text-xs">Academic Presence</span>
+        <h1 class="font-clash text-5xl text-primary font-black mt-2 tracking-tight italic">Attendance Record</h1>
         <p class="text-slate-500 text-lg mt-3 font-light leading-relaxed">Tracking your academic journey and daily commitment.</p>
     </div>
 </div>
 
 <!-- ═══════════ OVERVIEW STATS ═══════════ -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-    <div class="bg-white/60 p-8 rounded-2xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-primary transition-all group">
+    <div class="bg-white/60 p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between hover:border-primary transition-all group">
         <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+            <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
                 <span class="material-symbols-outlined scale-110">data_usage</span>
             </div>
         </div>
         <div>
-            <span class="text-4xl font-serif-title font-black text-primary">{{ attendance_pct }}%</span>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Overall Score</p>
+            <span class="text-4xl font-clash font-black text-primary">{{ attendance_pct }}%</span>
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Overall Score</p>
         </div>
     </div>
     
-    <div class="bg-white/60 p-8 rounded-2xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-emerald-500 transition-all group">
+    <div class="bg-white/60 p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between hover:border-emerald-500 transition-all group">
         <div class="flex justify-between items-start mb-6">
             <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-all">
                 <span class="material-symbols-outlined scale-110">how_to_reg</span>
             </div>
         </div>
         <div>
-            <span class="text-4xl font-serif-title font-black text-emerald-600">{{ present }}</span>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Days Present</p>
+            <span class="text-4xl font-clash font-black text-emerald-600">{{ present }}</span>
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Days Present</p>
         </div>
     </div>
 
-    <div class="bg-white/60 p-8 rounded-2xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-red-500 transition-all group">
+    <div class="bg-white/60 p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between hover:border-red-500 transition-all group">
         <div class="flex justify-between items-start mb-6">
             <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-600 group-hover:bg-red-500 group-hover:text-white transition-all">
                 <span class="material-symbols-outlined scale-110">person_off</span>
             </div>
         </div>
         <div>
-            <span class="text-4xl font-serif-title font-black text-red-600">{{ absent }}</span>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Days Absent</p>
+            <span class="text-4xl font-clash font-black text-red-600">{{ absent }}</span>
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Days Absent</p>
         </div>
     </div>
 
-    <div class="bg-white/60 p-8 rounded-2xl shadow-sm border border-primary/5 flex flex-col justify-between hover:border-amber-500 transition-all group">
+    <div class="bg-white/60 p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between hover:border-amber-500 transition-all group">
         <div class="flex justify-between items-start mb-6">
             <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all">
                 <span class="material-symbols-outlined scale-110">schedule</span>
             </div>
         </div>
         <div>
-            <span class="text-4xl font-serif-title font-black text-amber-500">{{ late }}</span>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Late Arrivals</p>
+            <span class="text-4xl font-clash font-black text-amber-500">{{ late }}</span>
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Late Arrivals</p>
         </div>
     </div>
 </div>
 
 <!-- ═══════════ CALENDAR ═══════════ -->
-<div class="bg-white/40 rounded-[2.5rem] shadow-sm border border-primary/5 overflow-hidden glass-panel mb-16">
-    <div class="px-10 py-8 border-b border-primary/5 flex justify-between items-center bg-white/30">
+<div class="bg-white/40 rounded-xl shadow-sm border border-slate-200 overflow-hidden glass-panel mb-16">
+    <div class="px-10 py-8 border-b border-slate-200 flex justify-between items-center bg-white/30">
         <button id="calPrev" class="w-12 h-12 rounded-full hover:bg-white flex items-center justify-center text-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-transparent hover:border-primary/10 hover:shadow-sm" aria-label="Previous month">
             <span class="material-symbols-outlined">chevron_left</span>
         </button>
         <div class="text-center">
-            <h3 id="calTitle" class="font-serif-title text-3xl font-bold text-primary tracking-tight">Loading...</h3>
-            <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-accent-gold mt-1">Calendar Navigation</p>
+            <h3 id="calTitle" class="font-clash text-3xl font-bold text-primary tracking-tight">Loading...</h3>
+            <p class="text-xs font-bold uppercase tracking-[0.4em] text-accent-gold mt-1">Calendar Navigation</p>
         </div>
         <button id="calNext" class="w-12 h-12 rounded-full hover:bg-white flex items-center justify-center text-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-transparent hover:border-primary/10 hover:shadow-sm" aria-label="Next month">
             <span class="material-symbols-outlined">chevron_right</span>

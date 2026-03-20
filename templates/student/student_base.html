@@ -2,7 +2,6 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>{% block title %}Scholaris Student Portal{% endblock %}</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -15,35 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#0f4c81", // Navy Blue
-                        "accent-gold": "#C5A028",  // Gold
-                        "bone-white": "#F1F4E4", // Bone White
-                        "background-light": "#F1F4E4",
-                        "background-dark": "#0a1f33",
-                        "status-success": "#22c55e",
-                        "status-success-bg": "#f0fdf4",
-                        "status-warning": "#f59e0b",
-                        "status-warning-bg": "#fffbeb",
-                        "status-danger": "#ef4444",
-                        "status-danger-bg": "#fef2f2",
-                        "status-info": "#3b82f6",
-                        "status-info-bg": "#eff6ff",
-                    },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"],
-                        "clash": ["Clash Display", "sans-serif"],
-                    },
-                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
     <style>
         :root {
             --background: 0 0% 100%;
@@ -245,8 +216,8 @@
 <!-- Spotlight Search -->
 <div class="relative w-full max-w-sm group hidden sm:block">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
-<input class="w-full pl-12 pr-4 py-2.5 bg-white/50 border border-primary/5 rounded-full focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm outline-none" placeholder="Search grades, schedules, or resources..." type="text">
-<div class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 border border-slate-300 px-1.5 py-0.5 rounded-md uppercase tracking-tighter hidden lg:block">CMD + K</div>
+<input class="w-full pl-12 pr-4 py-2.5 bg-white/50 border border-slate-200 rounded-full focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm outline-none" placeholder="Search grades, schedules, or resources..." type="text">
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-tighter hidden lg:block">CMD + K</div>
 </div>
 </div>
 <div class="flex items-center gap-6">
@@ -269,7 +240,7 @@
 </div>
 <div class="text-left hidden sm:block">
 <p class="text-xs font-bold leading-none text-slate-700">{{ student.first_name }}</p>
-<p class="text-[10px] text-slate-400 leading-none mt-1">Class {{ student.class_name }}</p>
+<p class="text-xs text-slate-500 leading-none mt-1">Class {{ student.class_name }}</p>
 </div>
 <span class="material-symbols-outlined text-slate-400 text-sm hidden sm:block">expand_more</span>
 </a>
