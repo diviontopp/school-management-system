@@ -150,28 +150,47 @@
                     <span class="material-symbols-outlined text-xl">timer</span> Upcoming Assessments
                 </h3>
                 {% if upcoming_tests %}
-                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:border-[#0f4c81]/30 transition-all h-full min-h-[240px] flex flex-col justify-between">
-                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500">
-                        <span class="material-symbols-outlined text-9xl">quiz</span>
+                <div class="bg-gradient-to-br from-white to-[#F1F4E4]/10 p-7 rounded-[2rem] border border-slate-200/60 shadow-sm relative overflow-hidden group hover:border-[#0f4c81]/30 hover:shadow-2xl hover:shadow-[#0f4c81]/5 transition-all duration-500 h-full min-h-[260px] flex flex-col justify-between cursor-pointer">
+                    <div class="absolute -right-8 -top-8 opacity-[0.04] group-hover:opacity-[0.1] group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 pointer-events-none">
+                        <span class="material-symbols-outlined text-[13rem]">quiz</span>
                     </div>
                     {% set test = upcoming_tests[0] %}
-                    <div>
-                        <span class="inline-block px-3 py-1 bg-[#8B3A3A]/10 text-[#8B3A3A] font-bold text-[10px] uppercase tracking-widest rounded-full mb-4">{{ test.test_type }}</span>
-                        <h4 class="text-2xl text-[#0f4c81] font-bold mb-2 truncate" title="{{ test.subject_name }}">{{ test.subject_name }}</h4>
-                        <p class="text-slate-600 mb-6 line-clamp-2" title="{{ test.name }}">{{ test.name }}</p>
-                    </div>
-                    <div class="flex items-center justify-between bg-[#F1F4E4] p-4 rounded-2xl text-[#0f4c81] relative z-10 w-full">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined">calendar_month</span>
-                            <span class="font-bold text-sm">{{ test.test_date.strftime('%B %d, %Y') }}</span>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#8B3A3A]/5 text-[#8B3A3A] font-bold text-[9px] uppercase tracking-widest rounded-full border border-[#8B3A3A]/10 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#8B3A3A] animate-pulse"></span>
+                                {{ test.test_type }}
+                            </span>
+                            <span class="text-[10px] font-bold text-[#0f4c81]/40 uppercase tracking-tighter">Academic Hub</span>
                         </div>
-                        <span class="material-symbols-outlined text-sm font-bold animate-bounce hidden sm:inline-block">arrow_right_alt</span>
+                        <h4 class="text-3xl text-[#0f4c81] font-black mb-1 truncate serif-heading" title="{{ test.subject_name }}">{{ test.subject_name }}</h4>
+                        <p class="text-slate-500 text-sm font-medium mb-6 line-clamp-2 leading-snug" title="{{ test.name }}">{{ test.name }}</p>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-white border border-slate-100 p-4 rounded-2xl text-[#0f4c81] relative z-10 w-full shadow-sm group-hover:border-[#0f4c81]/20 transition-all duration-500">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-10 h-10 rounded-xl bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] shadow-inner">
+                                <span class="material-symbols-outlined text-xl">event_upcoming</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold leading-none mb-1">Scheduled for</span>
+                                <span class="font-extrabold text-sm tracking-tight">{{ test.test_date.strftime('%B %d, %Y') }}</span>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-300 group-hover:text-[#0f4c81] group-hover:border-[#0f4c81]/20 group-hover:bg-[#F1F4E4] transition-all duration-500">
+                            <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                        </div>
                     </div>
                 </div>
                 {% else %}
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-full min-h-[240px] flex flex-col items-center justify-center">
-                    <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">event_available</span>
-                    <p class="text-sm font-medium">No scheduled assessments.</p>
+                <div class="bg-gradient-to-br from-slate-50 to-white p-10 rounded-[2rem] border border-slate-100 text-center h-full min-h-[260px] flex flex-col items-center justify-center group relative overflow-hidden">
+                    <div class="absolute inset-0 bg-blue-50/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div class="relative mb-6">
+                        <div class="absolute inset-0 bg-blue-100/30 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+                        <span class="material-symbols-outlined text-6xl text-slate-200 group-hover:text-blue-200 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 relative z-10">celebration</span>
+                    </div>
+                    <h5 class="text-[#0f4c81] font-bold text-sm mb-1 relative z-10">Clear Skies Ahead</h5>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest relative z-10">No assessments found for this week.</p>
                 </div>
                 {% endif %}
             </div>
@@ -183,34 +202,47 @@
                 </h3>
                 {% if remarks %}
                 {% set remark = remarks[0] %}
-                <div class="bg-[#F1F4E4] p-6 rounded-3xl relative overflow-hidden group hover:shadow-md transition-all h-full min-h-[240px] flex flex-col justify-between border border-[#0f4c81]/5">
-                    <div class="absolute right-0 top-0 w-24 h-24 bg-[#0f4c81] rounded-bl-full opacity-5 group-hover:scale-125 transition-transform duration-700"></div>
-                    <span class="material-symbols-outlined text-[#0f4c81]/10 text-6xl absolute top-4 left-4">format_quote</span>
+                {% if remarks %}
+                {% set remark = remarks[0] %}
+                <div class="bg-[#F1F4E4] p-7 rounded-[2rem] relative overflow-hidden group hover:shadow-2xl hover:shadow-[#0f4c81]/10 transition-all duration-500 h-full min-h-[260px] flex flex-col justify-between border border-[#0f4c81]/5 cursor-pointer">
+                    <div class="absolute right-0 top-0 w-32 h-32 bg-white rounded-bl-full opacity-20 group-hover:scale-150 group-hover:rotate-12 transition-transform duration-1000"></div>
+                    <span class="material-symbols-outlined text-[#0f4c81]/10 text-7xl absolute top-4 left-4 group-hover:scale-110 transition-transform duration-500 pointer-events-none">format_quote</span>
                     
-                    <div class="relative z-10 pt-8 pb-4 flex-1">
-                        <p class="text-[#0f4c81] font-medium leading-relaxed italic line-clamp-3">"{{ remark.remark }}"</p>
+                    <div class="relative z-10 pt-10 pb-6 flex-1">
+                        <p class="text-[#0f4c81] font-bold leading-relaxed serif-heading italic text-lg leading-snug line-clamp-3">"{{ remark.remark }}"</p>
                     </div>
                     
-                    <div class="relative z-10 flex justify-between items-end border-t border-[#0f4c81]/10 pt-4 mt-auto">
+                    <div class="relative z-10 flex justify-between items-center bg-white/40 backdrop-blur-sm p-4 rounded-2xl border border-white/50 mt-auto shadow-sm">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0f4c81] font-bold shadow-sm flex-shrink-0">
-                                {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
+                            <div class="relative">
+                                <div class="w-11 h-11 rounded-full bg-[#0f4c81] flex items-center justify-center text-[#F1F4E4] font-bold overflow-hidden shadow-md group-hover:scale-105 transition-transform duration-500">
+                                    {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
+                                </div>
+                                <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-[#F1F4E4] rounded-full"></div>
                             </div>
                             <div class="min-w-0">
-                                <h5 class="font-bold text-[#0f4c81] text-sm truncate" title="{{ remark.teacher_name }}">{{ remark.teacher_name }}</h5>
+                                <h5 class="font-black text-[#0f4c81] text-sm truncate serif-heading">{{ remark.teacher_name }}</h5>
                                 <div class="flex items-center gap-2">
-                                    <p class="text-[10px] text-slate-500 uppercase tracking-widest truncate">{{ remark.remark_type }}</p>
-                                    <span class="w-1 h-1 rounded-full bg-slate-300 flex-shrink-0"></span>
-                                    <p class="text-[10px] text-slate-500 uppercase tracking-widest flex-shrink-0">{{ remark.date.strftime('%d %b') }}</p>
+                                    <p class="text-[9px] text-[#0f4c81]/60 font-black uppercase tracking-widest truncate">{{ remark.remark_type }}</p>
+                                    <span class="w-1 h-1 rounded-full bg-[#0f4c81]/20"></span>
+                                    <p class="text-[9px] text-[#0f4c81]/60 font-black uppercase tracking-widest">{{ remark.date.strftime('%d %b') }}</p>
                                 </div>
                             </div>
                         </div>
+                        <button class="w-8 h-8 flex items-center justify-center text-[#0f4c81]/30 hover:text-[#0f4c81] transition-colors">
+                            <span class="material-symbols-outlined text-lg">chat_bubble</span>
+                        </button>
                     </div>
                 </div>
                 {% else %}
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-full min-h-[240px] flex flex-col items-center justify-center">
-                    <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">check_circle</span>
-                    <p class="text-sm font-medium">No remarks at the moment.</p>
+                <div class="bg-gradient-to-br from-[#F1F4E4]/30 to-white p-10 rounded-[2rem] border border-[#F1F4E4]/60 text-center h-full min-h-[260px] flex flex-col items-center justify-center group relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[#F1F4E4]/40 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                    <div class="relative mb-6">
+                        <div class="absolute inset-0 bg-[#F1F4E4] rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
+                        <span class="material-symbols-outlined text-6xl text-slate-200 group-hover:text-[#0f4c81]/20 group-hover:rotate-12 group-hover:scale-110 transition-all duration-700 relative z-10">volunteer_activism</span>
+                    </div>
+                    <h5 class="text-[#0f4c81] font-bold text-sm mb-1 relative z-10">Silence is Golden</h5>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest relative z-10">Your behavior record is pristine at the moment.</p>
                 </div>
                 {% endif %}
             </div>
