@@ -174,7 +174,7 @@
                             </div>
                             <div class="flex flex-col">
                                 <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold leading-none mb-1">Scheduled for</span>
-                                <span class="font-extrabold text-sm tracking-tight">{{ test.test_date.strftime('%B %d, %Y') }}</span>
+                                <span class="font-extrabold text-sm tracking-tight">{{ test.test_date.strftime('%B %d, %Y') if test.test_date else '' }}</span>
                             </div>
                         </div>
                         <div class="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-300 group-hover:text-[#0f4c81] group-hover:border-[#0f4c81]/20 group-hover:bg-[#F1F4E4] transition-all duration-500">
@@ -202,8 +202,6 @@
                 </h3>
                 {% if remarks %}
                 {% set remark = remarks[0] %}
-                {% if remarks %}
-                {% set remark = remarks[0] %}
                 <div class="bg-[#F1F4E4] p-7 rounded-[2rem] relative overflow-hidden group hover:shadow-2xl hover:shadow-[#0f4c81]/10 transition-all duration-500 h-full min-h-[260px] flex flex-col justify-between border border-[#0f4c81]/5 cursor-pointer">
                     <div class="absolute right-0 top-0 w-32 h-32 bg-white rounded-bl-full opacity-20 group-hover:scale-150 group-hover:rotate-12 transition-transform duration-1000"></div>
                     <span class="material-symbols-outlined text-[#0f4c81]/10 text-7xl absolute top-4 left-4 group-hover:scale-110 transition-transform duration-500 pointer-events-none">format_quote</span>
@@ -225,7 +223,7 @@
                                 <div class="flex items-center gap-2">
                                     <p class="text-[9px] text-[#0f4c81]/60 font-black uppercase tracking-widest truncate">{{ remark.remark_type }}</p>
                                     <span class="w-1 h-1 rounded-full bg-[#0f4c81]/20"></span>
-                                    <p class="text-[9px] text-[#0f4c81]/60 font-black uppercase tracking-widest">{{ remark.date.strftime('%d %b') }}</p>
+                                    <p class="text-[9px] text-[#0f4c81]/60 font-black uppercase tracking-widest">{{ remark.date.strftime('%d %b') if remark.date else '' }}</p>
                                 </div>
                             </div>
                         </div>

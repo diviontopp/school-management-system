@@ -67,7 +67,7 @@ def dashboard():
         att_pct = 0
 
     notices = safe_query("notices", "SELECT id, title, posted_at FROM notices WHERE is_active = 1 ORDER BY posted_at DESC LIMIT 5")
-    remarks = safe_query("remarks", "SELECT r.remark, r.date, CONCAT(t.first_name, ' ', t.last_name) as teacher_name FROM student_remarks r JOIN teachers t ON r.teacher_id = t.id WHERE r.student_id = %s ORDER BY r.date DESC LIMIT 2", (sid,))
+    remarks = safe_query("remarks", "SELECT r.remark, r.date, r.remark_type, CONCAT(t.first_name, ' ', t.last_name) as teacher_name FROM student_remarks r JOIN teachers t ON r.teacher_id = t.id WHERE r.student_id = %s ORDER BY r.date DESC LIMIT 2", (sid,))
     borrowed_books = safe_query("library", "SELECT b.title, bw.due_date, bw.status FROM borrowings bw JOIN books b ON bw.book_id = b.id JOIN library_members lm ON bw.member_id = lm.id WHERE lm.user_id = %s AND bw.status != 'Returned' LIMIT 3", (uid,))
 
     hw_pending = sum(1 for hw in upcoming_homework if not hw.get('submission_status') or hw['submission_status'] != 'Submitted')
