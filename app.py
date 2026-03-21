@@ -71,23 +71,22 @@ def create_app():
         # High-level log for every request
         print(f">>> [REQ] {request.method} {request.path}", flush=True)
 
-    # ── Fail-safe Routes ──────────────────────────────────
-    @app.route('/health')
-    def health():
-        from database.connection import query
-        db_status = "unknown"
-        try:
-            query("SELECT 1", fetch_one=True)
-            db_status = "connected"
-        except Exception as e:
-            db_status = f"error: {str(e)}"
-        return {"status": "ok", "env": os.getenv("FLASK_ENV", "dev"), "database": db_status}, 200
+    # ── Service Worker Failsafe ─────────────────────────────
+    @app.route('/sw.js')
+    def serve_sw():
+        return send_from_directory(app.static_folder, 'js/sw.js', mimetype='application/javascript')
+
+    @app.route('/manifest.json')
+    def serve_manifest():
+        return send_from_directory(app.static_folder, 'manifest.json')
 
     # ── Error Handling ─────────────────────────────────────
     from werkzeug.exceptions import HTTPException
     @app.errorhandler(Exception)
     def handle_exception(e):
         if isinstance(e, HTTPException):
+            if e.code == 404:
+                return render_template('public/base.html'), 404
             return e
             
         import traceback
@@ -100,9 +99,20 @@ def create_app():
         print(trace, flush=True)
         print("="*60, flush=True)
         
-        # Return a slightly more helpful 500 in dev or if specific info exists
-        # But for security in production, keep it generic unless authorized
-        return render_template('public/base.html'), 500 # Fallback to a base template if possible
+        # Return a simple error page that DOES NOT have the huge cinematic preloader
+        # This prevents the "infinite loading" feel when a backend crash occurs.
+        return f"""
+        <html>
+            <head><title>500 Internal Server Error</title></head>
+            <body style="font-family: sans-serif; padding: 40px; background: #fafafa;">
+                <h1>500 Internal Server Error</h1>
+                <p>Something went wrong on our end. Please try again later.</p>
+                <hr>
+                <p><a href="/">Return Home</a></p>
+                <!-- {err_msg} -->
+            </body>
+        </html>
+        """, 500
 
     # ── Template Utilities ────────────────────────────────
     from utils.storage import get_storage_url
