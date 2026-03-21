@@ -147,11 +147,8 @@
     <!-- ══════════ Editorial / Maximalist Sidebar (Frontend-Design Skill) — Light Theme ══════════ -->
     <aside id="sidebar" class="fixed top-0 left-0 h-screen w-80 bg-[#F1F4E4] border-r border-[#0f4c81]/10 z-[100] flex flex-col transition-transform duration-700 ease-[cubic-bezier(0.83,0,0.17,1)] transform -translate-x-full text-[#2D3748] shadow-2xl overflow-hidden">
         
-        <!-- Command Space for Fixed Toggle -->
-        <div class="h-24 w-full"></div>
-
         <!-- Massive Branding Header -->
-        <div class="px-8 pt-4 pb-6 relative group cursor-default">
+        <div class="px-8 pt-20 pb-6 relative group cursor-default bg-[#F1F4E4]">
             <div class="absolute inset-0 bg-[#0f4c81] transform -translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.83,0,0.17,1)] z-0"></div>
             <h1 class="text-5xl leading-none tracking-tighter text-[#0f4c81] group-hover:text-[#F1F4E4] relative z-10 transition-colors duration-500" style="font-family: 'Playfair Display', serif; font-style: italic;">Scholaris.</h1>
             <p class="mt-4 text-[9px] uppercase tracking-[0.3em] text-[#718096] group-hover:text-[#F1F4E4] font-medium relative z-10 transition-colors duration-500" style="font-family: 'Inter', sans-serif;">Academic Portal &copy; 2026</p>
@@ -200,7 +197,7 @@
         <!-- Sidebar Footer -->
         <div class="p-8 border-t border-[#0f4c81]/10 flex flex-col bg-[#F1F4E4]/50">
             <a href="{{ url_for('auth.logout') }}" class="group relative flex items-center justify-between py-2 transition-colors duration-500">
-                <span class="text-3xl font-black tracking-tighter text-[#8B3A3A] hover:text-[#E11D48] transition-all duration-500 uppercase" style="font-family: 'Playfair Display', serif;">Log Out</span>
+                <span class="text-2xl font-light tracking-tight text-[#8B3A3A] hover:text-[#E11D48] transition-all duration-500 uppercase" style="font-family: 'Playfair Display', serif;">Log Out</span>
                 <span class="text-[14px] text-[#8B3A3A] group-hover:translate-x-2 transition-transform duration-500">→</span>
             </a>
         </div>
@@ -318,12 +315,12 @@
 
     <!-- ══════════ Unified Toggle Button — Fixed Top-Left ══════════ -->
     <button id="toggleSidebar"
-        class="fixed top-6 left-8 z-[120] flex items-center justify-center w-12 h-12 transition-all border border-[#0f4c81]/10 bg-[#F1F4E4]/80 backdrop-blur-md rounded-xl shadow-sm hover:shadow-md hover:scale-105 active:scale-95 text-[#0f4c81] group"
+        class="fixed top-5 left-8 z-[120] flex items-center justify-center w-12 h-12 transition-all border border-[#0f4c81]/10 bg-[#F1F4E4] lg:bg-[#F1F4E4]/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md hover:scale-105 active:scale-95 text-[#0f4c81] group"
         aria-label="Toggle Sidebar">
         <div class="flex flex-col gap-[4px]">
-            <span id="burger-top" class="w-6 h-[2px] bg-current rounded-full transition-all duration-300"></span>
-            <span id="burger-mid" class="w-6 h-[2px] bg-current rounded-full transition-all duration-300"></span>
-            <span id="burger-bot" class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 group-hover:w-6"></span>
+            <span id="burger-top" class="w-6 h-[2.5px] bg-[#0f4c81] rounded-full transition-all duration-300"></span>
+            <span id="burger-mid" class="w-6 h-[2.5px] bg-[#0f4c81] rounded-full transition-all duration-300"></span>
+            <span id="burger-bot" class="w-4 h-[2.5px] bg-[#0f4c81] rounded-full transition-all duration-300 group-hover:w-6"></span>
         </div>
     </button>
 
