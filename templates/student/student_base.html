@@ -116,70 +116,70 @@
 <!-- (Mobile layout elements removed in favor of universal toggle) -->
 
 <!-- Left Sidebar Navigation -->
-<!-- ══════════ Shadcn Styled Sidebar (Radix Inspired + Custom Theme) ══════════ -->
-<aside id="sidebar" class="sidebar-font fixed top-0 left-0 h-screen w-64 bg-primary border-r border-white/10 z-[100] flex flex-col transition-transform duration-300 transform -translate-x-full">
+<!-- ══════════ Premium Zinc Dark Sidebar ══════════ -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-[#09090b] border-r border-slate-800 z-[100] flex flex-col transition-transform duration-300 transform -translate-x-full shadow-2xl font-sans">
     <!-- Sidebar Header -->
-    <div class="px-6 py-8 flex items-center gap-3 border-b border-white/5">
-        <div class="size-9 bg-accent-gold rounded-lg flex items-center justify-center text-primary shrink-0">
-            <span class="material-symbols-outlined text-lg">school</span>
+    <div class="px-6 py-8 flex items-center gap-3 border-b border-slate-800/60 mb-2">
+        <div class="size-9 bg-gradient-to-br from-slate-700 to-slate-900 border border-slate-600 rounded-lg flex items-center justify-center text-white shrink-0 shadow-inner">
+            <span class="material-symbols-outlined text-[20px]">school</span>
         </div>
         <div class="flex flex-col min-w-0">
-            <span class="font-bold text-sm tracking-tight text-white truncate">Scholaris</span>
-            <span class="text-[10px] text-white/50 font-medium uppercase tracking-wider truncate">Academy Portal</span>
+            <span class="font-bold text-sm tracking-tight text-white truncate" style="font-family: 'Playfair Display', serif;">Scholaris</span>
+            <span class="text-[9px] text-slate-400 font-black uppercase tracking-widest truncate">Academy Portal</span>
         </div>
     </div>
 
     <!-- Navigation List -->
-    <div class="flex-1 overflow-y-auto px-3 py-6 space-y-1">
-        <p class="secondary-label px-3 mb-2 text-[10px] text-white/50 tracking-[0.2em]">Main Menu</p>
+    <div class="flex-1 overflow-y-auto px-4 py-2 space-y-1">
+        <p class="px-2 mb-3 text-[10px] text-slate-500 font-black uppercase tracking-widest">Main Menu</p>
         
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'dashboard' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.dashboard') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'dashboard' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">dashboard</span>
-            <span class="font-serif font-bold">Dashboard</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'dashboard' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.dashboard') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'dashboard' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">space_dashboard</span>
+            <span>Dashboard</span>
         </a>
         
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'assignments' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.assignments') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'assignments' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">assignment</span>
-            <span class="font-serif font-bold">Assignments</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'assignments' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.assignments') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'assignments' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">assignment</span>
+            <span>Assignments</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'timetable' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.timetable') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'timetable' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">calendar_today</span>
-            <span class="font-serif font-bold">Timetable</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'timetable' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.timetable') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'timetable' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">calendar_month</span>
+            <span>Timetable</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'grades' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.grades') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'grades' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">grade</span>
-            <span class="font-serif font-bold">Exam Results</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'grades' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.grades') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'grades' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">military_tech</span>
+            <span>Exam Results</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'attendance' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.attendance') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'attendance' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">verified_user</span>
-            <span class="font-serif font-bold">Attendance</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'attendance' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.attendance') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'attendance' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">fact_check</span>
+            <span>Attendance</span>
         </a>
 
-        <p class="secondary-label px-3 mt-8 mb-2 text-[10px] text-white/50 tracking-[0.2em]">Settings</p>
+        <p class="px-2 mt-8 mb-3 text-[10px] text-slate-500 font-black uppercase tracking-widest">Settings</p>
         
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'profile' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.profile') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'profile' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">person</span>
-            <span class="font-serif font-bold">My Profile</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'profile' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.profile') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'profile' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">person</span>
+            <span>My Profile</span>
         </a>
 
-        <a class="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-all group {% if active_page == 'communication' %}bg-white/10 text-white{% else %}text-white/60 hover:bg-white/5 hover:text-white{% endif %}" href="{{ url_for('student.communication') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'communication' %}text-white{% else %}text-white/40 group-hover:text-white/70{% endif %}">mail</span>
-            <span class="font-serif font-bold">Messages</span>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'communication' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.communication') }}">
+            <span class="material-symbols-outlined text-[20px] {% if active_page == 'communication' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">forum</span>
+            <span>Messages</span>
         </a>
     </div>
 
     <!-- Sidebar Footer -->
-    <div class="p-4 border-t border-white/5 space-y-1">
-        <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-3 py-3 text-xs font-medium text-white/50 hover:bg-white/5 hover:text-white rounded-md transition-all">
-            <span class="material-symbols-outlined text-[18px]">language</span>
-            <span class="font-serif font-bold">Portal Home</span>
+    <div class="p-4 border-t border-slate-800/60 mb-2">
+        <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 rounded-lg transition-all">
+            <span class="material-symbols-outlined text-[20px] text-slate-500">public</span>
+            <span>Portal Home</span>
         </a>
-        <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-3 py-3 text-xs font-medium text-red-400 hover:bg-red-500/10 rounded-md transition-all">
-            <span class="material-symbols-outlined text-[18px]">logout</span>
-            <span class="font-serif font-bold">Log Out</span>
+        <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-3 py-2.5 mt-1 text-sm font-bold text-red-400 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-all">
+            <span class="material-symbols-outlined text-[20px]">logout</span>
+            <span>Log Out</span>
         </a>
     </div>
 </aside>
