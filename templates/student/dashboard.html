@@ -227,18 +227,18 @@
             
             <h4 class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#F1F4E4]/60 mb-8 border-b border-white/10 pb-4 w-full text-center">Attendance Record</h4>
             
-            <div class="relative w-36 h-36 flex items-center justify-center mb-6 mt-4">
+            <div class="relative w-56 h-56 flex items-center justify-center mb-6 mt-4">
                 <!-- Outer glow -->
                 <div class="absolute inset-0 rounded-full bg-white/5 blur-xl"></div>
                 
-                <svg class="w-full h-full transform -rotate-90 relative z-10 drop-shadow-lg">
+                <svg class="w-full h-full transform -rotate-90 relative z-10 drop-shadow-lg" viewBox="0 0 224 224">
                     <!-- Background Track -->
-                    <circle cx="72" cy="72" r="64" fill="transparent" stroke="rgba(241, 244, 228, 0.05)" stroke-width="4"></circle>
+                    <circle cx="112" cy="112" r="100" fill="transparent" stroke="rgba(241, 244, 228, 0.05)" stroke-width="4"></circle>
                     <!-- Progress Track -->
-                    <circle cx="72" cy="72" r="64" fill="transparent" stroke="#F1F4E4" stroke-width="10" stroke-linecap="round" stroke-dasharray="402" stroke-dashoffset="{{ 402 - (402 * attendance_pct / 100) }}"></circle>
+                    <circle cx="112" cy="112" r="100" fill="transparent" stroke="#F1F4E4" stroke-width="12" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="{{ 628 - (628 * attendance_pct / 100) }}"></circle>
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
-                    <span class="text-5xl text-[#F1F4E4] drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
+                    <span class="text-6xl text-[#F1F4E4] drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
                 </div>
             </div>
             
