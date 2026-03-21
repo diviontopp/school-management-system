@@ -115,13 +115,13 @@ SELECT 'Solve Exercise 4.2', 'Complete quadratic equations.', (SELECT id FROM su
 -- ── Attendance ───────────────────────────────────────────
 -- Use student DBX001
 INSERT IGNORE INTO student_attendance (student_id, date, status, marked_by) 
-SELECT (SELECT id FROM students WHERE admission_number='DBX001'), DATE_SUB(CURDATE(), INTERVAL 1 DAY), 'Present', 1;
+SELECT (SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), DATE_SUB(CURDATE(), INTERVAL 1 DAY), 'Present', 1;
 
 INSERT IGNORE INTO student_attendance (student_id, date, status, marked_by) 
-SELECT (SELECT id FROM students WHERE admission_number='DBX001'), DATE_SUB(CURDATE(), INTERVAL 2 DAY), 'Present', 1;
+SELECT (SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), DATE_SUB(CURDATE(), INTERVAL 2 DAY), 'Present', 1;
 
 INSERT IGNORE INTO student_attendance (student_id, date, status, marked_by) 
-SELECT (SELECT id FROM students WHERE admission_number='DBX001'), DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'Absent', 1;
+SELECT (SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), DATE_SUB(CURDATE(), INTERVAL 3 DAY), 'Absent', 1;
 
 -- ── Notices (Samvaad Hub) ──────────────────────────────────
 INSERT IGNORE INTO notices (title, content, posted_by, posted_at, is_active) VALUES
@@ -131,8 +131,8 @@ INSERT IGNORE INTO notices (title, content, posted_by, posted_at, is_active) VAL
 
 -- ── Student Remarks (Digital Diary) ────────────────────────
 INSERT IGNORE INTO student_remarks (student_id, teacher_id, remark, remark_type, date) VALUES
-((SELECT id FROM students WHERE admission_number='DBX001'), (SELECT id FROM teachers LIMIT 1), 'Excellent progress in Mathematics. Keep up the good work!', 'Academic', DATE_SUB(CURDATE(), INTERVAL 2 DAY)),
-((SELECT id FROM students WHERE admission_number='DBX001'), (SELECT id FROM teachers LIMIT 1), 'Participated actively in the class discussion today.', 'General', DATE_SUB(CURDATE(), INTERVAL 5 DAY));
+((SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), (SELECT id FROM teachers LIMIT 1), 'Excellent progress in Mathematics. Keep up the good work!', 'Academic', DATE_SUB(CURDATE(), INTERVAL 2 DAY)),
+((SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), (SELECT id FROM teachers LIMIT 1), 'Participated actively in the class discussion today.', 'General', DATE_SUB(CURDATE(), INTERVAL 5 DAY));
 
 -- ── Library Borrowings (Vidya Hub) ─────────────────────────
 -- First ensure books exist

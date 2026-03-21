@@ -80,6 +80,10 @@ def create_app():
     def serve_manifest():
         return send_from_directory(app.static_folder, 'manifest.json')
 
+    @app.route('/health')
+    def health_check():
+        return "OK", 200
+
     # ── Error Handling ─────────────────────────────────────
     from werkzeug.exceptions import HTTPException
     @app.errorhandler(Exception)
