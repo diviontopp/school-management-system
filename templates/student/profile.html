@@ -47,7 +47,7 @@
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
     <span class="material-symbols-outlined text-3xl">error</span>
     <div>
-        <h3 class="font-bold text-lg">Student record not found</h3>
+        <h3 class="font-black text-lg">Student record not found</h3>
         <p class="text-sm">Please contact administration.</p>
     </div>
 </div>
@@ -57,22 +57,22 @@
 <section class="relative mb-24 grid grid-cols-1 items-center gap-16 lg:grid-cols-2 mt-8">
     <div class="relative order-2 lg:order-1">
         <div class="flex flex-col gap-4 mb-8">
-            <span class="inline-flex w-fit items-center rounded-full bg-accent-gold/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-accent-gold">Scholar ID #{{ student.admission_number }}</span>
+            <span class="inline-flex w-fit items-center rounded-full bg-accent-gold/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.3em] text-accent-gold">Scholar ID #{{ student.admission_number }}</span>
             <h1 class="shadcn-h1 text-primary leading-[0.85] premium-text-gradient">
                 {{ student.first_name }} <br/>
                 <span class="text-accent-gold">{{ student.last_name }}</span>
             </h1>
         </div>
         <p class="max-w-md text-lg leading-relaxed text-primary/60 mb-10 font-light">
-            Enrolled in Class <span class="font-bold text-primary">{{ student.class_name }}</span>. 
+            Enrolled in Class <span class="font-black text-primary">{{ student.class_name }}</span>. 
             Academic Session 2026.
         </p>
         <div class="flex flex-wrap gap-6">
-            <a href="{{ url_for('student.grades') }}" class="micro-interaction flex h-14 items-center justify-center gap-3 rounded-full bg-primary px-10 text-xs font-bold uppercase tracking-[0.2em] text-bone-white shadow-2xl shadow-primary/20 transition-all">
+            <a href="{{ url_for('student.grades') }}" class="micro-interaction flex h-14 items-center justify-center gap-3 rounded-full bg-primary px-10 text-xs font-black uppercase tracking-[0.2em] text-bone-white shadow-2xl shadow-primary/20 transition-all">
                 <span class="material-symbols-outlined text-sm">visibility</span>
                 View Transcript
             </a>
-            <a href="{{ url_for('student.assignments') }}" class="micro-interaction flex h-14 items-center justify-center gap-3 rounded-full border border-slate-200 bg-white/50 px-10 text-xs font-bold uppercase tracking-[0.2em] text-primary transition-all hover:bg-white">
+            <a href="{{ url_for('student.assignments') }}" class="micro-interaction flex h-14 items-center justify-center gap-3 rounded-full border border-slate-200 bg-white/50 px-10 text-xs font-black uppercase tracking-[0.2em] text-primary transition-all hover:bg-white">
                 <span class="material-symbols-outlined text-sm">assignment</span>
                 Check Tasks
             </a>
@@ -95,7 +95,7 @@
                         <span class="material-symbols-outlined text-xl">how_to_reg</span>
                     </div>
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Attendance</p>
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Attendance</p>
                         <p class="shadcn-h3 text-primary">{{ attendance_pct }}%</p>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
         <section>
             <div class="mb-12 flex items-center justify-between border-b border-primary/5 pb-6">
                 <h3 class="shadcn-h3 text-primary italic">Academic Record</h3>
-                <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-primary/30 hidden sm:block">Curated Snapshot</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary/30 hidden sm:block">Curated Snapshot</span>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -121,8 +121,8 @@
                         <span class="material-symbols-outlined">class</span>
                     </div>
                     <div>
-                        <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mb-2">Class Assignment</h4>
-                        <p class="font-serif-title text-2xl font-bold text-primary">Grade {{ student.class_name }}</p>
+                        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 mb-2">Class Assignment</h4>
+                        <p class="font-serif-title text-2xl font-black text-primary">Grade {{ student.class_name }}</p>
                     </div>
                 </div>
                 <div class="group relative flex flex-col gap-6 rounded-[2rem] border border-primary/5 bg-white/60 p-10 transition-all hover:border-accent-gold/30 hover:-translate-y-1">
@@ -130,8 +130,8 @@
                         <span class="material-symbols-outlined">pin</span>
                     </div>
                     <div>
-                        <h4 class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mb-2">Roll Number</h4>
-                        <p class="font-serif-title text-2xl font-bold text-primary">{{ student.roll_number or 'Pending' }}</p>
+                        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 mb-2">Roll Number</h4>
+                        <p class="font-serif-title text-2xl font-black text-primary">{{ student.roll_number or 'Pending' }}</p>
                     </div>
                 </div>
             </div>
@@ -139,17 +139,17 @@
             <div class="mt-12 flex flex-wrap gap-8 items-center justify-around rounded-[2.5rem] bg-primary/5 p-10 md:py-12 md:px-6">
                 <div class="text-center w-full sm:w-auto">
                     <p class="text-5xl font-serif-title font-black text-primary tracking-tighter">{{ scores_count }}</p>
-                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mt-3">Tests Taken</p>
+                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 mt-3">Tests Taken</p>
                 </div>
                 <div class="h-px w-full sm:h-14 sm:w-px bg-primary/10"></div>
                 <div class="text-center w-full sm:w-auto">
                     <p class="text-5xl font-serif-title font-black text-primary tracking-tighter">{{ hw_done }}</p>
-                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mt-3">Tasks Done</p>
+                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 mt-3">Tasks Done</p>
                 </div>
                 <div class="h-px w-full sm:h-14 sm:w-px bg-primary/10"></div>
                 <div class="text-center w-full sm:w-auto">
                     <p class="text-5xl font-serif-title font-black text-accent-gold tracking-tighter">{{ attendance_pct }}%</p>
-                    <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 mt-3">Presence</p>
+                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 mt-3">Presence</p>
                 </div>
             </div>
         </section>
@@ -169,16 +169,16 @@
                     <div class="gold-path w-full"></div>
                     <div class="mt-8 grid grid-cols-3 gap-6">
                         <div class="flex flex-col gap-2">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-accent-gold">Term I</span>
-                            <span class="text-sm font-bold text-primary">Foundation</span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-accent-gold">Term I</span>
+                            <span class="text-sm font-black text-primary">Foundation</span>
                         </div>
                         <div class="flex flex-col gap-2">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-accent-gold">Term II</span>
-                            <span class="text-sm font-bold text-primary">Core Concepts</span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-accent-gold">Term II</span>
+                            <span class="text-sm font-black text-primary">Core Concepts</span>
                         </div>
                         <div class="flex flex-col gap-2 text-right">
-                            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40">Finals</span>
-                            <span class="text-sm font-bold text-primary/40">Advancement</span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40">Finals</span>
+                            <span class="text-sm font-black text-primary/40">Advancement</span>
                         </div>
                     </div>
                 </div>
@@ -192,38 +192,38 @@
         <div class="sticky top-32 space-y-12">
             
             <section class="bg-white/60 p-8 rounded-[2rem] border border-primary/5">
-                <h3 class="mb-8 text-[12px] font-bold uppercase tracking-[0.4em] text-accent-gold">Personal Data</h3>
+                <h3 class="mb-8 text-[12px] font-black uppercase tracking-[0.4em] text-accent-gold">Personal Data</h3>
                 <div class="space-y-6">
                     <div class="group border-b border-primary/5 pb-6">
-                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Email Address</p>
-                        <p class="text-sm font-bold text-primary group-hover:text-accent-gold transition-colors break-all">{{ student.email or '—' }}</p>
+                        <p class="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Email Address</p>
+                        <p class="text-sm font-black text-primary group-hover:text-accent-gold transition-colors break-all">{{ student.email or '—' }}</p>
                     </div>
                     <div class="group border-b border-primary/5 pb-6">
-                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Phone Contact</p>
-                        <p class="text-sm font-bold text-primary">{{ student.phone or '—' }}</p>
+                        <p class="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Phone Contact</p>
+                        <p class="text-sm font-black text-primary">{{ student.phone or '—' }}</p>
                     </div>
                     <div class="group border-b border-primary/5 pb-6">
-                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Date of Birth</p>
-                        <p class="text-sm font-bold text-primary">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</p>
+                        <p class="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Date of Birth</p>
+                        <p class="text-sm font-black text-primary">{{ student.date_of_birth.strftime('%d %B %Y') if student.date_of_birth else '—' }}</p>
                     </div>
                     <div class="group border-b border-primary/5 pb-6">
-                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Gender</p>
-                        <p class="text-sm font-bold text-primary">{% if student.gender == 'M' %}Male{% elif student.gender == 'F' %}Female{% else %}{{ student.gender or '—' }}{% endif %}</p>
+                        <p class="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Gender</p>
+                        <p class="text-sm font-black text-primary">{% if student.gender == 'M' %}Male{% elif student.gender == 'F' %}Female{% else %}{{ student.gender or '—' }}{% endif %}</p>
                     </div>
                     <div class="group">
-                        <p class="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-primary/40">Residential Address</p>
-                        <p class="text-sm font-bold text-primary leading-relaxed">{{ student.address or '—' }}</p>
+                        <p class="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary/40">Residential Address</p>
+                        <p class="text-sm font-black text-primary leading-relaxed">{{ student.address or '—' }}</p>
                     </div>
                 </div>
             </section>
 
             <section class="glass-panel space-y-6 rounded-[2rem] p-8 bg-white/40">
-                <h4 class="text-[11px] font-bold uppercase tracking-[0.3em] text-primary/40 mb-4">Account Status</h4>
-                <div class="flex items-center justify-between text-xs font-bold">
+                <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-primary/40 mb-4">Account Status</h4>
+                <div class="flex items-center justify-between text-xs font-black">
                     <span class="text-primary/70">Portal Access</span>
                     <span class="rounded-full bg-emerald-500/10 px-4 py-1.5 text-[9px] font-black uppercase tracking-widest text-emerald-600">Active</span>
                 </div>
-                <div class="flex items-center justify-between text-xs font-bold mt-4">
+                <div class="flex items-center justify-between text-xs font-black mt-4">
                     <span class="text-primary/70">Admission Date</span>
                     <span class="text-primary font-medium">{{ student.admission_date.strftime('%b %Y') if student.admission_date else '—' }}</span>
                 </div>

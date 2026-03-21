@@ -13,7 +13,7 @@
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
     <span class="material-symbols-outlined text-3xl">error</span>
     <div>
-        <h3 class="font-bold text-lg">Student record not found</h3>
+        <h3 class="font-black text-lg">Student record not found</h3>
         <p class="text-sm">Please contact administration.</p>
     </div>
 </div>
@@ -22,12 +22,12 @@
 <!-- Hero Title Section -->
 <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
     <div class="max-w-2xl">
-        <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Homework & Tests</span>
+        <span class="text-accent-gold font-black tracking-widest uppercase text-xs">Homework & Tests</span>
         <h1 class="shadcn-h1 text-primary mt-2">Assignments</h1>
         <p class="text-slate-600 text-xl mt-4 font-light leading-relaxed italic">Manage your assignments, track your submissions, and prepare for upcoming evaluations.</p>
     </div>
     <div class="flex gap-3">
-        <button class="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+        <button class="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-black shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
             <span class="material-symbols-outlined text-xl">file_download</span>
             Download Syllabus
         </button>
@@ -38,7 +38,7 @@
 <div class="mb-10 flex flex-wrap items-center gap-4 p-2 bg-white/50 rounded-2xl border border-slate-200 shadow-sm">
     <div class="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2">
         <span class="material-symbols-outlined text-primary text-lg">filter_list</span>
-        <span class="text-sm font-bold text-primary">Views</span>
+        <span class="text-sm font-black text-primary">Views</span>
     </div>
     <div class="h-6 w-[1px] bg-primary/10 hidden md:block"></div>
     <button id="hwTabBtn" onclick="switchTab('hw')" class="px-5 py-2 rounded-xl text-sm font-medium bg-primary text-white shadow-md transition-all">Assignments ({{ pending|length }})</button>
@@ -57,10 +57,10 @@
                 </div>
                 <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Term 1</span>
             </div>
-            <h4 class="text-xl font-bold text-slate-900 mb-1">Physics</h4>
+            <h4 class="text-xl font-black text-slate-900 mb-1">Physics</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Quantum & Electrodynamics</p>
             <div class="mt-auto">
-                <div class="flex justify-between text-xs font-bold mb-2">
+                <div class="flex justify-between text-xs font-black mb-2">
                     <span class="secondary-label text-slate-500 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-primary">68%</span>
                 </div>
@@ -77,10 +77,10 @@
                 </div>
                 <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Term 1</span>
             </div>
-            <h4 class="text-xl font-bold text-slate-900 mb-1">Chemistry</h4>
+            <h4 class="text-xl font-black text-slate-900 mb-1">Chemistry</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Organic & Physical Chem</p>
             <div class="mt-auto">
-                <div class="flex justify-between text-xs font-bold mb-2">
+                <div class="flex justify-between text-xs font-black mb-2">
                     <span class="secondary-label text-slate-500 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-accent-gold">45%</span>
                 </div>
@@ -97,10 +97,10 @@
                 </div>
                 <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Annual</span>
             </div>
-            <h4 class="text-xl font-bold text-slate-900 mb-1">Mathematics</h4>
+            <h4 class="text-xl font-black text-slate-900 mb-1">Mathematics</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Calculus & Geometry</p>
             <div class="mt-auto">
-                <div class="flex justify-between text-xs font-bold mb-2">
+                <div class="flex justify-between text-xs font-black mb-2">
                     <span class="secondary-label text-slate-400 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-primary">82%</span>
                 </div>
@@ -117,10 +117,10 @@
                 </div>
                 <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Annual</span>
             </div>
-            <h4 class="text-xl font-bold text-slate-900 mb-1">English</h4>
+            <h4 class="text-xl font-black text-slate-900 mb-1">English</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Literature & Composition</p>
             <div class="mt-auto">
-                <div class="flex justify-between text-xs font-bold mb-2">
+                <div class="flex justify-between text-xs font-black mb-2">
                     <span class="secondary-label text-slate-400 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-slate-400">30%</span>
                 </div>
@@ -153,7 +153,7 @@
                             <span class="material-symbols-outlined">description</span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h5 class="font-bold text-slate-800 text-sm truncate" title="{{ hw.title }}">{{ hw.title }}</h5>
+                            <h5 class="font-black text-slate-800 text-sm truncate" title="{{ hw.title }}">{{ hw.title }}</h5>
                             <p class="text-xs text-slate-400">{{ hw.subject_name }} • Due: {{ hw.deadline.strftime('%b %d') }}</p>
                         </div>
                         <span class="material-symbols-outlined ml-auto text-slate-300 group-hover:text-primary transition-colors">upload_file</span>
@@ -176,13 +176,13 @@
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="shadcn-h3 text-primary">Recent Submissions</h3>
                     <div class="flex gap-2">
-                        <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase tracking-tighter">{{ completed|length }} Completed</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-full uppercase tracking-tighter">{{ completed|length }} Completed</span>
                     </div>
                 </div>
                 {% if completed %}
                 <div class="bg-white rounded-xl border border-primary/10 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm min-w-[600px]">
-                        <thead class="bg-primary/5 border-b border-primary/10 uppercase text-[10px] font-bold tracking-widest text-primary/60">
+                        <thead class="bg-primary/5 border-b border-primary/10 uppercase text-[10px] font-black tracking-widest text-primary/60">
                             <tr>
                                 <th class="px-6 py-4">Title</th>
                                 <th class="px-6 py-4">Subject</th>
@@ -196,12 +196,12 @@
                                 <td class="px-6 py-4 font-semibold text-slate-800 max-w-xs truncate" title="{{ hw.title }}">{{ hw.title }}</td>
                                 <td class="px-6 py-4 text-slate-500 italic">{{ hw.subject_name }}</td>
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center gap-2 text-green-600 font-bold">
+                                    <div class="flex items-center justify-center gap-2 text-green-600 font-black">
                                         <span class="material-symbols-outlined text-lg">check_circle</span>
                                         {{ hw.submission_status }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center font-bold text-primary">{{ hw.grade or '—' }}</td>
+                                <td class="px-6 py-4 text-center font-black text-primary">{{ hw.grade or '—' }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -223,7 +223,7 @@
                         <p class="text-white/70 mb-6 text-sm leading-relaxed">You have {{ pending|length }} tasks pending and {{ completed|length }} tasks completed this term.</p>
                         
                         <div class="mb-4">
-                            <div class="flex justify-between text-xs font-bold mb-2">
+                            <div class="flex justify-between text-xs font-black mb-2">
                                 <span class="text-white/60 uppercase tracking-widest text-[10px]">Completion Rate</span>
                                 {% set total = pending|length + completed|length %}
                                 {% set pct = (completed|length / total * 100) if total > 0 else 0 %}
@@ -264,12 +264,12 @@
                             <div class="size-12 rounded-lg flex items-center justify-center {% if days_until <= 2 %}bg-red-50 text-red-600{% else %}bg-primary/5 text-primary{% endif %}">
                                 <span class="material-symbols-outlined">quiz</span>
                             </div>
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2 py-1 bg-slate-50 rounded">{{ test.test_type }}</span>
+                            <span class="text-xs font-black text-slate-400 uppercase tracking-widest px-2 py-1 bg-slate-50 rounded">{{ test.test_type }}</span>
                         </div>
-                        <h5 class="font-bold text-slate-800 text-lg mb-1">{{ test.name }}</h5>
+                        <h5 class="font-black text-slate-800 text-lg mb-1">{{ test.name }}</h5>
                         <p class="text-sm text-slate-500 mb-4">{{ test.subject_name }}</p>
                         <div class="mt-auto flex items-center justify-between">
-                            <span class="text-xs font-bold {% if days_until <= 2 %}text-red-500{% else %}text-primary{% endif %}">
+                            <span class="text-xs font-black {% if days_until <= 2 %}text-red-500{% else %}text-primary{% endif %}">
                                 {% if days_until == 0 %}Today{% elif days_until == 1 %}Tomorrow{% else %}In {{ days_until }} days{% endif %}
                             </span>
                             <span class="text-xs font-medium text-slate-400">{{ test.test_date.strftime('%b %d') }}</span>
@@ -293,7 +293,7 @@
                 {% if scores %}
                 <div class="bg-white rounded-xl border border-primary/10 overflow-x-auto shadow-sm">
                     <table class="w-full text-left text-sm min-w-[600px]">
-                        <thead class="bg-primary/5 border-b border-primary/10 uppercase text-[10px] font-bold tracking-widest text-primary/60">
+                        <thead class="bg-primary/5 border-b border-primary/10 uppercase text-[10px] font-black tracking-widest text-primary/60">
                             <tr>
                                 <th class="px-6 py-4">Test Name</th>
                                 <th class="px-6 py-4">Subject</th>
@@ -306,11 +306,11 @@
                             <tr class="hover:bg-primary/5 transition-colors">
                                 <td class="px-6 py-4 font-semibold text-slate-800">{{ s.test_name }}</td>
                                 <td class="px-6 py-4 text-slate-500 italic">{{ s.subject_name }}</td>
-                                <td class="px-6 py-4 text-center font-bold text-primary">{{ s.marks_obtained }} / {{ s.max_marks }}</td>
+                                <td class="px-6 py-4 text-center font-black text-primary">{{ s.marks_obtained }} / {{ s.max_marks }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center">
                                         {% if s.grade %}
-                                        <span class="px-3 py-1 font-bold rounded-full text-xs {% if s.grade in ['A+', 'A'] %}bg-green-100 text-green-700{% elif s.grade in ['B+', 'B'] %}bg-blue-100 text-blue-700{% elif s.grade in ['C+', 'C'] %}bg-amber-100 text-amber-700{% else %}bg-red-100 text-red-700{% endif %}">
+                                        <span class="px-3 py-1 font-black rounded-full text-xs {% if s.grade in ['A+', 'A'] %}bg-green-100 text-green-700{% elif s.grade in ['B+', 'B'] %}bg-blue-100 text-blue-700{% elif s.grade in ['C+', 'C'] %}bg-amber-100 text-amber-700{% else %}bg-red-100 text-red-700{% endif %}">
                                             {{ s.grade }}
                                         </span>
                                         {% else %}
@@ -339,11 +339,11 @@
                             <div class="size-8 bg-primary/10 rounded flex items-center justify-center text-primary">
                                 <span class="material-symbols-outlined text-lg">folder_open</span>
                             </div>
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Shared Drive</span>
+                            <span class="text-xs font-black text-slate-400 uppercase tracking-widest">Shared Drive</span>
                         </div>
-                        <h6 class="font-bold text-slate-800 mb-2">Previous Year Papers</h6>
+                        <h6 class="font-black text-slate-800 mb-2">Previous Year Papers</h6>
                         <p class="text-xs text-slate-500 leading-relaxed mb-4 italic">Access archive of past question papers for all subjects.</p>
-                        <div class="flex items-center gap-2 text-accent-gold font-bold text-xs">
+                        <div class="flex items-center gap-2 text-accent-gold font-black text-xs">
                             View Archive <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </div>
                     </div>

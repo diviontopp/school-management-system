@@ -200,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             cell.className = classes;
             cell.innerText = day;
+            cell.style.fontFamily = "'Inter', sans-serif";
+            cell.style.fontWeight = "900";
             
             if (status) {
                 const dot = document.createElement('div');

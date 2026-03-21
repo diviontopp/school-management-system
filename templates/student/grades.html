@@ -31,7 +31,7 @@
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
     <span class="material-symbols-outlined text-3xl">error</span>
     <div>
-        <h3 class="font-bold text-lg">Student record not found</h3>
+        <h3 class="font-black text-lg">Student record not found</h3>
         <p class="text-sm">Please contact administration.</p>
     </div>
 </div>
@@ -40,12 +40,12 @@
 <!-- Hero Section -->
 <section class="flex flex-col md:flex-row justify-between items-end gap-8 border-b border-slate-200 pb-12 mb-12">
     <div class="space-y-4">
-        <div class="inline-block px-4 py-1 rounded-full bg-accent-gold/10 text-accent-gold text-xs font-bold tracking-widest uppercase">Performance Hub</div>
+        <div class="inline-block px-4 py-1 rounded-full bg-accent-gold/10 text-accent-gold text-xs font-black tracking-widest uppercase">Performance Hub</div>
         <h1 class="shadcn-h1 text-primary">Exam <span class="text-accent-gold">Results</span></h1>
         <p class="text-lg text-slate-600 max-w-xl font-light">Sophisticated academic tracking and preparation repository for your examinations and results.</p>
     </div>
     <div class="flex gap-4">
-        <button class="flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
+        <button class="flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-black hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
             <span class="material-symbols-outlined text-sm">download</span>
             <span>Cumulative Transcript</span>
         </button>
@@ -71,19 +71,19 @@
             <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
                 <div class="w-32 h-32 rounded-full border-4 border-white/20 flex flex-col items-center justify-center bg-white/5 shrink-0 backdrop-blur-sm">
                     <span class="shadcn-h1 text-accent-gold">{{ avg_grade }}</span>
-                    <span class="text-xs font-bold uppercase tracking-widest text-white/60 mt-2">Overall Grade</span>
+                    <span class="text-xs font-black uppercase tracking-widest text-white/60 mt-2">Overall Grade</span>
                 </div>
                 <div class="text-center md:text-left">
                     <h3 class="shadcn-h3 text-white mb-3">{{ student.first_name }}'s Academic Profile</h3>
-                    <p class="text-white/80 font-medium mb-6 text-lg">You have an aggregate percentage of <span class="text-accent-gold font-bold">{{ avg_pct }}%</span> across all subjects.</p>
+                    <p class="text-white/80 font-medium mb-6 text-lg">You have an aggregate percentage of <span class="text-accent-gold font-black">{{ avg_pct }}%</span> across all subjects.</p>
                     <div class="flex flex-wrap justify-center md:justify-start gap-4">
                         <div class="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
-                            <span class="block text-xs uppercase tracking-widest text-white/50 font-bold mb-1">Total Tests</span>
-                            <span class="text-xl font-bold">{{ scores|length }}</span>
+                            <span class="block text-xs uppercase tracking-widest text-white/50 font-black mb-1">Total Tests</span>
+                            <span class="text-xl font-black">{{ scores|length }}</span>
                         </div>
                         <div class="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
-                            <span class="block text-xs uppercase tracking-widest text-white/50 font-bold mb-1">Subjects Tracked</span>
-                            <span class="text-xl font-bold">{{ by_subject.keys()|length }}</span>
+                            <span class="block text-xs uppercase tracking-widest text-white/50 font-black mb-1">Subjects Tracked</span>
+                            <span class="text-xl font-black">{{ by_subject.keys()|length }}</span>
                         </div>
                     </div>
                 </div>
@@ -97,10 +97,10 @@
                 <div class="absolute inset-0 bg-slate-50 rotate-45 transform scale-75 border-2 border-slate-200"></div>
                 <div class="absolute inset-0 bg-accent-gold/10 rotate-12 transform scale-90 border-2 border-accent-gold/30"></div>
                 <span class="material-symbols-outlined text-6xl text-primary/40">radar</span>
-                <span class="absolute top-0 -mt-2 font-bold text-xs uppercase tracking-widest text-primary bg-white px-2 rounded-full">Excellence</span>
-                <span class="absolute bottom-0 -mb-2 font-bold text-[10px] uppercase tracking-widest text-primary bg-white px-2 rounded-full">Foundation</span>
+                <span class="absolute top-0 -mt-2 font-black text-xs uppercase tracking-widest text-primary bg-white px-2 rounded-full">Excellence</span>
+                <span class="absolute bottom-0 -mb-2 font-black text-[10px] uppercase tracking-widest text-primary bg-white px-2 rounded-full">Foundation</span>
             </div>
-            <p class="mt-6 text-xs text-center font-bold text-primary/40 tracking-widest uppercase relative z-10">Competency Radar</p>
+            <p class="mt-6 text-xs text-center font-black text-primary/40 tracking-widest uppercase relative z-10">Competency Radar</p>
         </div>
     </section>
 
@@ -113,24 +113,24 @@
             <div class="min-w-[360px] bg-white p-8 rounded-xl border border-primary/5 shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between h-64 {% if loop.index0 % 2 == 0 %}border-l-4 border-l-accent-gold{% else %}border-l-4 border-l-primary{% endif %}">
                 <div class="flex justify-between items-start">
                     <div>
-                        <h6 class="font-bold text-primary text-lg truncate w-48" title="{{ s.test_name }}">{{ s.test_name }}</h6>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-tighter mt-1">{{ s.subject_name }}</p>
+                        <h6 class="font-black text-primary text-lg truncate w-48" title="{{ s.test_name }}">{{ s.test_name }}</h6>
+                        <p class="text-xs text-slate-400 font-black uppercase tracking-tighter mt-1">{{ s.subject_name }}</p>
                         <p class="text-xs text-slate-400 mt-1">{{ s.test_date.strftime('%d %b %Y') }}</p>
                     </div>
                     <div class="text-right">
                         <div class="text-3xl font-serif-title {% if loop.index0 % 2 == 0 %}text-accent-gold{% else %}text-primary{% endif %}">{{ s.grade or '—' }}</div>
-                        <p class="text-[10px] font-bold text-slate-400">GRADE</p>
+                        <p class="text-[10px] font-black text-slate-400">GRADE</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between border-t border-primary/5 pt-6 mt-auto">
                     <div class="flex gap-8">
                         <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Score</p>
-                            <p class="font-bold text-lg {{ 'text-accent-gold' if loop.index0 % 2 == 0 else 'text-primary' }}">{{ s.marks_obtained }}<span class="text-sm font-normal text-slate-400">/{{ s.max_marks }}</span></p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Score</p>
+                            <p class="font-black text-lg {{ 'text-accent-gold' if loop.index0 % 2 == 0 else 'text-primary' }}">{{ s.marks_obtained }}<span class="text-sm font-normal text-slate-400">/{{ s.max_marks }}</span></p>
                         </div>
                         <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Percentage</p>
-                            <p class="font-bold text-lg {{ 'text-primary' if loop.index0 % 2 == 0 else 'text-accent-gold' }}">{{ pct }}%</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Percentage</p>
+                            <p class="font-black text-lg {{ 'text-primary' if loop.index0 % 2 == 0 else 'text-accent-gold' }}">{{ pct }}%</p>
                         </div>
                     </div>
                 </div>
@@ -138,8 +138,8 @@
             {% endfor %}
             <div class="min-w-[360px] bg-white/40 p-8 rounded-xl border-2 border-dashed border-primary/10 flex flex-col justify-center items-center h-64 opacity-60">
                 <span class="material-symbols-outlined text-4xl text-primary/20 mb-2">lock_clock</span>
-                <p class="font-bold text-primary/40">Upcoming Results Pending</p>
-                <p class="text-xs text-primary/30 mt-1 uppercase tracking-widest font-bold">Keep working hard</p>
+                <p class="font-black text-primary/40">Upcoming Results Pending</p>
+                <p class="text-xs text-primary/30 mt-1 uppercase tracking-widest font-black">Keep working hard</p>
             </div>
         </div>
     </section>
@@ -159,7 +159,7 @@
                     <div class="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-white/40 to-transparent"></div>
                     <div class="flex items-center gap-4 relative z-10">
                         <div class="w-2 h-10 rounded-full bg-accent-gold"></div>
-                        <h4 class="font-bold text-xl text-primary">{{ subject }}</h4>
+                        <h4 class="font-black text-xl text-primary">{{ subject }}</h4>
                     </div>
                     {% set ns = namespace(total=0, max=0, count=0) %}
                     {% for s in subject_scores %}
@@ -171,7 +171,7 @@
                     {% endfor %}
                     {% if ns.max > 0 %}
                     <div class="text-right relative z-10">
-                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Subject Avg</span>
+                        <span class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Subject Avg</span>
                         <span class="shadcn-h3 text-primary">{{ (ns.total / ns.max * 100)|round|int }}%</span>
                     </div>
                     {% endif %}
@@ -184,11 +184,11 @@
                     <div class="group">
                         <div class="flex justify-between items-start mb-3">
                             <div>
-                                <h5 class="font-bold text-slate-800 text-sm group-hover:text-primary transition-colors">{{ s.test_name }}</h5>
+                                <h5 class="font-black text-slate-800 text-sm group-hover:text-primary transition-colors">{{ s.test_name }}</h5>
                                 <p class="text-xs text-slate-500 font-medium mt-1">{{ s.test_type }} • {{ s.test_date.strftime('%d %b %Y') }}</p>
                             </div>
                             <div class="text-right">
-                                <span class="font-bold text-primary text-base">{{ s.marks_obtained }}</span>
+                                <span class="font-black text-primary text-base">{{ s.marks_obtained }}</span>
                                 <span class="text-xs text-slate-400 font-medium">/ {{ s.max_marks }}</span>
                             </div>
                         </div>
@@ -199,9 +199,9 @@
                                 <div class="bg-accent-gold h-full rounded-full transition-all duration-1000 w-0" data-width="{{ pct }}"></div>
                             </div>
                             {% if s.grade %}
-                            <span class="px-3 py-1 shrink-0 rounded-full border border-primary/10 bg-white text-primary font-bold text-xs shadow-sm">{{ s.grade }}</span>
+                            <span class="px-3 py-1 shrink-0 rounded-full border border-primary/10 bg-white text-primary font-black text-xs shadow-sm">{{ s.grade }}</span>
                             {% else %}
-                            <span class="px-3 py-1 shrink-0 rounded-full border border-slate-100 bg-slate-50 text-slate-400 font-bold text-xs">—</span>
+                            <span class="px-3 py-1 shrink-0 rounded-full border border-slate-100 bg-slate-50 text-slate-400 font-black text-xs">—</span>
                             {% endif %}
                         </div>
                         
@@ -226,7 +226,7 @@
     <div class="absolute inset-0 spider-grid rounded-2xl"></div>
     <div class="relative z-10">
         <span class="material-symbols-outlined text-8xl text-primary/20 mb-6 block">analytics</span>
-        <h3 class="font-serif-title text-4xl text-primary font-bold mb-4">No Records Found</h3>
+        <h3 class="font-serif-title text-4xl text-primary font-black mb-4">No Records Found</h3>
         <p class="text-slate-500 font-medium text-lg">Your academic performance analytics will appear here once tests are graded.</p>
     </div>
 </div>

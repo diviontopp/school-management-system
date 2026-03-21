@@ -29,8 +29,8 @@
                 <h3 class="shadcn-h3 text-primary italic mt-1">Teacher Remarks</h3>
             </div>
             <div class="flex gap-2">
-                <button class="px-5 py-2.5 rounded-full border border-slate-200 text-xs font-bold text-primary hover:bg-white transition-all">Archive</button>
-                <button class="px-5 py-2.5 rounded-full bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20 transition-all">Latest</button>
+                <button class="px-5 py-2.5 rounded-full border border-slate-200 text-xs font-black text-primary hover:bg-white transition-all">Archive</button>
+                <button class="px-5 py-2.5 rounded-full bg-primary text-white text-xs font-black shadow-lg shadow-primary/20 transition-all">Latest</button>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             <div class="bg-white/60 rounded-xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all group">
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <span class="text-xs uppercase tracking-widest text-accent-gold font-bold px-4 py-1.5 bg-accent-gold/10 rounded-full">{{ remark.subject_name or 'General' }}</span>
+                        <span class="text-xs uppercase tracking-widest text-accent-gold font-black px-4 py-1.5 bg-accent-gold/10 rounded-full">{{ remark.subject_name or 'General' }}</span>
                         <p class="shadcn-h3 text-primary mt-3">{{ remark.date.strftime('%A, %d %b %Y') }}</p>
                     </div>
                     <span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors cursor-pointer">more_horiz</span>
@@ -50,20 +50,20 @@
                     <div class="p-6 rounded-2xl bg-bone-white border-l-4 border-primary">
                         <div class="flex items-center gap-3 mb-3">
                             <span class="material-symbols-outlined text-primary text-sm">chat_bubble</span>
-                            <h4 class="text-xs font-bold text-primary uppercase tracking-widest">Teacher's Remark</h4>
+                            <h4 class="text-xs font-black text-primary uppercase tracking-widest">Teacher's Remark</h4>
                         </div>
                         <p class="text-slate-700 text-base leading-relaxed font-medium italic">"{{ remark.remark }}"</p>
-                        <p class="text-xs text-slate-500 mt-3 font-bold uppercase tracking-widest">— {{ remark.teacher_name }}</p>
+                        <p class="text-xs text-slate-500 mt-3 font-black uppercase tracking-widest">— {{ remark.teacher_name }}</p>
                     </div>
                     
                     <div class="flex items-center gap-6 px-2">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-slate-500 text-sm">visibility</span>
-                            <span class="text-xs font-bold text-slate-500 uppercase">Seen</span>
+                            <span class="text-xs font-black text-slate-500 uppercase">Seen</span>
                         </div>
                         <button class="flex items-center gap-2 hover:text-accent-gold transition-colors">
                             <span class="material-symbols-outlined text-slate-500 text-sm">reply</span>
-                            <span class="text-xs font-bold text-slate-500 uppercase">Respond</span>
+                            <span class="text-xs font-black text-slate-500 uppercase">Respond</span>
                         </button>
                     </div>
                 </div>
@@ -93,8 +93,8 @@
                     {% if notices %}
                         {% for notice in notices %}
                         <div class="group/item cursor-pointer">
-                            <p class="text-[10px] text-accent-gold font-bold uppercase tracking-[0.2em] mb-1">{{ notice.posted_at.strftime('%d %b') }}</p>
-                            <p class="text-base font-bold text-bone-white/90 group-hover/item:text-accent-gold transition-colors leading-snug">{{ notice.title }}</p>
+                            <p class="text-[10px] text-accent-gold font-black uppercase tracking-[0.2em] mb-1">{{ notice.posted_at.strftime('%d %b') }}</p>
+                            <p class="text-base font-black text-bone-white/90 group-hover/item:text-accent-gold transition-colors leading-snug">{{ notice.title }}</p>
                             <div class="h-px w-full bg-white/10 mt-5"></div>
                         </div>
                         {% endfor %}
@@ -102,7 +102,7 @@
                         <p class="text-white/40 italic text-sm">No active notices at the moment.</p>
                     {% endif %}
                 </div>
-                <button class="w-full mt-8 py-4 rounded-full border border-white/20 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all text-bone-white">Explore Full Archive</button>
+                <button class="w-full mt-8 py-4 rounded-full border border-white/20 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all text-bone-white">Explore Full Archive</button>
             </div>
             <!-- Decorative blur -->
             <div class="absolute -right-10 -bottom-10 size-48 bg-white/5 rounded-full blur-3xl transition-transform duration-1000 group-hover:scale-150"></div>
@@ -124,7 +124,7 @@ Upcoming Meeting</p>
                     <p class="shadcn-h3 text-primary">Winter Meet '26</p>
                     <p class="text-xs text-slate-500 mt-1 font-medium italic">Progress Review & Goal Setting</p>
                 </div>
-                <button class="w-full py-5 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">Request Appointment</button>
+                <button class="w-full py-5 rounded-full bg-primary text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">Request Appointment</button>
             </section>
 
             <!-- Leave Portal -->
@@ -138,9 +138,9 @@ Upcoming Meeting</p>
                 <div class="flex flex-col gap-4">
                     <div class="p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 flex flex-col items-center justify-center group/upload hover:border-accent-gold transition-all cursor-pointer">
                         <span class="material-symbols-outlined text-primary/30 group-hover/upload:text-accent-gold transition-colors mb-2">upload_file</span>
-                        <p class="text-xs font-bold text-slate-500 group-hover/upload:text-accent-gold transition-colors uppercase tracking-widest">Medical / Duty Slip</p>
+                        <p class="text-xs font-black text-slate-500 group-hover/upload:text-accent-gold transition-colors uppercase tracking-widest">Medical / Duty Slip</p>
                     </div>
-                    <button class="w-full py-5 rounded-full bg-accent-gold text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent-gold/90 transition-all shadow-xl shadow-accent-gold/20">Launch Leave Portal</button>
+                    <button class="w-full py-5 rounded-full bg-accent-gold text-white text-xs font-black uppercase tracking-[0.2em] hover:bg-accent-gold/90 transition-all shadow-xl shadow-accent-gold/20">Launch Leave Portal</button>
                 </div>
             </section>
         </div>
