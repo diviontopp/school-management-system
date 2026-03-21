@@ -116,72 +116,86 @@
 <!-- (Mobile layout elements removed in favor of universal toggle) -->
 
 <!-- Left Sidebar Navigation -->
-<!-- ══════════ Premium Zinc Dark Sidebar ══════════ -->
-<aside id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-[#09090b] border-r border-slate-800 z-[100] flex flex-col transition-transform duration-300 transform -translate-x-full shadow-2xl font-sans">
-    <!-- Sidebar Header -->
-    <div class="px-6 py-8 flex items-center gap-3 border-b border-slate-800/60 mb-2">
-        <div class="size-9 bg-gradient-to-br from-slate-700 to-slate-900 border border-slate-600 rounded-lg flex items-center justify-center text-white shrink-0 shadow-inner">
-            <span class="material-symbols-outlined text-[20px]">school</span>
-        </div>
-        <div class="flex flex-col min-w-0">
-            <span class="font-bold text-sm tracking-tight text-white truncate" style="font-family: 'Playfair Display', serif;">Scholaris</span>
-            <span class="text-[9px] text-slate-400 font-black uppercase tracking-widest truncate">Academy Portal</span>
-        </div>
+<!-- ══════════ Editorial / Maximalist Sidebar (Frontend-Design Skill) ══════════ -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-80 bg-[#070707] border-r border-[#1C1C1C] z-[100] flex flex-col transition-transform duration-700 ease-[cubic-bezier(0.83,0,0.17,1)] transform -translate-x-full text-[#E5E5E5] shadow-2xl overflow-hidden">
+    
+    <!-- Massive Branding Header -->
+    <div class="px-8 pt-12 pb-10 border-b border-[#1C1C1C] relative group cursor-default">
+        <div class="absolute inset-0 bg-[#E5E5E5] transform -translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.83,0,0.17,1)] z-0"></div>
+        <h1 class="text-5xl leading-none tracking-tighter text-[#E5E5E5] group-hover:text-[#070707] relative z-10 transition-colors duration-500" style="font-family: 'Playfair Display', serif; font-style: italic;">Scholaris.</h1>
+        <p class="mt-4 text-[9px] uppercase tracking-[0.3em] text-[#666666] group-hover:text-[#070707] font-medium relative z-10 transition-colors duration-500" style="font-family: 'Inter', sans-serif;">Academic Portal &copy; 2026</p>
     </div>
 
-    <!-- Navigation List -->
-    <div class="flex-1 overflow-y-auto px-4 py-2 space-y-1">
-        <p class="px-2 mb-3 text-[10px] text-slate-500 font-black uppercase tracking-widest">Main Menu</p>
-        
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'dashboard' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.dashboard') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'dashboard' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">space_dashboard</span>
-            <span>Dashboard</span>
-        </a>
-        
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'assignments' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.assignments') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'assignments' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">assignment</span>
-            <span>Assignments</span>
-        </a>
+    <!-- Editorial Navigation -->
+    <nav class="flex-1 overflow-y-auto no-scrollbar pb-8">
+        <div class="px-8 mt-10 mb-4 flex items-center gap-4">
+            <div class="h-px bg-[#1C1C1C] flex-1"></div>
+            <span class="text-[9px] uppercase tracking-[0.25em] text-[#404040]" style="font-family: 'Inter', sans-serif;">Menu</span>
+            <div class="h-px bg-[#1C1C1C] flex-1"></div>
+        </div>
 
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'timetable' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.timetable') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'timetable' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">calendar_month</span>
-            <span>Timetable</span>
-        </a>
+        <div class="flex flex-col">
+            <!-- Link Template -->
+            <a href="{{ url_for('student.dashboard') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'dashboard' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Dashboard</span>{% else %}Dashboard{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">01</span>
+            </a>
+            
+            <a href="{{ url_for('student.assignments') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'assignments' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Assignments</span>{% else %}Assignments{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">02</span>
+            </a>
 
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'grades' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.grades') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'grades' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">military_tech</span>
-            <span>Exam Results</span>
-        </a>
+            <a href="{{ url_for('student.timetable') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'timetable' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Timetable</span>{% else %}Timetable{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">03</span>
+            </a>
 
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'attendance' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.attendance') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'attendance' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">fact_check</span>
-            <span>Attendance</span>
-        </a>
+            <a href="{{ url_for('student.grades') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'grades' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Results</span>{% else %}Results{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">04</span>
+            </a>
 
-        <p class="px-2 mt-8 mb-3 text-[10px] text-slate-500 font-black uppercase tracking-widest">Settings</p>
-        
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'profile' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.profile') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'profile' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">person</span>
-            <span>My Profile</span>
-        </a>
+            <a href="{{ url_for('student.attendance') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-b border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'attendance' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Attendance</span>{% else %}Attendance{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">05</span>
+            </a>
+        </div>
 
-        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-bold transition-all group {% if active_page == 'communication' %}bg-slate-800/80 text-white shadow-sm ring-1 ring-white/10{% else %}text-slate-400 hover:bg-slate-800/40 hover:text-slate-200{% endif %}" href="{{ url_for('student.communication') }}">
-            <span class="material-symbols-outlined text-[20px] {% if active_page == 'communication' %}text-white{% else %}text-slate-500 group-hover:text-slate-300{% endif %}">forum</span>
-            <span>Messages</span>
-        </a>
-    </div>
+        <div class="px-8 mt-12 mb-4 flex items-center gap-4">
+            <div class="h-px bg-[#1C1C1C] flex-1"></div>
+            <span class="text-[9px] uppercase tracking-[0.25em] text-[#404040]" style="font-family: 'Inter', sans-serif;">Account</span>
+            <div class="h-px bg-[#1C1C1C] flex-1"></div>
+        </div>
+
+        <div class="flex flex-col">
+            <a href="{{ url_for('student.profile') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'profile' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Profile</span>{% else %}Profile{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">06</span>
+            </a>
+
+            <a href="{{ url_for('student.communication') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-b border-[#1C1C1C] hover:bg-[#E5E5E5] transition-colors duration-500">
+                <span class="text-2xl font-light tracking-tight text-[#A3A3A3] group-hover:text-[#070707] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'communication' %}<span class="text-[#E5E5E5] group-hover:text-[#070707] font-bold italic">Messages</span>{% else %}Messages{% endif %}</span>
+                <span class="text-[10px] tracking-widest text-[#333333] group-hover:text-[#070707] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">07</span>
+            </a>
+        </div>
+    </nav>
 
     <!-- Sidebar Footer -->
-    <div class="p-4 border-t border-slate-800/60 mb-2">
-        <a href="{{ url_for('public.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 rounded-lg transition-all">
-            <span class="material-symbols-outlined text-[20px] text-slate-500">public</span>
+    <div class="p-8 border-t border-[#1C1C1C] flex flex-col gap-5 bg-[#030303]">
+        <a href="{{ url_for('public.index') }}" class="text-[10px] uppercase tracking-[0.2em] text-[#606060] hover:text-[#E5E5E5] transition-colors flex justify-between items-center group" style="font-family: 'Inter', sans-serif;">
             <span>Portal Home</span>
+            <span class="transform group-hover:translate-x-2 transition-transform duration-500">→</span>
         </a>
-        <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-3 py-2.5 mt-1 text-sm font-bold text-red-400 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-all">
-            <span class="material-symbols-outlined text-[20px]">logout</span>
-            <span>Log Out</span>
+        <a href="{{ url_for('auth.logout') }}" class="text-[10px] uppercase tracking-[0.2em] text-[#8B3A3A] hover:text-[#FF4444] transition-colors flex justify-between items-center group" style="font-family: 'Inter', sans-serif;">
+            <span>Terminate Session</span>
+            <span class="transform group-hover:translate-x-2 transition-transform duration-500">→</span>
         </a>
     </div>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </aside>
 
 <!-- Overlay for mobile sidebar -->
@@ -201,13 +215,13 @@
                 sidebar.classList.remove('-translate-x-full');
                 sidebar.classList.add('translate-x-0');
                 if (window.innerWidth >= 1024) {
-                    mainContent.classList.add('lg:pl-64');
+                    mainContent.classList.add('lg:pl-80');
                 }
             } else {
                 // Closed state
                 sidebar.classList.add('-translate-x-full');
                 sidebar.classList.remove('translate-x-0');
-                mainContent.classList.remove('lg:pl-64');
+                mainContent.classList.remove('lg:pl-80');
             }
             
             // Respect mobile overlay
@@ -260,13 +274,13 @@
             const isOpen = sidebar.classList.contains('translate-x-0');
             if (isDesktop) {
                 if (isOpen) {
-                    mainContent.classList.add('lg:pl-64');
+                    mainContent.classList.add('lg:pl-80');
                 } else {
-                    mainContent.classList.remove('lg:pl-64');
+                    mainContent.classList.remove('lg:pl-80');
                 }
                 overlay.classList.add('hidden');
             } else {
-                mainContent.classList.remove('lg:pl-64');
+                mainContent.classList.remove('lg:pl-80');
                 if (isOpen) {
                     overlay.classList.remove('hidden');
                 }
@@ -276,7 +290,7 @@
 </script>
 
 <!-- Adjusting Content Wrapper for Sidebar -->
-<div id="mainContent" class="lg:pl-64 flex flex-col min-h-screen transition-all duration-300">
+<div id="mainContent" class="lg:pl-80 flex flex-col min-h-screen transition-all duration-300">
     <!-- Top Navigation -->
     <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-4">
