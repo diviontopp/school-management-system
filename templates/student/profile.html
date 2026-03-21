@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .font-clash { font-family: 'Clash Display', sans-serif; }
+    /* Removed ad-hoc fonts */
     .glass-panel {
         background: rgba(255, 255, 255, 0.4);
         backdrop-filter: blur(24px);
@@ -58,10 +58,10 @@
     <div class="relative order-2 lg:order-1">
         <div class="flex flex-col gap-4 mb-8">
             <span class="inline-flex w-fit items-center rounded-full bg-accent-gold/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-accent-gold">Scholar ID #{{ student.admission_number }}</span>
-            <h2 class="font-clash text-5xl md:text-7xl lg:text-[100px] font-black tracking-tighter text-primary leading-[0.85] premium-text-gradient">
+            <h1 class="shadcn-h1 text-primary leading-[0.85] premium-text-gradient">
                 {{ student.first_name }} <br/>
-                <span class="italic font-normal">{{ student.last_name }}</span>
-            </h2>
+                <span class="text-accent-gold">{{ student.last_name }}</span>
+            </h1>
         </div>
         <p class="max-w-md text-lg leading-relaxed text-primary/60 mb-10 font-light">
             Enrolled in Class <span class="font-bold text-primary">{{ student.class_name }}</span>. 
@@ -86,7 +86,7 @@
             <!-- Main Photo with framing (Initials fallback) -->
             <div class="hero-mask relative h-full w-full overflow-hidden bg-white/60 shadow-[0_40px_80px_-15px_rgba(15,76,129,0.1)] transition-transform duration-1000 group-hover:scale-[1.02] flex items-center justify-center border-4 border-white">
                 <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent-gold/10"></div>
-                <span class="font-clash text-8xl font-black text-primary/20">{{ student.first_name[0] }}{{ student.last_name[0] }}</span>
+                <span class="shadcn-h1 text-primary/20">{{ student.first_name[0] }}{{ student.last_name[0] }}</span>
             </div>
             <!-- Float Badge -->
             <div class="absolute -bottom-8 -left-8 glass-panel rounded-xl p-6 shadow-2xl weighted-silk group-hover:-translate-y-2 bg-white/80">
@@ -96,7 +96,7 @@
                     </div>
                     <div>
                         <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Attendance</p>
-                        <p class="font-clash text-2xl font-black text-primary">{{ attendance_pct }}%</p>
+                        <p class="shadcn-h3 text-primary">{{ attendance_pct }}%</p>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,7 @@
         <!-- Academic Portfolio -->
         <section>
             <div class="mb-12 flex items-center justify-between border-b border-primary/5 pb-6">
-                <h3 class="font-serif-title text-4xl font-bold tracking-tight text-primary italic">Academic Record</h3>
+                <h3 class="shadcn-h3 text-primary italic">Academic Record</h3>
                 <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-primary/30 hidden sm:block">Curated Snapshot</span>
             </div>
             
@@ -160,7 +160,7 @@
             <div class="relative z-10">
                 <div class="flex items-center gap-4 mb-8">
                     <span class="material-symbols-outlined text-accent-gold text-3xl">trending_up</span>
-                    <h3 class="font-serif-title text-3xl font-bold italic tracking-tight text-primary">Academic Record</h3>
+                    <h3 class="shadcn-h3 text-primary italic">Academic Progress</h3>
                 </div>
                 <p class="mb-12 max-w-xl text-lg leading-relaxed text-primary/70 font-medium">
                     Consistently working towards academic proficiency. Track your milestones and maintain steady progress through the curriculum.

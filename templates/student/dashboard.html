@@ -7,6 +7,7 @@
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
     <span class="material-symbols-outlined text-3xl">error</span>
     <div>
+        <h1 class="shadcn-h1 text-primary">Academic <span class="text-accent-gold">Dashboard</span></h1>
         <h3 class="font-bold text-lg">Student record not found</h3>
         <p class="text-sm">Please contact administration.</p>
     </div>
@@ -99,7 +100,7 @@
         <!-- Upcoming Tests & Vivas -->
         <section>
             <div class="flex justify-between items-center mb-6">
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Upcoming Tests</h3>
+                <h3 class="shadcn-h3 text-primary mb-6">Upcoming Tests</h3>
                  <a href="{{ url_for('student.grades') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
             </div>
             
@@ -139,7 +140,7 @@
                 <div class="size-10 rounded-2xl bg-accent-gold/10 flex items-center justify-center text-accent-gold">
                     <span class="material-symbols-outlined">chat_bubble</span>
                 </div>
-                <h3 class="font-serif text-2xl font-bold text-primary tracking-tight">Teacher Remarks</h3>
+                <h3 class="shadcn-h3 text-primary">Teacher Remarks</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -177,15 +178,15 @@
     <aside class="col-span-12 lg:col-span-3 space-y-8">
         <!-- Attendance Gauge -->
         <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 text-center">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Attendance</h4>
+            <h4 class="secondary-label text-[10px] text-slate-500 tracking-[0.2em] mb-6">Attendance</h4>
             <div class="relative w-40 h-40 mx-auto">
                 <svg class="w-full h-full transform -rotate-90">
                     <circle class="text-bone-white" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
                     <circle class="{% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 - (440 * attendance_pct / 100) }}" stroke-linecap="round" stroke-width="12"></circle>
                 </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span class="text-4xl font-display font-black {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}">{{ attendance_pct|round|int }}%</span>
-                    <span class="text-xs font-bold {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} uppercase tracking-widest leading-none mt-1">
+                <div class="absolute inset-0 flex flex-col items-center justify-center -space-y-1">
+                    <span class="shadcn-h1 !text-4xl {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} !mt-0">{{ attendance_pct|round|int }}%</span>
+                    <span class="secondary-label text-[9px] {% if attendance_pct >= 85 %}text-primary/60{% elif attendance_pct >= 75 %}text-accent-gold/60{% else %}text-red-500/60{% endif %} tracking-[0.2em] leading-none">
                         {% if attendance_pct >= 85 %}On Track{% elif attendance_pct >= 75 %}Good{% else %}Warning{% endif %}
                     </span>
                 </div>
@@ -197,7 +198,7 @@
             <div class="absolute -right-4 -bottom-4 opacity-10">
                 <span class="material-symbols-outlined text-9xl">library_books</span>
             </div>
-            <h4 class="text-xs font-bold text-white/60 uppercase tracking-widest mb-2">Borrowed Library Books</h4>
+            <h4 class="secondary-label text-[10px] text-white/60 tracking-[0.2em] mb-2">Borrowed Library Books</h4>
             {% if borrowed_books %}
                 <div class="flex items-baseline gap-1 mb-8 relative z-10">
                     <span class="text-5xl font-serif font-bold tracking-tight">{{ borrowed_books|length }}</span>
@@ -221,7 +222,7 @@
         <!-- Notice Ticker -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Recent School Notices</h4>
+                <h4 class="secondary-label text-[10px] text-slate-500 tracking-[0.2em]">Recent School Notices</h4>
                 <span class="material-symbols-outlined text-slate-300 text-lg">campaign</span>
             </div>
             <div class="p-6">

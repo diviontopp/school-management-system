@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .font-clash { font-family: 'Clash Display', sans-serif; }
+    /* Removed ad-hoc fonts */
     .glass-panel {
         background: rgba(255, 255, 255, 0.4);
         backdrop-filter: blur(24px);
@@ -32,7 +32,7 @@
 <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 transition-all duration-700">
     <div class="max-w-2xl">
         <span class="text-accent-gold font-bold tracking-[0.3em] uppercase text-xs">Academic Presence</span>
-        <h1 class="font-clash text-5xl text-primary font-black mt-2 tracking-tight italic">Attendance Record</h1>
+        <h1 class="shadcn-h1 text-primary mt-2">Attendance Record</h1>
         <p class="text-slate-500 text-lg mt-3 font-light leading-relaxed">Tracking your academic journey and daily commitment.</p>
     </div>
 </div>
@@ -58,8 +58,8 @@
             </div>
         </div>
         <div>
-            <span class="text-4xl font-clash font-black text-emerald-600">{{ present }}</span>
-            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Days Present</p>
+            <span class="text-4xl shadcn-h1 text-emerald-600">{{ present }}</span>
+            <p class="secondary-label mt-2">Days Present</p>
         </div>
     </div>
 
@@ -95,7 +95,7 @@
             <span class="material-symbols-outlined">chevron_left</span>
         </button>
         <div class="text-center">
-            <h3 id="calTitle" class="font-clash text-3xl font-bold text-primary tracking-tight">Loading...</h3>
+            <h3 id="calTitle" class="shadcn-h3 text-primary">Loading...</h3>
             <p class="text-xs font-bold uppercase tracking-[0.4em] text-accent-gold mt-1">Calendar Navigation</p>
         </div>
         <button id="calNext" class="w-12 h-12 rounded-full hover:bg-white flex items-center justify-center text-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-transparent hover:border-primary/10 hover:shadow-sm" aria-label="Next month">

@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .font-clash { font-family: 'Clash Display', sans-serif; }
+    /* Removed ad-hoc fonts */
     .glass-card {
         background: rgba(241, 244, 228, 0.4);
         backdrop-filter: blur(15px);
@@ -25,8 +25,8 @@
     <div class="lg:col-span-12 xl:col-span-7 space-y-10">
         <div class="flex items-center justify-between">
             <div>
-                <span class="text-accent-gold font-bold tracking-[0.3em] uppercase text-xs">Teacher Communication</span>
-                <h3 class="font-clash text-4xl text-primary font-black italic mt-1">Teacher Remarks</h3>
+                <span class="secondary-label text-accent-gold text-[10px] tracking-[0.3em]">Teacher Communication</span>
+                <h3 class="shadcn-h3 text-primary italic mt-1">Teacher Remarks</h3>
             </div>
             <div class="flex gap-2">
                 <button class="px-5 py-2.5 rounded-full border border-slate-200 text-xs font-bold text-primary hover:bg-white transition-all">Archive</button>
@@ -41,7 +41,7 @@
                 <div class="flex justify-between items-start mb-6">
                     <div>
                         <span class="text-xs uppercase tracking-widest text-accent-gold font-bold px-4 py-1.5 bg-accent-gold/10 rounded-full">{{ remark.subject_name or 'General' }}</span>
-                        <p class="text-xl font-black text-primary font-clash mt-3 tracking-tight">{{ remark.date.strftime('%A, %d %b %Y') }}</p>
+                        <p class="shadcn-h3 text-primary mt-3">{{ remark.date.strftime('%A, %d %b %Y') }}</p>
                     </div>
                     <span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors cursor-pointer">more_horiz</span>
                 </div>
@@ -84,7 +84,7 @@
         <section class="bg-primary p-10 rounded-xl text-white shadow-2xl shadow-primary/30 relative overflow-hidden group">
             <div class="relative z-10">
                 <div class="flex items-center justify-between mb-10">
-                    <h3 class="font-clash text-3xl font-bold italic text-bone-white">Notice Board</h3>
+                    <h3 class="shadcn-h3 text-bone-white italic">Notice Board</h3>
                     <div class="p-2 bg-accent-gold/20 rounded-lg">
                         <span class="material-symbols-outlined text-accent-gold">campaign</span>
                     </div>
@@ -116,11 +116,12 @@
                     <div class="size-10 rounded-xl bg-accent-gold/10 flex items-center justify-center text-accent-gold group-hover:bg-accent-gold group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-xl">calendar_month</span>
                     </div>
-                    <h3 class="font-clash text-2xl text-primary font-bold">PTM Scheduler</h3>
+                    <h3 class="shadcn-h3 text-primary">PTM Scheduler</h3>
                 </div>
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-8">
-                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Upcoming Meeting</p>
-                    <p class="text-lg font-black text-primary font-clash">Winter Meet '26</p>
+                        <p class="secondary-label text-[9px] text-slate-500 tracking-[0.2em]">
+Upcoming Meeting</p>
+                    <p class="shadcn-h3 text-primary">Winter Meet '26</p>
                     <p class="text-xs text-slate-500 mt-1 font-medium italic">Progress Review & Goal Setting</p>
                 </div>
                 <button class="w-full py-5 rounded-full bg-primary text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">Request Appointment</button>
@@ -132,7 +133,7 @@
                     <div class="size-10 rounded-xl bg-slate-50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-xl">flight_takeoff</span>
                     </div>
-                    <h3 class="font-clash text-2xl text-primary font-bold">Request Absence</h3>
+                    <h3 class="shadcn-h3 text-primary">Request Absence</h3>
                 </div>
                 <div class="flex flex-col gap-4">
                     <div class="p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 flex flex-col items-center justify-center group/upload hover:border-accent-gold transition-all cursor-pointer">

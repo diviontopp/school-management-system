@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .font-clash { font-family: 'Clash Display', sans-serif; }
+    /* Removed ad-hoc fonts */
 </style>
 {% endblock %}
 
@@ -23,7 +23,7 @@
 <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
     <div class="max-w-2xl">
         <span class="text-accent-gold font-bold tracking-widest uppercase text-xs">Homework & Tests</span>
-        <h1 class="font-clash text-5xl md:text-7xl text-primary font-bold mt-2 tracking-tight">Assignments</h1>
+        <h1 class="shadcn-h1 text-primary mt-2">Assignments</h1>
         <p class="text-slate-600 text-xl mt-4 font-light leading-relaxed italic">Manage your assignments, track your submissions, and prepare for upcoming evaluations.</p>
     </div>
     <div class="flex gap-3">
@@ -47,7 +47,7 @@
 
 <!-- Subject Folders Grid (Visual Placeholder / Motivation) -->
 <section class="mb-16">
-    <h3 class="font-clash text-3xl text-primary mb-8 border-l-4 border-accent-gold pl-6 leading-none font-bold">Academic Overview</h3>
+    <h3 class="shadcn-h3 text-primary mb-8 border-l-4 border-accent-gold pl-6">Academic Overview</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Physics Card -->
         <div class="group relative flex flex-col bg-white p-8 rounded-xl border border-slate-200 hover:border-primary/20 transition-all hover:shadow-xl">
@@ -55,13 +55,13 @@
                 <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">bolt</span>
                 </div>
-                <span class="text-xs font-bold text-accent-gold uppercase tracking-tighter">Term 1</span>
+                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Term 1</span>
             </div>
             <h4 class="text-xl font-bold text-slate-900 mb-1">Physics</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Quantum & Electrodynamics</p>
             <div class="mt-auto">
                 <div class="flex justify-between text-xs font-bold mb-2">
-                    <span class="text-slate-500 uppercase tracking-widest text-xs">Syllabus Progress</span>
+                    <span class="secondary-label text-slate-500 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-primary">68%</span>
                 </div>
                 <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
@@ -75,13 +75,13 @@
                 <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">science</span>
                 </div>
-                <span class="text-xs font-bold text-accent-gold uppercase tracking-tighter">Term 1</span>
+                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Term 1</span>
             </div>
             <h4 class="text-xl font-bold text-slate-900 mb-1">Chemistry</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Organic & Physical Chem</p>
             <div class="mt-auto">
                 <div class="flex justify-between text-xs font-bold mb-2">
-                    <span class="text-slate-500 uppercase tracking-widest text-xs">Syllabus Progress</span>
+                    <span class="secondary-label text-slate-500 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-accent-gold">45%</span>
                 </div>
                 <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
@@ -95,13 +95,13 @@
                 <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">functions</span>
                 </div>
-                <span class="text-xs font-bold text-accent-gold uppercase tracking-tighter">Annual</span>
+                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Annual</span>
             </div>
             <h4 class="text-xl font-bold text-slate-900 mb-1">Mathematics</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Calculus & Geometry</p>
             <div class="mt-auto">
                 <div class="flex justify-between text-xs font-bold mb-2">
-                    <span class="text-slate-400 uppercase tracking-widest text-[10px]">Syllabus Progress</span>
+                    <span class="secondary-label text-slate-400 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-primary">82%</span>
                 </div>
                 <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
@@ -115,13 +115,13 @@
                 <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-3xl">auto_stories</span>
                 </div>
-                <span class="text-xs font-bold text-accent-gold uppercase tracking-tighter">Annual</span>
+                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Annual</span>
             </div>
             <h4 class="text-xl font-bold text-slate-900 mb-1">English</h4>
             <p class="text-sm text-slate-500 mb-6 italic">Literature & Composition</p>
             <div class="mt-auto">
                 <div class="flex justify-between text-xs font-bold mb-2">
-                    <span class="text-slate-400 uppercase tracking-widest text-[10px]">Syllabus Progress</span>
+                    <span class="secondary-label text-slate-400 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
                     <span class="text-slate-400">30%</span>
                 </div>
                 <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
@@ -142,7 +142,7 @@
             <!-- Pending Assignments (Styled like Class Notes) -->
             <section>
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="font-serif-title text-3xl text-primary font-bold">Pending Tasks</h3>
+                    <h3 class="shadcn-h3 text-primary">Pending Tasks</h3>
                 </div>
                 {% if pending %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -174,7 +174,7 @@
             <!-- Completed Assignments (Styled like Syllabus Tracker) -->
             <section>
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="font-serif-title text-3xl text-primary font-bold">Recent Submissions</h3>
+                    <h3 class="shadcn-h3 text-primary">Recent Submissions</h3>
                     <div class="flex gap-2">
                         <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase tracking-tighter">{{ completed|length }} Completed</span>
                     </div>
@@ -219,7 +219,7 @@
             <section>
                 <div class="p-8 bg-primary text-white rounded-xl relative overflow-hidden shadow-xl">
                     <div class="relative z-10">
-                        <h4 class="font-serif-title text-2xl mb-4 font-bold">Task Analytics</h4>
+                        <h4 class="shadcn-h3 text-white mb-4">Task Analytics</h4>
                         <p class="text-white/70 mb-6 text-sm leading-relaxed">You have {{ pending|length }} tasks pending and {{ completed|length }} tasks completed this term.</p>
                         
                         <div class="mb-4">
@@ -253,7 +253,7 @@
             <!-- Upcoming Tests (Styled like Class Notes) -->
             <section>
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="font-serif-title text-3xl text-primary font-bold">Upcoming Tests</h3>
+                    <h3 class="shadcn-h3 text-primary">Upcoming Tests</h3>
                 </div>
                 {% if upcoming_tests %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -288,7 +288,7 @@
             <!-- Recent Results (Styled like Syllabus Tracker) -->
             <section>
                 <div class="flex items-center justify-between mb-8">
-                    <h3 class="font-serif-title text-3xl text-primary font-bold">Recent Results</h3>
+                    <h3 class="shadcn-h3 text-primary">Recent Results</h3>
                 </div>
                 {% if scores %}
                 <div class="bg-white rounded-xl border border-primary/10 overflow-x-auto shadow-sm">
@@ -332,7 +332,7 @@
         <div class="lg:col-span-1 border-t lg:border-t-0 pt-8 lg:pt-0 border-primary/10 space-y-8">
             <!-- External Resources adapted for test prep -->
             <section>
-                <h3 class="font-serif-title text-2xl text-primary mb-6 leading-none font-bold">Preparation Materials</h3>
+                <h3 class="shadcn-h3 text-primary mb-6">Preparation Materials</h3>
                 <div class="space-y-4">
                     <div class="p-6 bg-white rounded-xl border border-primary/10 hover:border-accent-gold/40 transition-all cursor-pointer shadow-sm">
                         <div class="flex items-center gap-3 mb-4">

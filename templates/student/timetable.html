@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    .font-clash { font-family: 'Clash Display', sans-serif; }
+    /* Removed ad-hoc fonts */
     .glass-panel {
         background: rgba(255, 255, 255, 0.4);
         backdrop-filter: blur(12px);
@@ -24,9 +24,9 @@
     {% endif %}
     .premium-text-shadow { text-shadow: 0 2px 4px rgba(15, 76, 129, 0.05); }
     .period-header {
-        font-family: 'Clash Display', sans-serif;
-        font-weight: 700;
-        letter-spacing: -0.02em;
+        font-family: ui-serif, "New York", "SF Pro Serif", "Instrument Serif", "Playfair Display", serif;
+        font-weight: 800;
+        font-style: italic;
     }
 </style>
 
@@ -47,11 +47,11 @@
 <header class="mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
     <div class="max-w-2xl">
         <span class="inline-block px-4 py-1 rounded-full bg-primary text-bone-white text-xs font-black uppercase tracking-[0.3em] mb-6">Academic Year 2026</span>
-        <h2 class="font-clash text-6xl md:text-8xl font-medium leading-[0.9] mb-8 tracking-tighter">Your <span class="italic font-medium text-accent-gold">Daily Schedule</span></h2>
+        <h1 class="shadcn-h1 text-primary">Your <span class="text-accent-gold">Daily Schedule</span></h1>
         <p class="text-xl opacity-80 leading-relaxed font-medium">Class {{ student.class_name }}. Your daily schedule is designed to balance study and breaks.</p>
     </div>
     <div class="flex flex-col items-end gap-4">
-        <p class="font-clash text-4xl italic font-semibold">{{ today_name }}, Class Schedule</p>
+        <p class="shadcn-h3 text-primary">{{ today_name }}, Class Schedule</p>
     </div>
 </header>
 
@@ -64,7 +64,7 @@
         
         <!-- Grid Header (Periods) -->
         <div class="timetable-grid border-b-2 border-primary pb-6 mb-6">
-            <div class="flex items-center justify-center font-clash font-black italic opacity-30 text-lg">Days</div>
+            <div class="flex items-center justify-center secondary-label text-[10px] text-primary/30 tracking-[0.3em] uppercase">Days</div>
             {% for pn in period_nums %}
                 {% set p = grid[pn]['period'] %}
                 <div class="px-1 text-center">
@@ -82,7 +82,7 @@
         <div class="space-y-4">
             {% for day in days %}
             <div class="timetable-grid {% if day == today_name %}group bg-accent-gold/5 rounded-xl{% else %}opacity-70 hover:opacity-100 transition-opacity{% endif %}">
-                <div class="flex items-center font-display font-black text-xs tracking-[0.2em] uppercase py-4 pl-4 border-r-2 border-slate-200">{{ day }}</div>
+                <div class="flex items-center secondary-label text-[10px] tracking-[0.2em] uppercase py-4 pl-4 border-r-2 border-slate-200">{{ day }}</div>
                 
                 {% for pn in period_nums %}
                     {% set p = grid[pn]['period'] %}
