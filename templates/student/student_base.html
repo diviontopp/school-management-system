@@ -318,7 +318,9 @@
         <!-- Top Navigation -->
         <nav
             class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4 w-full md:w-auto">
+            
+            <!-- Left: Toggle Sidebar -->
+            <div class="flex-1 flex justify-start">
                 <!-- ══════════ Unified Toggle Button ══════════ -->
                 <button id="toggleSidebar"
                     class="flex flex-shrink-0 items-center justify-center w-12 h-12 transition-all border border-[#0f4c81]/10 bg-[#F1F4E4] hover:bg-[#0f4c81] hover:text-[#F1F4E4] rounded-full shadow-sm hover:shadow-md hover:scale-105 active:scale-95 text-[#0f4c81] group"
@@ -329,47 +331,43 @@
                         <span id="burger-bot" class="w-4 h-[2.5px] bg-current rounded-full transition-all duration-300 group-hover:w-6"></span>
                     </div>
                 </button>
-                <!-- Spotlight Search -->
-                <div class="relative w-full max-w-sm group hidden sm:block">
-                    <span
-                        class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
-                    <input
-                        class="w-full pl-12 pr-20 py-2.5 bg-white/50 border border-slate-200 rounded-full focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm outline-none"
-                        placeholder="Search grades, schedules, or resources..." type="text">
-                    <div
-                        class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-500 border border-slate-200 px-2 py-1 rounded-md uppercase tracking-tighter hidden lg:block bg-white/80 backdrop-blur-sm">
-                        CMD + K</div>
+            </div>
+
+            <!-- Center: Functional Spotlight Search -->
+            <div class="flex-1 flex justify-center hidden md:flex">
+                <div class="relative w-full max-w-md group">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#0f4c81] transition-colors z-10">search</span>
+                    <input id="globalSearchInput"
+                        class="w-full pl-12 pr-6 py-2.5 bg-slate-50 border border-slate-200 rounded-full focus:ring-2 focus:ring-[#0f4c81]/20 focus:bg-white transition-all text-sm outline-none text-slate-700 shadow-inner"
+                        placeholder="Search dashboard visually..." type="text">
                 </div>
             </div>
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-8 mr-4 hidden md:flex">
-                    <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">LMS</a>
-                    <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
-                        href="#">Library</a>
-                    <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
-                        href="#">Events</a>
+
+            <!-- Right: Secondary Nav & Profile -->
+            <div class="flex-1 flex items-center justify-end gap-6">
+                <div class="flex items-center gap-8 mr-2 hidden lg:flex">
+                    <a class="text-sm font-bold text-slate-500 hover:text-[#0f4c81] transition-colors uppercase tracking-widest" href="#">LMS</a>
+                    <a class="text-sm font-bold text-slate-500 hover:text-[#0f4c81] transition-colors uppercase tracking-widest" href="#">Library</a>
+                    <a class="text-sm font-bold text-slate-500 hover:text-[#0f4c81] transition-colors uppercase tracking-widest" href="#">Events</a>
                 </div>
-                <button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+                <button class="relative p-2 text-slate-500 hover:text-[#0f4c81] transition-colors">
                     <span class="material-symbols-outlined">notifications</span>
-                    <span
-                        class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-bone-white"></span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
                 </button>
-                <div class="h-8 w-[1px] bg-primary/10"></div>
-                <!-- Multi-Child Toggle (Profile) -->
+                <div class="h-8 w-[1px] bg-[#0f4c81]/10 hidden sm:block"></div>
+                <!-- Profile -->
                 {% if student %}
                 <div class="relative group">
                     <a href="{{ url_for('student.profile') }}"
-                        class="flex items-center gap-3 bg-white/80 border border-primary/10 rounded-full pl-2 pr-4 py-1.5 hover:shadow-md transition-all">
-                        <div
-                            class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/20 text-sm">
+                        class="flex items-center gap-3 bg-white/80 border border-[#0f4c81]/10 rounded-full pl-1.5 pr-4 py-1.5 hover:shadow-md transition-all">
+                        <div class="w-8 h-8 rounded-full bg-[#0f4c81] flex items-center justify-center text-[#F1F4E4] font-bold overflow-hidden shadow-sm text-sm">
                             {{ student.first_name[0] }}{{ student.last_name[0] }}
                         </div>
                         <div class="text-left hidden sm:block">
                             <p class="text-xs font-bold leading-none text-slate-700">{{ student.first_name }}</p>
-                            <p class="text-xs text-slate-500 leading-none mt-1">Class {{ student.class_name }}</p>
+                            <p class="text-[10px] text-slate-500 leading-none mt-1 uppercase tracking-widest font-bold">Class {{ student.class_name }}</p>
                         </div>
-                        <span
-                            class="material-symbols-outlined text-slate-400 text-sm hidden sm:block">expand_more</span>
+                        <span class="material-symbols-outlined text-slate-400 text-sm hidden lg:block">expand_more</span>
                     </a>
                 </div>
                 {% endif %}
@@ -398,6 +396,42 @@
         </footer>
 
     </div>
+    <!-- Global Search Behavior Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('globalSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const term = e.target.value.toLowerCase().trim();
+                    const mainContent = document.querySelector('main');
+                    if (!mainContent) return;
+                    
+                    if (term === '') {
+                        mainContent.style.opacity = '1';
+                        const cards = mainContent.querySelectorAll('.searchable-card');
+                        cards.forEach(card => card.style.opacity = '1');
+                        return;
+                    }
+
+                    // For the dashboard, apply a subtle CSS filter effect
+                    const cards = mainContent.querySelectorAll('.bg-white, .bg-\\[\\#F1F4E4\\]');
+                    cards.forEach(card => {
+                        const content = card.textContent.toLowerCase();
+                        if (content.includes(term)) {
+                            card.style.opacity = '1';
+                            card.classList.add('ring-2', 'ring-[#0f4c81]/20');
+                        } else {
+                            card.style.opacity = '0.3';
+                            card.classList.remove('ring-2', 'ring-[#0f4c81]/20');
+                        }
+                        
+                        // Small transition helper
+                        card.style.transition = "opacity 0.3s ease, box-shadow 0.3s ease";
+                    });
+                });
+            }
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 

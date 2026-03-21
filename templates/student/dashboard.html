@@ -44,7 +44,7 @@
         </section>
 
         <!-- QoL Quick Actions Ribbon -->
-        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <a href="{{ url_for('student.assignments') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
                 <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
                     <span class="material-symbols-outlined">task</span>
@@ -63,13 +63,6 @@
                 </div>
                 <span class="text-sm font-bold text-slate-700">Academics</span>
             </a>
-            <button title="Feature coming soon!" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center relative overflow-hidden cursor-not-allowed">
-                <div class="absolute inset-0 bg-gradient-to-tr from-transparent to-[#F1F4E4]/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm relative z-10">
-                    <span class="material-symbols-outlined">account_balance_wallet</span>
-                </div>
-                <span class="text-sm font-bold text-slate-700 relative z-10">Fee Portal</span>
-            </button>
         </section>
 
         <!-- Upgraded Task Center (Assignments) -->
@@ -157,7 +150,7 @@
                     <span class="material-symbols-outlined text-xl">timer</span> Upcoming Assessments
                 </h3>
                 {% if upcoming_tests %}
-                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:border-[#0f4c81]/30 transition-all h-[240px] flex flex-col justify-between">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:border-[#0f4c81]/30 transition-all h-full min-h-[240px] flex flex-col justify-between">
                     <div class="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500">
                         <span class="material-symbols-outlined text-9xl">quiz</span>
                     </div>
@@ -176,7 +169,7 @@
                     </div>
                 </div>
                 {% else %}
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-[240px] flex flex-col items-center justify-center">
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-full min-h-[240px] flex flex-col items-center justify-center">
                     <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">event_available</span>
                     <p class="text-sm font-medium">No scheduled assessments.</p>
                 </div>
@@ -190,7 +183,7 @@
                 </h3>
                 {% if remarks %}
                 {% set remark = remarks[0] %}
-                <div class="bg-[#F1F4E4] p-6 rounded-3xl relative overflow-hidden group hover:shadow-md transition-all h-[240px] flex flex-col justify-between border border-[#0f4c81]/5">
+                <div class="bg-[#F1F4E4] p-6 rounded-3xl relative overflow-hidden group hover:shadow-md transition-all h-full min-h-[240px] flex flex-col justify-between border border-[#0f4c81]/5">
                     <div class="absolute right-0 top-0 w-24 h-24 bg-[#0f4c81] rounded-bl-full opacity-5 group-hover:scale-125 transition-transform duration-700"></div>
                     <span class="material-symbols-outlined text-[#0f4c81]/10 text-6xl absolute top-4 left-4">format_quote</span>
                     
@@ -215,7 +208,7 @@
                     </div>
                 </div>
                 {% else %}
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-[240px] flex flex-col items-center justify-center">
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-full min-h-[240px] flex flex-col items-center justify-center">
                     <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">check_circle</span>
                     <p class="text-sm font-medium">No remarks at the moment.</p>
                 </div>
@@ -234,18 +227,18 @@
             
             <h4 class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#F1F4E4]/60 mb-8 border-b border-white/10 pb-4 w-full text-center">Attendance Record</h4>
             
-            <div class="relative w-48 h-48 flex items-center justify-center mb-6">
+            <div class="relative w-36 h-36 flex items-center justify-center mb-6 mt-4">
                 <!-- Outer glow -->
                 <div class="absolute inset-0 rounded-full bg-white/5 blur-xl"></div>
                 
                 <svg class="w-full h-full transform -rotate-90 relative z-10 drop-shadow-lg">
                     <!-- Background Track -->
-                    <circle cx="96" cy="96" r="86" fill="transparent" stroke="rgba(241, 244, 228, 0.05)" stroke-width="4"></circle>
+                    <circle cx="72" cy="72" r="64" fill="transparent" stroke="rgba(241, 244, 228, 0.05)" stroke-width="4"></circle>
                     <!-- Progress Track -->
-                    <circle cx="96" cy="96" r="86" fill="transparent" stroke="#F1F4E4" stroke-width="12" stroke-linecap="round" stroke-dasharray="540" stroke-dashoffset="{{ 540 - (540 * attendance_pct / 100) }}"></circle>
+                    <circle cx="72" cy="72" r="64" fill="transparent" stroke="#F1F4E4" stroke-width="10" stroke-linecap="round" stroke-dasharray="402" stroke-dashoffset="{{ 402 - (402 * attendance_pct / 100) }}"></circle>
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
-                    <span class="text-6xl text-[#F1F4E4] drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
+                    <span class="text-5xl text-[#F1F4E4] drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
                 </div>
             </div>
             
