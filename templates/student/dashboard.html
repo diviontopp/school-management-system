@@ -7,8 +7,8 @@
 <div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
     <span class="material-symbols-outlined text-3xl">error</span>
     <div>
-        <h1 class="shadcn-h1 text-primary">Academic <span class="text-accent-gold">Dashboard</span></h1>
-        <h3 class="font-bold text-lg">Student record not found</h3>
+        <h1 class="text-2xl font-bold" style="font-family: 'Playfair Display', serif;">Academic Dashboard</h1>
+        <h3 class="font-bold text-lg mt-2">Student record not found</h3>
         <p class="text-sm">Please contact administration.</p>
     </div>
 </div>
@@ -16,236 +16,307 @@
 
 <div class="grid grid-cols-12 gap-8">
     <!-- Left Column: Main Content -->
-    <div class="col-span-12 lg:col-span-9 space-y-12">
-        <!-- Hero Greeting -->
-        <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-            <div>
-                <p class="text-accent-gold font-bold tracking-widest uppercase text-xs mb-3">Welcome Back</p>
-                <h2 class="shadcn-h1 text-primary mb-4">Hello, {{ student.first_name }}!</h2>
-                <div class="flex items-center gap-4 text-slate-500">
-                    <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-slate-200">
-                        <span class="material-symbols-outlined text-sm text-accent-gold">wb_cloudy</span>
-                        <span class="text-sm font-medium">Class {{ student.class_name }} • Roll #{{ student.roll_number }}</span>
+    <div class="col-span-12 lg:col-span-8 space-y-12">
+        <!-- Editorial Hero Greeting -->
+        <section class="relative bg-[#0f4c81] text-[#F1F4E4] rounded-3xl p-10 overflow-hidden shadow-2xl shadow-[#0f4c81]/20">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <div>
+                    <p class="text-[#F1F4E4]/70 font-bold tracking-widest uppercase text-xs mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        Student Command Center
+                    </p>
+                    <h2 class="text-5xl lg:text-6xl text-[#F1F4E4] mb-4" style="font-family: 'Playfair Display', serif;">
+                        Hello, <span class="italic">{{ student.first_name }}</span>.
+                    </h2>
+                    <div class="flex flex-wrap items-center gap-4 text-[#F1F4E4]/80">
+                        <div class="flex items-center gap-2 bg-black/20 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
+                            <span class="material-symbols-outlined text-sm">school</span>
+                            <span class="text-sm font-medium">Class {{ student.class_name }} &bull; Roll #{{ student.roll_number }}</span>
+                        </div>
+                        <p class="text-sm font-medium flex items-center gap-2 bg-black/20 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
+                            <span class="material-symbols-outlined text-sm">calendar_today</span>
+                            {{ today.strftime('%A, %d %B %Y') }}
+                        </p>
                     </div>
-                    <span class="w-1 h-1 bg-primary/20 rounded-full"></span>
-                    <p class="text-sm font-medium">{{ today.strftime('%A, %d %B %Y') }}</p>
                 </div>
-            </div>
-            <div class="flex gap-3">
-                <button class="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                    <span class="material-symbols-outlined text-sm">edit_calendar</span>
-                    Schedule Meeting
-                </button>
             </div>
         </section>
 
-        <!-- Upcoming Assignments -->
+        <!-- QoL Quick Actions Ribbon -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="{{ url_for('student.assignments') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
+                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                    <span class="material-symbols-outlined">task</span>
+                </div>
+                <span class="text-sm font-bold text-slate-700">Assignments</span>
+            </a>
+            <a href="{{ url_for('student.timetable') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
+                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                    <span class="material-symbols-outlined">event</span>
+                </div>
+                <span class="text-sm font-bold text-slate-700">Class Routine</span>
+            </a>
+            <a href="{{ url_for('student.grades') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
+                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <span class="text-sm font-bold text-slate-700">Academics</span>
+            </a>
+            <button title="Feature coming soon!" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center relative overflow-hidden cursor-not-allowed">
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent to-[#F1F4E4]/50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm relative z-10">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                </div>
+                <span class="text-sm font-bold text-slate-700 relative z-10">Fee Portal</span>
+            </button>
+        </section>
+
+        <!-- Upgraded Task Center (Assignments) -->
         <section>
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="shadcn-h3 text-primary">Upcoming Assignments</h3>
-                <a href="{{ url_for('student.assignments') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+            <div class="flex justify-between items-end mb-8 border-b border-slate-200 pb-4">
+                <div>
+                    <h3 class="text-3xl text-[#0f4c81]" style="font-family: 'Playfair Display', serif;">Action Items</h3>
+                    <p class="text-sm text-slate-500 mt-1">Your academic priorities for the week.</p>
+                </div>
+                <a href="{{ url_for('student.assignments') }}" class="text-sm font-bold text-[#0f4c81] flex items-center gap-1 hover:gap-2 transition-all group px-4 py-2 rounded-full hover:bg-[#F1F4E4]">
+                    View All <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
             </div>
             
             {% if upcoming_homework %}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {% for hw in upcoming_homework[:3] %}
+            <div class="space-y-4">
+                {% for hw in upcoming_homework[:4] %}
                 {% set days_left = (hw.deadline - today).days %}
                 {% set is_done = hw.submission_status == 'Submitted' %}
                 
-                <div class="bg-white p-6 rounded-xl border-t-4 {% if is_done %}border-status-success opacity-70{% elif days_left <= 1 %}border-red-500{% elif days_left <= 3 %}border-amber-500{% else %}border-blue-500{% endif %} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                        <span class="material-symbols-outlined text-6xl">{% if is_done %}task_alt{% else %}menu_book{% endif %}</span>
-                    </div>
+                <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-center gap-6 group relative overflow-hidden pl-6">
+                    <!-- Status Indicator Line -->
+                    <div class="absolute left-0 top-0 bottom-0 w-2 {% if is_done %}bg-green-500{% elif days_left < 0 %}bg-red-500{% elif days_left <= 1 %}bg-[#8B3A3A]{% else %}bg-[#0f4c81]{% endif %}"></div>
                     
-                    {% if is_done %}
-                    <span class="inline-block px-2 py-1 rounded bg-status-success-bg text-xs font-extrabold text-status-success mb-3 uppercase tracking-widest">Submitted</span>
-                    {% elif days_left < 0 %}
-                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-xs font-extrabold text-red-600 mb-3 uppercase tracking-widest">Overdue</span>
-                    {% elif days_left <= 1 %}
-                    <span class="inline-block px-2 py-1 rounded bg-red-50 text-xs font-extrabold text-red-600 mb-3 uppercase tracking-widest">Urgent</span>
-                    {% elif days_left <= 3 %}
-                    <span class="inline-block px-2 py-1 rounded bg-amber-50 text-xs font-extrabold text-amber-600 mb-3 uppercase tracking-widest">Ongoing</span>
-                    {% else %}
-                    <span class="inline-block px-2 py-1 rounded bg-blue-50 text-xs font-extrabold text-blue-600 mb-3 uppercase tracking-widest">Upcoming</span>
-                    {% endif %}
-                    
-                    <h4 class="font-bold text-lg text-slate-800 mb-1" title="{{ hw.subject_name }}">{{ hw.subject_name }}</h4>
-                    <p class="text-slate-500 text-sm mb-4 truncate" title="{{ hw.title }}">{{ hw.title }}</p>
-                    
-                    <div class="flex items-center gap-2 {% if is_done %}text-status-success{% elif days_left <= 1 %}text-red-600{% elif days_left <= 3 %}text-amber-600{% else %}text-blue-600{% endif %} text-xs font-bold mt-auto">
-                        <span class="material-symbols-outlined text-sm">schedule</span>
-                        {% if is_done %}
-                        Completed
-                        {% elif days_left < 0 %}
-                        Overdue
-                        {% elif days_left == 0 %}
-                        Due Today
-                        {% elif days_left == 1 %}
-                        Tomorrow, 11:59 PM
-                        {% else %}
-                        {{ hw.deadline.strftime('%b %d, %Y') }}
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="p-8 bg-white border border-slate-200 rounded-xl text-center shadow-sm">
-                <span class="material-symbols-outlined text-5xl text-green-400 mb-3">task_alt</span>
-                <p class="text-slate-600 font-medium">No pending homework — enjoy your free time! 🎉</p>
-            </div>
-            {% endif %}
-        </section>
-
-        <!-- Upcoming Tests & Vivas -->
-        <section>
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="shadcn-h3 text-primary mb-6">Upcoming Tests</h3>
-                 <a href="{{ url_for('student.grades') }}" class="text-sm font-bold text-accent-gold flex items-center gap-1 hover:gap-2 transition-all">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
-            </div>
-            
-            {% if upcoming_tests %}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {% for test in upcoming_tests[:3] %}
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between hover:border-slate-300 transition-colors">
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            {% set test_colors = [('bg-primary/5', 'text-primary'), ('bg-accent-gold/5', 'text-accent-gold'), ('bg-green-50', 'text-green-600')] %}
-                            {% set color_idx = loop.index0 % 3 %}
-                            <div class="w-10 h-10 rounded-lg {{ test_colors[color_idx][0] }} flex items-center justify-center {{ test_colors[color_idx][1] }}">
-                                <span class="material-symbols-outlined">quiz</span>
-                            </div>
-                            <span class="text-xs font-bold text-slate-500">{{ test.test_date.strftime('%b %d') }}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 mb-1 line-clamp-1" title="{{ test.name }}">{{ test.name }}</h4>
-                        <p class="text-slate-500 text-sm mb-4 flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">menu_book</span> {{ test.subject_name }}
-                        </p>
-                    </div>
-                    <div class="text-xs font-medium text-slate-500 italic">Type: {{ test.test_type }}</div>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="p-8 bg-white border border-slate-200 rounded-xl text-center shadow-sm max-w-2xl">
-                <span class="material-symbols-outlined text-5xl text-blue-300 mb-3">event_available</span>
-                <p class="text-slate-600 font-medium">No upcoming tests scheduled.</p>
-            </div>
-            {% endif %}
-        </section>
-
-        <!-- Academic Insights (Remarks) from Samvaad -->
-        <section class="border-t border-slate-200 pt-12">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="size-10 rounded-2xl bg-accent-gold/10 flex items-center justify-center text-accent-gold">
-                    <span class="material-symbols-outlined">chat_bubble</span>
-                </div>
-                <h3 class="shadcn-h3 text-primary">Teacher Remarks</h3>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {% if remarks %}
-                    {% for remark in remarks %}
-                    <div class="bg-white/50 rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all relative group">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-xs font-bold text-accent-gold uppercase tracking-widest px-3 py-1 bg-accent-gold/10 rounded-full">{{ remark.remark_type }}</span>
-                            <span class="text-xs font-medium text-slate-500 uppercase">{{ remark.date.strftime('%d %b, %Y') }}</span>
-                        </div>
-                        <p class="text-slate-700 text-sm leading-relaxed italic mb-4">"{{ remark.remark }}"</p>
-                        <div class="flex items-center gap-3 pt-4 border-t border-slate-200">
-                            <div class="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                                {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
+                    <div class="ml-2 flex-1 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] flex-shrink-0">
+                                <span class="material-symbols-outlined text-2xl">{% if is_done %}task_alt{% else %}draw{% endif %}</span>
                             </div>
                             <div>
-                                <h5 class="text-xs font-bold text-primary">{{ remark.teacher_name }}</h5>
-                                <p class="text-xs text-slate-500 uppercase tracking-tighter">Academic Head</p>
+                                <h4 class="font-bold text-lg text-slate-800 line-clamp-1 group-hover:text-[#0f4c81] transition-colors" title="{{ hw.title }}">{{ hw.title }}</h4>
+                                <p class="text-slate-500 text-sm font-medium">{{ hw.subject_name }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between xl:justify-end gap-6 mt-2 xl:mt-0">
+                            <div class="text-left xl:text-right">
+                                <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Due Date</p>
+                                <div class="flex items-center gap-1.5 {% if is_done %}text-green-600{% elif days_left < 0 %}text-red-600{% elif days_left <= 1 %}text-[#8B3A3A] font-bold{% else %}text-[#0f4c81] font-bold{% endif %} text-sm">
+                                    <span class="material-symbols-outlined text-sm">schedule</span>
+                                    {% if is_done %}
+                                    Completed
+                                    {% elif days_left < 0 %}
+                                    Overdue
+                                    {% elif days_left == 0 %}
+                                    Today
+                                    {% elif days_left == 1 %}
+                                    Tomorrow
+                                    {% else %}
+                                    {{ hw.deadline.strftime('%b %d') }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Turn in Action / Checklist feel -->
+                            {% if not is_done %}
+                            <a href="{{ url_for('student.assignments') }}" class="w-10 h-10 rounded-full border border-slate-200 hover:border-[#0f4c81] hover:bg-[#0f4c81] hover:text-[#F1F4E4] transition-all flex items-center justify-center text-slate-400 flex-shrink-0">
+                                <span class="material-symbols-outlined text-xl">publish</span>
+                            </a>
+                            {% else %}
+                            <div class="w-10 h-10 rounded-full bg-green-50 border border-green-100 text-green-500 flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-xl">done_all</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="p-12 bg-[#F1F4E4]/50 border border-[#0f4c81]/10 border-dashed rounded-3xl text-center shadow-inner">
+                <div class="w-20 h-20 mx-auto bg-white rounded-full flex items-center justify-center mb-6 shadow-sm text-green-500">
+                    <span class="material-symbols-outlined text-4xl">celebration</span>
+                </div>
+                <h4 class="text-2xl text-[#0f4c81] mb-2" style="font-family: 'Playfair Display', serif;">You're All Caught Up!</h4>
+                <p class="text-slate-600 font-medium">No pending assignments at the moment. Enjoy your free time.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Academic Insights & Tests -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Latest Test -->
+            <div>
+                <h3 class="text-xl text-[#0f4c81] mb-6 border-b border-slate-200 pb-2 flex items-center gap-2" style="font-family: 'Playfair Display', serif;">
+                    <span class="material-symbols-outlined text-xl">timer</span> Upcoming Assessments
+                </h3>
+                {% if upcoming_tests %}
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden group hover:border-[#0f4c81]/30 transition-all h-[240px] flex flex-col justify-between">
+                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500">
+                        <span class="material-symbols-outlined text-9xl">quiz</span>
+                    </div>
+                    {% set test = upcoming_tests[0] %}
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-[#8B3A3A]/10 text-[#8B3A3A] font-bold text-[10px] uppercase tracking-widest rounded-full mb-4">{{ test.test_type }}</span>
+                        <h4 class="text-2xl text-[#0f4c81] font-bold mb-2 truncate" title="{{ test.subject_name }}">{{ test.subject_name }}</h4>
+                        <p class="text-slate-600 mb-6 line-clamp-2" title="{{ test.name }}">{{ test.name }}</p>
+                    </div>
+                    <div class="flex items-center justify-between bg-[#F1F4E4] p-4 rounded-2xl text-[#0f4c81] relative z-10 w-full">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            <span class="font-bold text-sm">{{ test.test_date.strftime('%B %d, %Y') }}</span>
+                        </div>
+                        <span class="material-symbols-outlined text-sm font-bold animate-bounce hidden sm:inline-block">arrow_right_alt</span>
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-[240px] flex flex-col items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">event_available</span>
+                    <p class="text-sm font-medium">No scheduled assessments.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Digital Diary Mention -->
+            <div>
+                <h3 class="text-xl text-[#0f4c81] mb-6 border-b border-slate-200 pb-2 flex items-center gap-2" style="font-family: 'Playfair Display', serif;">
+                    <span class="material-symbols-outlined text-xl">auto_awesome</span> Teacher Remarks
+                </h3>
+                {% if remarks %}
+                {% set remark = remarks[0] %}
+                <div class="bg-[#F1F4E4] p-6 rounded-3xl relative overflow-hidden group hover:shadow-md transition-all h-[240px] flex flex-col justify-between border border-[#0f4c81]/5">
+                    <div class="absolute right-0 top-0 w-24 h-24 bg-[#0f4c81] rounded-bl-full opacity-5 group-hover:scale-125 transition-transform duration-700"></div>
+                    <span class="material-symbols-outlined text-[#0f4c81]/10 text-6xl absolute top-4 left-4">format_quote</span>
+                    
+                    <div class="relative z-10 pt-8 pb-4 flex-1">
+                        <p class="text-[#0f4c81] font-medium leading-relaxed italic line-clamp-3">"{{ remark.remark }}"</p>
+                    </div>
+                    
+                    <div class="relative z-10 flex justify-between items-end border-t border-[#0f4c81]/10 pt-4 mt-auto">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0f4c81] font-bold shadow-sm flex-shrink-0">
+                                {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
+                            </div>
+                            <div class="min-w-0">
+                                <h5 class="font-bold text-[#0f4c81] text-sm truncate" title="{{ remark.teacher_name }}">{{ remark.teacher_name }}</h5>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-[10px] text-slate-500 uppercase tracking-widest truncate">{{ remark.remark_type }}</p>
+                                    <span class="w-1 h-1 rounded-full bg-slate-300 flex-shrink-0"></span>
+                                    <p class="text-[10px] text-slate-500 uppercase tracking-widest flex-shrink-0">{{ remark.date.strftime('%d %b') }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
+                </div>
                 {% else %}
-                    <div class="col-span-full p-8 border border-dashed border-primary/10 rounded-3xl text-center bg-white/30">
-                        <span class="material-symbols-outlined text-4xl text-primary/20 mb-3">lightbulb</span>
-                        <p class="text-slate-500 font-medium italic">Your teachers haven't posted any feedback yet. Keep up the good work!</p>
-                    </div>
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 text-center text-slate-500 h-[240px] flex flex-col items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl mb-2 text-slate-300">check_circle</span>
+                    <p class="text-sm font-medium">No remarks at the moment.</p>
+                </div>
                 {% endif %}
             </div>
         </section>
 
     </div>
 
-    <!-- Right Sidebar -->
-    <aside class="col-span-12 lg:col-span-3 space-y-8">
-        <!-- Attendance Gauge -->
-        <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 text-center">
-            <h4 class="secondary-label text-[10px] text-slate-500 tracking-[0.2em] mb-6">Attendance</h4>
-            <div class="relative w-40 h-40 mx-auto">
-                <svg class="w-full h-full transform -rotate-90">
-                    <circle class="text-bone-white" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
-                    <circle class="{% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %}" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 - (440 * attendance_pct / 100) }}" stroke-linecap="round" stroke-width="12"></circle>
+    <!-- Right Sidebar (Overview pane) -->
+    <aside class="col-span-12 lg:col-span-4 space-y-8">
+        <!-- Minimalist Architecture Attendance -->
+        <div class="bg-[#0f4c81] text-[#F1F4E4] p-8 rounded-[2.5rem] shadow-xl shadow-[#0f4c81]/10 flex flex-col items-center justify-center relative overflow-hidden">
+            <!-- Decorative circle -->
+            <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-20 translate-x-20"></div>
+            
+            <h4 class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#F1F4E4]/60 mb-8 border-b border-white/10 pb-4 w-full text-center">Attendance Record</h4>
+            
+            <div class="relative w-48 h-48 flex items-center justify-center mb-6">
+                <!-- Outer glow -->
+                <div class="absolute inset-0 rounded-full bg-white/5 blur-xl"></div>
+                
+                <svg class="w-full h-full transform -rotate-90 relative z-10 drop-shadow-lg">
+                    <!-- Background Track -->
+                    <circle cx="96" cy="96" r="86" fill="transparent" stroke="rgba(241, 244, 228, 0.05)" stroke-width="4"></circle>
+                    <!-- Progress Track -->
+                    <circle cx="96" cy="96" r="86" fill="transparent" stroke="#F1F4E4" stroke-width="12" stroke-linecap="round" stroke-dasharray="540" stroke-dashoffset="{{ 540 - (540 * attendance_pct / 100) }}"></circle>
                 </svg>
-                <div class="absolute inset-0 flex flex-col items-center justify-center -space-y-1">
-                    <span class="shadcn-h1 !text-4xl {% if attendance_pct >= 85 %}text-primary{% elif attendance_pct >= 75 %}text-accent-gold{% else %}text-red-500{% endif %} !mt-0">{{ attendance_pct|round|int }}%</span>
-                    <span class="secondary-label text-[9px] {% if attendance_pct >= 85 %}text-primary/60{% elif attendance_pct >= 75 %}text-accent-gold/60{% else %}text-red-500/60{% endif %} tracking-[0.2em] leading-none">
-                        {% if attendance_pct >= 85 %}On Track{% elif attendance_pct >= 75 %}Good{% else %}Warning{% endif %}
-                    </span>
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
+                    <span class="text-6xl text-[#F1F4E4] drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
                 </div>
+            </div>
+            
+            <div class="bg-[#F1F4E4]/10 backdrop-blur-md px-6 py-2.5 rounded-full border border-white/20 shadow-inner max-w-full text-center">
+                <span class="text-xs font-bold tracking-widest uppercase">
+                    Status: <strong class="{% if attendance_pct >= 85 %}text-green-400{% elif attendance_pct >= 75 %}text-yellow-400{% else %}text-red-400{% endif %} ml-1">{% if attendance_pct >= 85 %}Excellent{% elif attendance_pct >= 75 %}Good{% else %}Needs Improvement{% endif %}</strong>
+                </span>
             </div>
         </div>
 
-        <!-- Grade Summary Mini Widget (Library placeholder from before, but let's use Vidya Hub books here instead of Fees since it's connected to DB) -->
-        <div class="bg-primary text-white p-8 rounded-xl shadow-xl shadow-primary/20 relative overflow-hidden">
-            <div class="absolute -right-4 -bottom-4 opacity-10">
-                <span class="material-symbols-outlined text-9xl">library_books</span>
+        <!-- Library Status - Premium Checklist Style -->
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between mb-8">
+                <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0f4c81]">Library Loans</h4>
+                <div class="w-8 h-8 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81]">
+                    <span class="material-symbols-outlined text-sm">auto_stories</span>
+                </div>
             </div>
-            <h4 class="secondary-label text-[10px] text-white/60 tracking-[0.2em] mb-2">Borrowed Library Books</h4>
+            
             {% if borrowed_books %}
-                <div class="flex items-baseline gap-1 mb-8 relative z-10">
-                    <span class="shadcn-h1 text-white">{{ borrowed_books|length }}</span>
-                </div>
-                <div class="space-y-3 relative z-10">
-                    {% for book in borrowed_books[:2] %}
-                    <div class="w-full py-4 px-4 bg-white/10 text-white rounded-xl text-left border border-white/20">
-                        <p class="text-xs font-bold leading-tight line-clamp-1" title="{{ book.title }}">{{ book.title }}</p>
-                        <p class="text-xs text-white/50 mt-1 uppercase tracking-wider">Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}</p>
+            <div class="space-y-4">
+                {% for book in borrowed_books[:3] %}
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm group hover:border-[#0f4c81]/30 hover:shadow-md transition-all">
+                    <div class="w-12 h-12 bg-[#F1F4E4] rounded-xl flex items-center justify-center text-[#0f4c81] flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <span class="material-symbols-outlined">menu_book</span>
                     </div>
-                    {% endfor %}
+                    <div class="flex-1 min-w-0 pt-1">
+                        <p class="text-sm font-bold text-slate-800 truncate" title="{{ book.title }}">{{ book.title }}</p>
+                        <p class="text-xs font-medium mt-1 uppercase tracking-widest {% if book.due_date and (book.due_date - today).days < 0 %}text-red-500{% elif book.due_date and (book.due_date - today).days <= 2 %}text-[#8B3A3A]{% else %}text-slate-400{% endif %}">
+                            Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}
+                        </p>
+                    </div>
                 </div>
+                {% endfor %}
+            </div>
             {% else %}
-                <div class="flex items-baseline gap-1 mb-8 relative z-10">
-                    <span class="shadcn-h1 text-white">0</span>
-                </div>
-                <p class="text-xs text-white/60 relative z-10 mb-6">No books currently borrowed from Vidya Hub.</p>
+            <div class="py-10 text-center bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">menu_book</span>
+                <p class="text-sm text-slate-500 font-medium">No books currently borrowed.</p>
+            </div>
             {% endif %}
         </div>
 
-        <!-- Notice Ticker -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-                <h4 class="secondary-label text-[10px] text-slate-500 tracking-[0.2em]">Recent School Notices</h4>
-                <span class="material-symbols-outlined text-slate-300 text-lg">campaign</span>
-            </div>
-            <div class="p-6">
-                <div class="space-y-6">
-                    {% if notices %}
-                        {% for notice in notices[:3] %}
-                        {% set notice_colors = ['bg-accent-gold', 'bg-primary', 'bg-slate-200'] %}
-                        <div class="flex gap-4 group cursor-pointer">
-                            <div class="w-2 h-2 mt-2 rounded-full {{ notice_colors[loop.index0 % 3] }} flex-shrink-0"></div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors leading-tight">{{ notice.title }}</p>
-                                <p class="text-xs text-slate-500 font-medium mt-1 uppercase">{{ notice.posted_at.strftime('%b %d') if notice.posted_at else 'Active' }}</p>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="text-center text-slate-500 text-xs italic">No active circulars.</div>
-                    {% endif %}
+        <!-- Ticker List purely for school notices -->
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between mb-8">
+                <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0f4c81]">Notice Board</h4>
+                <div class="w-8 h-8 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81]">
+                    <span class="material-symbols-outlined text-sm">campaign</span>
                 </div>
+            </div>
+
+            <div class="space-y-5">
+                {% if notices %}
+                    {% for notice in notices[:4] %}
+                    <div class="group cursor-pointer flex gap-4 p-3 rounded-xl hover:bg-[#F1F4E4] transition-colors -mx-3">
+                        <div class="w-1.5 rounded-full bg-[#0f4c81] opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0"></div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-bold text-slate-400 mb-1 tracking-[0.2em] uppercase">{{ notice.posted_at.strftime('%d %b') if notice.posted_at else 'Active' }}</p>
+                            <h5 class="text-sm font-bold text-slate-800 group-hover:text-[#0f4c81] transition-colors line-clamp-2 leading-snug truncate" title="{{ notice.title }}">{{ notice.title }}</h5>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center text-sm font-medium text-slate-500 italic py-6 bg-slate-50 rounded-2xl">No recent notices.</div>
+                {% endif %}
             </div>
         </div>
     </aside>
 </div>
 
 {% endif %}
+
 {% endblock %}
