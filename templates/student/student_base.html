@@ -147,22 +147,19 @@
     <!-- ══════════ Editorial / Maximalist Sidebar (Frontend-Design Skill) — Light Theme ══════════ -->
     <aside id="sidebar" class="fixed top-0 left-0 h-screen w-80 bg-[#F1F4E4] border-r border-[#0f4c81]/10 z-[100] flex flex-col transition-transform duration-700 ease-[cubic-bezier(0.83,0,0.17,1)] transform -translate-x-full text-[#2D3748] shadow-2xl overflow-hidden">
         
+        <!-- Command Space for Fixed Toggle -->
+        <div class="h-24 w-full"></div>
+
         <!-- Massive Branding Header -->
-        <div class="px-8 pt-12 pb-10 border-b border-[#0f4c81]/10 relative group cursor-default">
+        <div class="px-8 pt-4 pb-6 relative group cursor-default">
             <div class="absolute inset-0 bg-[#0f4c81] transform -translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.83,0,0.17,1)] z-0"></div>
             <h1 class="text-5xl leading-none tracking-tighter text-[#0f4c81] group-hover:text-[#F1F4E4] relative z-10 transition-colors duration-500" style="font-family: 'Playfair Display', serif; font-style: italic;">Scholaris.</h1>
             <p class="mt-4 text-[9px] uppercase tracking-[0.3em] text-[#718096] group-hover:text-[#F1F4E4] font-medium relative z-10 transition-colors duration-500" style="font-family: 'Inter', sans-serif;">Academic Portal &copy; 2026</p>
         </div>
 
         <!-- Editorial Navigation -->
-        <nav class="flex-1 overflow-y-auto no-scrollbar pb-8">
-            <div class="px-8 mt-10 mb-4 flex items-center gap-4">
-                <div class="h-px bg-[#0f4c81]/10 flex-1"></div>
-                <span class="text-[9px] uppercase tracking-[0.25em] text-[#718096]/60" style="font-family: 'Inter', sans-serif;">Menu</span>
-                <div class="h-px bg-[#0f4c81]/10 flex-1"></div>
-            </div>
-
-            <div class="flex flex-col">
+        <nav class="flex-1 overflow-y-auto no-scrollbar pt-6">
+            <div class="flex flex-col border-t border-[#0f4c81]/10">
                 <a href="{{ url_for('student.dashboard') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#0f4c81]/10 hover:bg-[#0f4c81] transition-colors duration-500">
                     <span class="text-2xl font-light tracking-tight text-[#4A5568] group-hover:text-[#F1F4E4] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'dashboard' %}<span class="text-[#0f4c81] group-hover:text-[#F1F4E4] font-bold italic">Dashboard</span>{% else %}Dashboard{% endif %}</span>
                     <span class="text-[10px] tracking-widest text-[#A0AEC0] group-hover:text-[#F1F4E4] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">01</span>
@@ -183,25 +180,17 @@
                     <span class="text-[10px] tracking-widest text-[#A0AEC0] group-hover:text-[#F1F4E4] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">04</span>
                 </a>
 
-                <a href="{{ url_for('student.attendance') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-b border-[#0f4c81]/10 hover:bg-[#0f4c81] transition-colors duration-500">
+                <a href="{{ url_for('student.attendance') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#0f4c81]/10 hover:bg-[#0f4c81] transition-colors duration-500">
                     <span class="text-2xl font-light tracking-tight text-[#4A5568] group-hover:text-[#F1F4E4] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'attendance' %}<span class="text-[#0f4c81] group-hover:text-[#F1F4E4] font-bold italic">Attendance</span>{% else %}Attendance{% endif %}</span>
                     <span class="text-[10px] tracking-widest text-[#A0AEC0] group-hover:text-[#F1F4E4] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">05</span>
                 </a>
-            </div>
 
-            <div class="px-8 mt-12 mb-4 flex items-center gap-4">
-                <div class="h-px bg-[#0f4c81]/10 flex-1"></div>
-                <span class="text-[9px] uppercase tracking-[0.25em] text-[#718096]/60" style="font-family: 'Inter', sans-serif;">Account</span>
-                <div class="h-px bg-[#0f4c81]/10 flex-1"></div>
-            </div>
-
-            <div class="flex flex-col">
                 <a href="{{ url_for('student.profile') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#0f4c81]/10 hover:bg-[#0f4c81] transition-colors duration-500">
                     <span class="text-2xl font-light tracking-tight text-[#4A5568] group-hover:text-[#F1F4E4] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'profile' %}<span class="text-[#0f4c81] group-hover:text-[#F1F4E4] font-bold italic">Profile</span>{% else %}Profile{% endif %}</span>
                     <span class="text-[10px] tracking-widest text-[#A0AEC0] group-hover:text-[#F1F4E4] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">06</span>
                 </a>
 
-                <a href="{{ url_for('student.communication') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-b border-[#0f4c81]/10 hover:bg-[#0f4c81] transition-colors duration-500">
+                <a href="{{ url_for('student.communication') }}" class="group relative flex items-center justify-between px-8 py-5 border-t border-[#0f4c81]/10 hover:bg-[#0f4c81] transition-colors duration-500">
                     <span class="text-2xl font-light tracking-tight text-[#4A5568] group-hover:text-[#F1F4E4] group-hover:translate-x-3 transition-all duration-500" style="font-family: 'Playfair Display', serif;">{% if active_page == 'communication' %}<span class="text-[#0f4c81] group-hover:text-[#F1F4E4] font-bold italic">Messages</span>{% else %}Messages{% endif %}</span>
                     <span class="text-[10px] tracking-widest text-[#A0AEC0] group-hover:text-[#F1F4E4] transition-colors duration-500" style="font-family: 'Inter', sans-serif;">07</span>
                 </a>
@@ -209,14 +198,10 @@
         </nav>
 
         <!-- Sidebar Footer -->
-        <div class="p-8 border-t border-[#0f4c81]/10 flex flex-col gap-5 bg-[#F1F4E4]/50">
-            <a href="{{ url_for('public.index') }}" class="text-[10px] uppercase tracking-[0.2em] text-[#718096] hover:text-[#0f4c81] transition-colors flex justify-between items-center group" style="font-family: 'Inter', sans-serif;">
-                <span>Portal Home</span>
-                <span class="transform group-hover:translate-x-2 transition-transform duration-500">→</span>
-            </a>
-            <a href="{{ url_for('auth.logout') }}" class="text-[10px] uppercase tracking-[0.2em] text-[#8B3A3A] hover:text-[#E11D48] transition-colors flex justify-between items-center group" style="font-family: 'Inter', sans-serif;">
-                <span>Terminate Session</span>
-                <span class="transform group-hover:translate-x-2 transition-transform duration-500">→</span>
+        <div class="p-8 border-t border-[#0f4c81]/10 flex flex-col bg-[#F1F4E4]/50">
+            <a href="{{ url_for('auth.logout') }}" class="group relative flex items-center justify-between py-2 transition-colors duration-500">
+                <span class="text-3xl font-black tracking-tighter text-[#8B3A3A] hover:text-[#E11D48] transition-all duration-500 uppercase" style="font-family: 'Playfair Display', serif;">Log Out</span>
+                <span class="text-[14px] text-[#8B3A3A] group-hover:translate-x-2 transition-transform duration-500">→</span>
             </a>
         </div>
         <style>
@@ -237,6 +222,10 @@
             if (!sidebar || !toggleBtn) return;
 
             function setSidebarState(isOpen) {
+                const burgerTop = document.getElementById('burger-top');
+                const burgerMid = document.getElementById('burger-mid');
+                const burgerBot = document.getElementById('burger-bot');
+
                 if (isOpen) {
                     // Open state
                     sidebar.classList.remove('-translate-x-full');
@@ -244,11 +233,22 @@
                     if (window.innerWidth >= 1024) {
                         mainContent.classList.add('lg:pl-80');
                     }
+                    // Burger to X animation cues (if desired)
+                    if (burgerTop) {
+                        burgerTop.classList.add('translate-y-[6px]', 'rotate-45');
+                        burgerMid.classList.add('opacity-0');
+                        burgerBot.classList.add('-translate-y-[6px]', '-rotate-45', 'w-6');
+                    }
                 } else {
                     // Closed state
                     sidebar.classList.add('-translate-x-full');
                     sidebar.classList.remove('translate-x-0');
                     mainContent.classList.remove('lg:pl-80');
+                    if (burgerTop) {
+                        burgerTop.classList.remove('translate-y-[6px]', 'rotate-45');
+                        burgerMid.classList.remove('opacity-0');
+                        burgerBot.classList.remove('-translate-y-[6px]', '-rotate-45', 'w-6');
+                    }
                 }
 
                 // Respect mobile overlay
@@ -316,22 +316,25 @@
         });
     </script>
 
+    <!-- ══════════ Unified Toggle Button — Fixed Top-Left ══════════ -->
+    <button id="toggleSidebar"
+        class="fixed top-6 left-8 z-[120] flex items-center justify-center w-12 h-12 transition-all border border-[#0f4c81]/10 bg-[#F1F4E4]/80 backdrop-blur-md rounded-xl shadow-sm hover:shadow-md hover:scale-105 active:scale-95 text-[#0f4c81] group"
+        aria-label="Toggle Sidebar">
+        <div class="flex flex-col gap-[4px]">
+            <span id="burger-top" class="w-6 h-[2px] bg-current rounded-full transition-all duration-300"></span>
+            <span id="burger-mid" class="w-6 h-[2px] bg-current rounded-full transition-all duration-300"></span>
+            <span id="burger-bot" class="w-4 h-[2px] bg-current rounded-full transition-all duration-300 group-hover:w-6"></span>
+        </div>
+    </button>
+
     <!-- Adjusting Content Wrapper for Sidebar -->
     <div id="mainContent" class="lg:pl-80 flex flex-col min-h-screen transition-all duration-300">
         <!-- Top Navigation -->
         <nav
             class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- 3-line Hamburguer Button -->
-                <button id="toggleSidebar"
-                    class="flex items-center justify-center w-10 h-10 transition-all border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:bg-slate-50 text-primary relative z-[110] group"
-                    aria-label="Toggle Sidebar">
-                    <div class="flex flex-col gap-[4px]">
-                        <span class="w-5 h-[2px] bg-current rounded-full transition-all group-hover:w-4"></span>
-                        <span class="w-5 h-[2px] bg-current rounded-full transition-all"></span>
-                        <span class="w-4 h-[2px] bg-current rounded-full transition-all group-hover:w-5"></span>
-                    </div>
-                </button>
+                <!-- Search Bar Placeholder Space -->
+                <div class="w-12 h-12 hidden lg:block"></div>
                 <!-- Spotlight Search -->
                 <div class="relative w-full max-w-sm group hidden sm:block">
                     <span
