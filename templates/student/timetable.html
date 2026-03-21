@@ -14,7 +14,7 @@
     {% set period_nums = grid.keys()|list %}
     .timetable-grid {
         display: grid;
-        grid-template-columns: 120px repeat({{ period_nums|length }}, minmax(65px, 1fr));
+        grid-template-columns: 120px repeat({{ periods|length }}, minmax(100px, 1fr));
     }
     {% else %}
     .timetable-grid {
@@ -60,19 +60,17 @@
     <div class="min-w-[1000px] bg-white rounded-xl p-6 shadow-2xl shadow-primary/5 border border-slate-200">
         
         {% if grid %}
-        {% set period_nums = grid.keys()|sort %}
-        
         <!-- Grid Header (Periods) -->
         <div class="timetable-grid border-b-2 border-primary pb-6 mb-6">
             <div class="flex items-center justify-center secondary-label text-[10px] text-primary/30 tracking-[0.3em] uppercase">Days</div>
-            {% for pn in period_nums %}
-                {% set p = grid[pn]['period'] %}
+            {% for p in periods %}
+                {% set pn = p.period_number %}
                 <div class="px-1 text-center">
-                    <p class="text-xs font-black uppercase tracking-tighter opacity-50 whitespace-nowrap">{{ p.start_time|format_time }}<br>{{ p.end_time|format_time }}</p>
+                    <p class="text-[10px] font-black uppercase tracking-tighter opacity-50 whitespace-nowrap">{{ p.start_time|format_time }} — {{ p.end_time|format_time }}</p>
                     {% if p.is_break %}
-                    <p class="period-header text-lg text-accent-gold">{{ p.break_name[:3]|upper if p.break_name else 'BRK' }}</p>
+                    <p class="period-header text-lg text-accent-gold">{{ p.break_name|upper if p.break_name else 'BREAK' }}</p>
                     {% else %}
-                    <p class="period-header text-lg">P{{ p.period_number }}</p>
+                    <p class="period-header text-lg">Period {{ p.period_number }}</p>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -84,11 +82,11 @@
             <div class="timetable-grid {% if day == today_name %}group bg-accent-gold/5 rounded-xl{% else %}opacity-70 hover:opacity-100 transition-opacity{% endif %}">
                 <div class="flex items-center secondary-label text-[10px] tracking-[0.2em] uppercase py-4 pl-4 border-r-2 border-slate-200">{{ day }}</div>
                 
-                {% for pn in period_nums %}
-                    {% set p = grid[pn]['period'] %}
+                {% for p in periods %}
+                    {% set pn = p.period_number %}
                     
                     {% if p.is_break %}
-                        <div class="p-1"><div class="h-full rounded-lg bg-accent-gold/10 text-accent-gold flex items-center justify-center text-xs font-black uppercase">{{ p.break_name[:5] if p.break_name else 'BRK' }}</div></div>
+                        <div class="p-1"><div class="h-full min-h-[60px] rounded-lg bg-accent-gold/10 text-accent-gold flex items-center justify-center text-xs font-black uppercase tracking-widest">{{ p.break_name if p.break_name else 'BREAK' }}</div></div>
                     {% else %}
                         {% set slot = grid[pn]['slots'].get(day) %}
                         {% if slot and slot.subject_name %}
@@ -96,16 +94,16 @@
                             {% set bg_class = 'bg-primary text-bone-white border-primary' if (loop.index0 % 3 == 0) else ('bg-white border-2 border-primary/20 text-slate-800' if not is_lab else 'bg-green-50 text-green-700 border-2 border-green-200') %}
                             
                             <div class="p-1">
-                                <div class="h-full rounded-lg {{ bg_class }} p-2 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer shadow-sm group-hover:border-primary/40 relative overflow-hidden" title="{{ slot.subject_name }} with {{ slot.teacher_name or 'TBA' }}">
-                                    <span class="text-[11px] font-bold line-clamp-1 leading-tight">{{ slot.subject_name[:8] }}</span>
+                                <div class="h-full min-h-[60px] rounded-lg {{ bg_class }} p-3 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer shadow-sm group-hover:border-primary/40 relative overflow-hidden" title="{{ slot.subject_name }} with {{ slot.teacher_name or 'TBA' }}">
+                                    <span class="text-xs font-black leading-tight">{{ slot.subject_name }}</span>
                                     {% if slot.room %}
-                                    <span class="text-[9px] opacity-60 mt-1 block">{{ slot.room[:6] }}</span>
+                                    <span class="text-[9px] opacity-70 mt-1 block font-bold">Room {{ slot.room }}</span>
                                     {% endif %}
                                 </div>
                             </div>
                         {% else %}
                             <div class="p-1">
-                                <div class="h-full rounded-lg border-2 border-dashed border-slate-200 p-2 text-slate-300 flex items-center justify-center">
+                                <div class="h-full min-h-[60px] rounded-lg border-2 border-dashed border-slate-200 p-2 text-slate-300 flex items-center justify-center">
                                     <span class="text-xs">—</span>
                                 </div>
                             </div>
