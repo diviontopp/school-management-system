@@ -106,11 +106,11 @@ SELECT
 
 -- ── Tests ────────────────────────────────────────────────
 INSERT IGNORE INTO tests (name, subject_id, class_id, test_date, max_marks, portions, test_type, created_by) 
-SELECT 'Unit Test 3 - Quadratics', (SELECT id FROM subjects WHERE code='MATH'), (SELECT id FROM classes WHERE name='10-A'), DATE_ADD(CURDATE(), INTERVAL 3 DAY), 25, 'Quadratic equations', 'Unit Test', 1;
+SELECT 'Unit Test 3 - Quadratics', (SELECT id FROM subjects WHERE code='MATH' LIMIT 1), (SELECT id FROM classes WHERE name='10-A' LIMIT 1), DATE_ADD(CURDATE(), INTERVAL 3 DAY), 25, 'Quadratic equations', 'Unit Test', 1;
 
 -- ── Homework ─────────────────────────────────────────────
 INSERT IGNORE INTO homework (title, description, subject_id, class_id, assigned_by, assigned_date, deadline)
-SELECT 'Solve Exercise 4.2', 'Complete quadratic equations.', (SELECT id FROM subjects WHERE code='MATH'), (SELECT id FROM classes WHERE name='10-A'), 1, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 DAY);
+SELECT 'Solve Exercise 4.2', 'Complete quadratic equations.', (SELECT id FROM subjects WHERE code='MATH' LIMIT 1), (SELECT id FROM classes WHERE name='10-A' LIMIT 1), 1, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 DAY);
 
 -- ── Attendance ───────────────────────────────────────────
 -- Use student DBX001
@@ -125,14 +125,14 @@ SELECT (SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), DATE_S
 
 -- ── Notices (Samvaad Hub) ──────────────────────────────────
 INSERT IGNORE INTO notices (title, content, posted_by, posted_at, is_active) VALUES
-('Annual Sports Meet 2026', 'The annual sports meet will be held on April 15th. All students are requested to participate.', (SELECT id FROM teachers LIMIT 1), DATE_SUB(NOW(), INTERVAL 1 DAY), TRUE),
-('Science Fair Postponed', 'The Science Fair scheduled for next week is postponed to May 5th due to unforeseen circumstances.', (SELECT id FROM teachers LIMIT 1), DATE_SUB(NOW(), INTERVAL 2 DAY), TRUE),
-('New Library Rules', 'Students are now allowed to borrow up to 5 books. Please return current books on time.', (SELECT id FROM teachers LIMIT 1), DATE_SUB(NOW(), INTERVAL 5 DAY), TRUE);
+('Annual Sports Meet 2026', 'The annual sports meet will be held on April 15th. All students are requested to participate.', (SELECT id FROM teachers ORDER BY id ASC LIMIT 1), DATE_SUB(NOW(), INTERVAL 1 DAY), TRUE),
+('Science Fair Postponed', 'The Science Fair scheduled for next week is postponed to May 5th due to unforeseen circumstances.', (SELECT id FROM teachers ORDER BY id ASC LIMIT 1), DATE_SUB(NOW(), INTERVAL 2 DAY), TRUE),
+('New Library Rules', 'Students are now allowed to borrow up to 5 books. Please return current books on time.', (SELECT id FROM teachers ORDER BY id ASC LIMIT 1), DATE_SUB(NOW(), INTERVAL 5 DAY), TRUE);
 
 -- ── Student Remarks (Digital Diary) ────────────────────────
 INSERT IGNORE INTO student_remarks (student_id, teacher_id, remark, remark_type, date) VALUES
-((SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), (SELECT id FROM teachers LIMIT 1), 'Excellent progress in Mathematics. Keep up the good work!', 'Academic', DATE_SUB(CURDATE(), INTERVAL 2 DAY)),
-((SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), (SELECT id FROM teachers LIMIT 1), 'Participated actively in the class discussion today.', 'General', DATE_SUB(CURDATE(), INTERVAL 5 DAY));
+((SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), (SELECT id FROM teachers ORDER BY id ASC LIMIT 1), 'Excellent progress in Mathematics. Keep up the good work!', 'Academic', DATE_SUB(CURDATE(), INTERVAL 2 DAY)),
+((SELECT id FROM students WHERE admission_number='DBX001' LIMIT 1), (SELECT id FROM teachers ORDER BY id ASC LIMIT 1), 'Participated actively in the class discussion today.', 'General', DATE_SUB(CURDATE(), INTERVAL 5 DAY));
 
 -- ── Library Borrowings (Vidya Hub) ─────────────────────────
 -- First ensure books exist

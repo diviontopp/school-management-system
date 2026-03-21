@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS classes (
     name           VARCHAR(20) NOT NULL,        -- e.g. "10-A"
     grade          INT         NOT NULL,         -- e.g. 10
     section        VARCHAR(5)  NOT NULL,         -- e.g. "A"
-    academic_year  VARCHAR(9)  NOT NULL          -- e.g. "2025-2026"
+    academic_year  VARCHAR(9)  NOT NULL,         -- e.g. "2025-2026"
+    UNIQUE KEY uq_class_name (name, academic_year)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS subjects (

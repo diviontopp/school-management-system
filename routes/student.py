@@ -370,7 +370,7 @@ def communication():
     
     sid = student.get('id')
     notices = query("SELECT * FROM notices WHERE is_active = 1 ORDER BY posted_at DESC LIMIT 10") or []
-    remarks = query("SELECT r.remark, r.date, CONCAT(t.first_name, ' ', t.last_name) as teacher_name, s.name as subject_name FROM student_remarks r JOIN teachers t ON r.teacher_id = t.id JOIN subjects s ON r.subject_id = s.id WHERE r.student_id = %s ORDER BY r.date DESC LIMIT 10", (sid,)) or []
+    remarks = query("SELECT r.remark, r.date, CONCAT(t.first_name, ' ', t.last_name) as teacher_name FROM student_remarks r JOIN teachers t ON r.teacher_id = t.id WHERE r.student_id = %s ORDER BY r.date DESC LIMIT 10", (sid,)) or []
     
     return render_template('student/communication.html',
         student=student,
