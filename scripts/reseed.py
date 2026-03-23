@@ -1,6 +1,12 @@
 import os
 import sys
 
+# Inject MYSQL local defaults to bypass Railway/env crash when run standalone
+os.environ["MYSQL_HOST"] = "localhost"
+os.environ["MYSQL_USER"] = "root"
+os.environ["MYSQL_DATABASE"] = "school_portal"
+os.environ["MYSQL_PASSWORD"] = ""
+
 # Add project root to python path to import config and database
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
