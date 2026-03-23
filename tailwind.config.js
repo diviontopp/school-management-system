@@ -9,7 +9,9 @@ module.exports = {
       extend: {
           colors: {
               "primary": "#0f4c81", // Navy Blue
+              "navy-light": "#1a62a0",
               "accent-gold": "#C5A028",  // Gold
+              "accent-maroon": "#8B3A3A",
               "bone-white": "#F1F4E4", // Bone White
               "background-light": "#F1F4E4",
               "background-dark": "#0a1f33",
@@ -25,6 +27,7 @@ module.exports = {
           fontFamily: {
               "display": ["Inter", "sans-serif"],
               "clash": ["Clash Display", "sans-serif"],
+              "serif": ["Playfair Display", "Georgia", "serif"],
           },
           borderRadius: {
               "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"

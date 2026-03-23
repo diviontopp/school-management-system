@@ -4,10 +4,10 @@
 
 {% block content %}
 {% if not student %}
-<div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4">
-    <span class="material-symbols-outlined text-3xl">error</span>
+<div class="p-8 bg-red-50 text-red-600 rounded-xl border border-red-200 flex items-center gap-4" role="alert">
+    <span class="material-symbols-outlined text-3xl" aria-hidden="true">error</span>
     <div>
-        <h1 class="text-2xl font-bold" style="font-family: 'Playfair Display', serif;">Academic Dashboard</h1>
+        <h1 class="text-2xl font-bold font-serif">Academic Dashboard</h1>
         <h3 class="font-bold text-lg mt-2">Student record not found</h3>
         <p class="text-sm">Please contact administration.</p>
     </div>
@@ -18,24 +18,24 @@
     <!-- Left Column: Main Content -->
     <div class="col-span-12 lg:col-span-8 space-y-12">
         <!-- Editorial Hero Greeting -->
-        <section class="relative bg-[#0f4c81] text-[#F1F4E4] rounded-3xl p-10 overflow-hidden shadow-2xl shadow-[#0f4c81]/20">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+        <section class="relative bg-primary text-bone-white rounded-3xl p-10 overflow-hidden shadow-2xl shadow-primary/20">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" aria-hidden="true"></div>
             <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                 <div>
-                    <p class="text-[#F1F4E4]/70 font-bold tracking-widest uppercase text-xs mb-3 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <p class="text-bone-white/70 font-bold tracking-widest uppercase text-xs mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse" aria-hidden="true"></span>
                         Student Command Center
                     </p>
-                    <h2 class="text-5xl lg:text-6xl text-[#F1F4E4] mb-4" style="font-family: 'Playfair Display', serif;">
+                    <h2 class="text-5xl lg:text-6xl text-bone-white mb-4 font-serif">
                         Hello, <span class="italic">{{ student.first_name }}</span>.
                     </h2>
-                    <div class="flex flex-wrap items-center gap-4 text-[#F1F4E4]/80">
+                    <div class="flex flex-wrap items-center gap-4 text-bone-white/80">
                         <div class="flex items-center gap-2 bg-black/20 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
-                            <span class="material-symbols-outlined text-sm">school</span>
+                            <span class="material-symbols-outlined text-sm" aria-hidden="true">school</span>
                             <span class="text-sm font-medium">Class {{ student.class_name }} &bull; Roll #{{ student.roll_number }}</span>
                         </div>
                         <p class="text-sm font-medium flex items-center gap-2 bg-black/20 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
-                            <span class="material-symbols-outlined text-sm">calendar_today</span>
+                            <span class="material-symbols-outlined text-sm" aria-hidden="true">calendar_today</span>
                             {{ today.strftime('%A, %d %B %Y') }}
                         </p>
                     </div>
@@ -44,186 +44,170 @@
         </section>
 
         <!-- QoL Quick Actions Ribbon -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="{{ url_for('student.assignments') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
-                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="material-symbols-outlined">task</span>
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4" aria-label="Quick actions">
+            <a href="{{ url_for('student.assignments') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-primary/30 hover:shadow-lg transition-all text-center min-h-[88px]">
+                <div class="w-12 h-12 rounded-full bg-bone-white flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                    <span class="material-symbols-outlined" aria-hidden="true">task</span>
                 </div>
                 <span class="text-sm font-bold text-slate-700">Assignments</span>
             </a>
-            <a href="{{ url_for('student.timetable') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
-                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="material-symbols-outlined">event</span>
+            <a href="{{ url_for('student.timetable') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-primary/30 hover:shadow-lg transition-all text-center min-h-[88px]">
+                <div class="w-12 h-12 rounded-full bg-bone-white flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                    <span class="material-symbols-outlined" aria-hidden="true">event</span>
                 </div>
                 <span class="text-sm font-bold text-slate-700">Class Routine</span>
             </a>
-            <a href="{{ url_for('student.grades') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-[#0f4c81]/30 hover:shadow-lg transition-all text-center">
-                <div class="w-12 h-12 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81] mb-3 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="material-symbols-outlined">school</span>
+            <a href="{{ url_for('student.grades') }}" class="group flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-200 hover:border-primary/30 hover:shadow-lg transition-all text-center min-h-[88px]">
+                <div class="w-12 h-12 rounded-full bg-bone-white flex items-center justify-center text-primary mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                    <span class="material-symbols-outlined" aria-hidden="true">school</span>
                 </div>
                 <span class="text-sm font-bold text-slate-700">Academics</span>
             </a>
         </section>
 
-        <!-- Ultra-Premium Action Items -->
-        <section class="mb-16">
+        <!-- Action Items -->
+        <section class="mb-16" aria-label="Action items">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
                 <div>
-                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-[#0f4c81]/50 mb-2">Priority Queue</h3>
-                    <h2 class="text-4xl md:text-5xl text-[#0f4c81] font-black tracking-tight" style="font-family: 'Playfair Display', serif;">Action Items</h2>
+                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-primary/50 mb-2">Priority Queue</h3>
+                    <h2 class="text-4xl md:text-5xl text-primary font-black tracking-tight font-serif">Action Items</h2>
                 </div>
-                <a href="{{ url_for('student.assignments') }}" class="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-[#0f4c81] px-6 py-3 text-[#F1F4E4] transition-all hover:pr-12 shadow-lg hover:shadow-xl hover:shadow-[#0f4c81]/20">
-                    <span class="text-xs font-bold uppercase tracking-widest z-10 transition-colors">All Tasks</span>
-                    <div class="absolute right-1 top-1 bottom-1 w-10 rounded-full bg-[#1a62a0] flex items-center justify-center transition-all duration-300 group-hover:w-[calc(100%-8px)] group-hover:bg-[#1a62a0] z-0"></div>
-                    <span class="material-symbols-outlined absolute right-3 z-10 text-white transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+                <a href="{{ url_for('student.assignments') }}" aria-label="View all assignments" class="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-primary px-6 py-3 text-bone-white transition-all shadow-lg hover:shadow-xl hover:shadow-primary/20 min-h-[44px] min-w-[44px]">
+                    <span class="text-xs font-bold uppercase tracking-widest z-10">All Tasks</span>
+                    <span class="material-symbols-outlined z-10 text-white transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">arrow_forward</span>
                 </a>
             </div>
             
             {% if upcoming_homework %}
-            <div class="relative pl-4 md:pl-0">
-                <div class="absolute left-[11px] top-6 bottom-6 w-px bg-gradient-to-b from-[#0f4c81]/30 via-[#0f4c81]/10 to-transparent md:hidden"></div>
+            <div class="space-y-6">
+                {% for hw in upcoming_homework[:4] %}
+                {% set days_left = (hw.deadline - today).days %}
+                {% set is_done = hw.submission_status == 'Submitted' %}
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 md:gap-y-0">
-                    {% for hw in upcoming_homework[:4] %}
-                    {% set days_left = (hw.deadline - today).days %}
-                    {% set is_done = hw.submission_status == 'Submitted' %}
-                    
-                    <div class="relative group {% if loop.index0 % 2 == 1 %}md:mt-16{% else %}md:mb-16{% endif %}">
-                        <div class="flex gap-5 md:gap-6 items-start">
-                            <div class="relative z-10 w-6 h-6 md:w-8 md:h-8 rounded-full border-2 {% if is_done %}border-green-500 bg-green-50{% elif days_left < 0 %}border-red-500 bg-red-50{% elif days_left <= 1 %}border-[#8B3A3A] bg-[#8B3A3A]/10{% else %}border-[#0f4c81] bg-white{% endif %} flex items-center justify-center flex-shrink-0 mt-1 md:mt-2 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                <article class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+                    <!-- Status accent -->
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-[2rem] {% if is_done %}bg-status-success{% elif days_left < 0 %}bg-status-danger{% elif days_left <= 1 %}bg-accent-maroon{% else %}bg-primary{% endif %}" aria-hidden="true"></div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pl-4">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="inline-block px-3 py-1 bg-slate-50 text-slate-500 text-[10px] font-black uppercase tracking-[0.15em] rounded-full border border-slate-100">
+                                    {{ hw.subject_name }}
+                                </span>
                                 {% if is_done %}
-                                <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-500"></div>
-                                {% elif days_left <= 1 and not days_left < 0 %}
-                                <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#8B3A3A] animate-pulse"></div>
-                                {% else %}
-                                <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full {% if days_left < 0 %}bg-red-500{% else %}bg-[#0f4c81]{% endif %} opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <span class="text-status-success material-symbols-outlined text-xl" aria-label="Completed">verified</span>
                                 {% endif %}
                             </div>
-                            
-                            <div class="flex-1 min-w-0 bg-white p-6 md:p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-[0_20px_40px_-15px_rgba(15,76,129,0.15)] hover:-translate-y-2 transition-all duration-400">
-                                <div class="flex justify-between items-start mb-5">
-                                    <span class="inline-block px-4 py-1.5 bg-slate-50 text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-slate-100">
-                                        {{ hw.subject_name }}
-                                    </span>
-                                    {% if is_done %}
-                                    <span class="text-green-500 material-symbols-outlined text-2xl drop-shadow-sm">verified</span>
-                                    {% endif %}
-                                </div>
-                                <h4 class="text-2xl md:text-3xl font-black text-slate-800 mb-3 leading-tight group-hover:text-[#0f4c81] transition-colors line-clamp-2" title="{{ hw.title }}" style="font-family: 'Playfair Display', serif;">{{ hw.title }}</h4>
-                                
-                                <div class="mt-8 flex items-end justify-between border-t border-slate-50 pt-5">
-                                    <div class="flex flex-col">
-                                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Deadline</span>
-                                        <span class="text-sm md:text-base font-bold {% if is_done %}text-green-600{% elif days_left < 0 %}text-red-600{% elif days_left <= 1 %}text-[#8B3A3A]{% else %}text-slate-700{% endif %}">
-                                            {% if is_done %}Completed{% elif days_left < 0 %}Overdue{% elif days_left == 0 %}Today{% elif days_left == 1 %}Tomorrow{% else %}{{ hw.deadline.strftime('%b %d') }}{% endif %}
-                                        </span>
-                                    </div>
-                                    
-                                    {% if not is_done %}
-                                    <a href="{{ url_for('student.assignments') }}" class="w-12 h-12 rounded-full bg-[#F1F4E4] text-[#0f4c81] flex items-center justify-center hover:bg-[#0f4c81] hover:text-[#F1F4E4] transition-all duration-300 border border-[#0f4c81]/10 group-hover:rotate-45">
-                                        <span class="material-symbols-outlined">north_east</span>
-                                    </a>
-                                    {% endif %}
-                                </div>
+                            <h4 class="text-xl md:text-2xl font-black text-slate-800 leading-tight group-hover:text-primary transition-colors line-clamp-2 font-serif" title="{{ hw.title }}">{{ hw.title }}</h4>
+                        </div>
+                        
+                        <div class="flex items-center gap-5 sm:flex-shrink-0">
+                            <div class="flex flex-col items-start sm:items-end">
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Deadline</span>
+                                <span class="text-sm font-bold {% if is_done %}text-status-success{% elif days_left < 0 %}text-status-danger{% elif days_left <= 1 %}text-accent-maroon{% else %}text-slate-700{% endif %}">
+                                    {% if is_done %}Completed{% elif days_left < 0 %}Overdue{% elif days_left == 0 %}Today{% elif days_left == 1 %}Tomorrow{% else %}{{ hw.deadline.strftime('%b %d') }}{% endif %}
+                                </span>
                             </div>
+                            
+                            {% if not is_done %}
+                            <a href="{{ url_for('student.assignments') }}" aria-label="Submit {{ hw.title }}" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-bone-white text-primary flex items-center justify-center hover:bg-primary hover:text-bone-white transition-all duration-300 border border-primary/10">
+                                <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                            </a>
+                            {% else %}
+                            <div class="w-11 h-11 rounded-full bg-status-success-bg text-status-success flex items-center justify-center border border-green-100" aria-hidden="true">
+                                <span class="material-symbols-outlined" aria-hidden="true">done_all</span>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
+                </article>
+                {% endfor %}
             </div>
             {% else %}
-            <div class="relative bg-gradient-to-r from-slate-50 to-white p-16 rounded-[3rem] border border-slate-100 text-center overflow-hidden">
-                <div class="absolute inset-0 bg-[#F1F4E4]/30 pointer-events-none" style="mask-image: radial-gradient(circle at center, black, transparent);"></div>
-                <h4 class="text-4xl text-slate-300 font-bold mb-4" style="font-family: 'Playfair Display', serif;">No Pending Tasks</h4>
+            <div class="relative bg-gradient-to-r from-slate-50 to-white p-16 rounded-[2rem] border border-slate-100 text-center overflow-hidden">
+                <h4 class="text-3xl text-slate-300 font-bold mb-4 font-serif">No Pending Tasks</h4>
                 <p class="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">You're completely caught up. Go rest.</p>
             </div>
             {% endif %}
         </section>
 
-        <!-- Immersive Glassmorphism Section -->
-        <section class="relative rounded-[3rem] p-8 md:p-12 overflow-hidden mb-16 shadow-2xl">
-            <!-- Vibrant Abstract Background to make glass pop -->
-            <div class="absolute inset-0 bg-slate-900 pointer-events-none"></div>
-            <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-80" style="background: radial-gradient(circle at 10% 0%, #3b82f6 0%, transparent 60%), radial-gradient(circle at 90% 100%, #10b981 0%, transparent 60%), radial-gradient(circle at 50% 50%, #8b5cf6 0%, transparent 70%); filter: blur(40px);"></div>
+        <!-- Assessments & Teacher Remarks -->
+        <section class="relative rounded-[2rem] p-6 md:p-10 overflow-hidden mb-16" aria-label="Academic insights">
+            <!-- Controlled dark background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 pointer-events-none" aria-hidden="true"></div>
+            <!-- Subtle gradient accents (reduced from audit) -->
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-50" style="background: radial-gradient(ellipse at 20% 20%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.25) 0%, transparent 50%);" aria-hidden="true"></div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
-                <!-- Upcoming Assessments (Glass with specific background) -->
-                <div class="h-full flex flex-col pt-2">
+                <!-- Upcoming Assessments -->
+                <div class="flex flex-col pt-2">
                     <h3 class="text-white/90 font-black tracking-[0.2em] uppercase text-xs mb-6 pl-4 border-l-2 border-blue-400">
                         Upcoming Assessments
                     </h3>
                     {% if upcoming_tests %}
-                    <!-- Tinted Glass for Assessments -->
-                    <div class="flex-1 bg-blue-600/20 backdrop-blur-[32px] p-8 md:p-10 rounded-[2.5rem] border border-white/20 shadow-[0_8px_32px_rgba(37,99,235,0.4)] group hover:bg-blue-600/30 hover:border-white/30 transition-all duration-500 relative overflow-hidden flex flex-col justify-between">
-                        <!-- Extra abstract shape inside for 'different background' effect locally -->
-                        <div class="absolute -top-32 -right-32 w-80 h-80 bg-blue-400/30 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-400/40 transition-colors"></div>
-                        
+                    <div class="flex-1 bg-blue-500/15 backdrop-blur-xl p-8 md:p-10 rounded-[2rem] border border-white/15 shadow-lg group hover:bg-blue-500/20 hover:border-white/25 transition-all duration-500 relative overflow-hidden flex flex-col justify-between">
                         {% set test = upcoming_tests[0] %}
                         <div class="relative z-10 space-y-6 flex-1">
-                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-black/20 backdrop-blur-md text-white font-bold text-[10px] uppercase tracking-widest rounded-full border border-white/10 shadow-inner">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse box-content border-2 border-blue-300"></span>
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-black/20 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-widest rounded-full border border-white/10">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-300" aria-hidden="true"></span>
                                 {{ test.test_type }}
                             </div>
-                            <div class="mt-8">
-                                <h4 class="text-4xl md:text-5xl text-white font-black mb-3 leading-tight drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ test.subject_name }}</h4>
-                                <p class="text-white/80 text-base font-medium drop-shadow-sm">{{ test.name }}</p>
+                            <div class="mt-6">
+                                <h4 class="text-3xl md:text-4xl text-white font-black mb-3 leading-tight font-serif">{{ test.subject_name }}</h4>
+                                <p class="text-white/70 text-base font-medium">{{ test.name }}</p>
                             </div>
                         </div>
 
-                        <div class="relative z-10 mt-12 flex items-center justify-between bg-black/20 backdrop-blur-md border border-white/10 p-5 rounded-3xl group-hover:bg-black/30 transition-colors shadow-lg">
+                        <div class="relative z-10 mt-10 flex items-center justify-between bg-black/20 backdrop-blur-sm border border-white/10 p-5 rounded-2xl transition-colors">
                             <div class="flex flex-col">
                                 <span class="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">Scheduled Date</span>
                                 <span class="text-lg font-black text-white">{{ test.test_date.strftime('%B %d, %Y') if test.test_date else '' }}</span>
                             </div>
-                            <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-blue-900 group-hover:scale-110 transition-all duration-300 shadow-sm content-center">
-                                <span class="material-symbols-outlined">east</span>
-                            </div>
+                            <a href="{{ url_for('student.grades') }}" aria-label="View assessment details for {{ test.subject_name }}" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all duration-300">
+                                <span class="material-symbols-outlined" aria-hidden="true">east</span>
+                            </a>
                         </div>
                     </div>
                     {% else %}
-                    <div class="flex-1 bg-white/10 backdrop-blur-[32px] p-10 rounded-[2.5rem] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] flex flex-col items-center justify-center text-center">
-                        <span class="material-symbols-outlined text-6xl text-white/20 mb-4">check_circle</span>
+                    <div class="flex-1 bg-white/10 backdrop-blur-xl p-10 rounded-[2rem] border border-white/10 flex flex-col items-center justify-center text-center">
+                        <span class="material-symbols-outlined text-6xl text-white/20 mb-4" aria-hidden="true">check_circle</span>
                         <h5 class="text-white font-bold text-xl mb-2">No Assessments</h5>
                         <p class="text-white/40 text-[10px] font-black uppercase tracking-widest">You have a clear schedule.</p>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- Teacher Remarks (Glass) -->
-                <div class="h-full flex flex-col pt-2">
+                <!-- Teacher Remarks -->
+                <div class="flex flex-col pt-2">
                     <h3 class="text-white/90 font-black tracking-[0.2em] uppercase text-xs mb-6 pl-4 border-l-2 border-emerald-400">
                         Teacher Remarks
                     </h3>
                     {% if remarks %}
-                    <!-- Clearer Glass for Remarks -->
-                    <div class="flex-1 bg-white/10 backdrop-blur-[32px] p-8 md:p-10 rounded-[2.5rem] border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.2)] group hover:bg-white/15 hover:border-white/30 transition-all duration-500 relative overflow-hidden flex flex-col justify-between">
-                        <!-- Highlight glow -->
-                        <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-400/30 transition-colors"></div>
-
-                        <span class="material-symbols-outlined absolute top-10 right-10 text-8xl text-white/10 transform rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-transform duration-700 pointer-events-none drop-shadow-lg" style="font-family: 'Playfair Display', serif;">format_quote</span>
+                    {% set remark = remarks[0] %}
+                    <div class="flex-1 bg-white/10 backdrop-blur-xl p-8 md:p-10 rounded-[2rem] border border-white/15 group hover:bg-white/15 hover:border-white/25 transition-all duration-500 relative overflow-hidden flex flex-col justify-between">
+                        <span class="material-symbols-outlined absolute top-8 right-8 text-7xl text-white/5 pointer-events-none" aria-hidden="true">format_quote</span>
                         
-                        {% set remark = remarks[0] %}
                         <div class="relative z-10 pt-4 flex-1">
-                            <p class="text-white text-2xl md:text-3xl font-medium leading-relaxed italic drop-shadow-md" style="font-family: 'Playfair Display', serif;">"{{ remark.remark }}"</p>
+                            <p class="text-white text-xl md:text-2xl font-medium leading-relaxed italic font-serif">"{{ remark.remark }}"</p>
                         </div>
                         
-                        <div class="relative z-10 mt-12 flex items-center gap-5">
-                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-black text-2xl shadow-[0_4px_16px_rgba(16,185,129,0.5)] border-2 border-white/30">
+                        <div class="relative z-10 mt-10 flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-lg border-2 border-white/20" aria-hidden="true">
                                 {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
                             </div>
                             <div>
-                                <h5 class="font-black text-white text-xl tracking-tight drop-shadow-sm">{{ remark.teacher_name }}</h5>
+                                <h5 class="font-black text-white text-lg tracking-tight">{{ remark.teacher_name }}</h5>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <p class="text-[10px] text-emerald-300 font-bold uppercase tracking-[0.2em]">{{ remark.remark_type }}</p>
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400/50"></span>
-                                    <p class="text-[10px] text-emerald-300 font-bold uppercase tracking-[0.2em]">{{ remark.date.strftime('%d %b') if remark.date else '' }}</p>
+                                    <p class="text-[10px] text-emerald-300 font-bold uppercase tracking-[0.15em]">{{ remark.remark_type }}</p>
+                                    <span class="w-1 h-1 rounded-full bg-emerald-400/50" aria-hidden="true"></span>
+                                    <p class="text-[10px] text-emerald-300 font-bold uppercase tracking-[0.15em]">{{ remark.date.strftime('%d %b') if remark.date else '' }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% else %}
-                    <div class="flex-1 bg-white/10 backdrop-blur-[32px] p-10 rounded-[2.5rem] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] flex flex-col items-center justify-center text-center">
-                        <span class="material-symbols-outlined text-6xl text-white/20 mb-4">chat_bubble</span>
+                    <div class="flex-1 bg-white/10 backdrop-blur-xl p-10 rounded-[2rem] border border-white/10 flex flex-col items-center justify-center text-center">
+                        <span class="material-symbols-outlined text-6xl text-white/20 mb-4" aria-hidden="true">chat_bubble</span>
                         <h5 class="text-white font-bold text-xl mb-2">No Remarks</h5>
                         <p class="text-white/40 text-[10px] font-black uppercase tracking-widest">Nothing to display at this time.</p>
                     </div>
@@ -235,55 +219,51 @@
     </div>
 
     <!-- Right Sidebar (Overview pane) -->
-    <aside class="col-span-12 lg:col-span-4 space-y-8">
-        <!-- Minimalist Architecture Attendance -->
-        <div class="bg-[#0f4c81] text-[#F1F4E4] p-8 rounded-[2.5rem] shadow-xl shadow-[#0f4c81]/10 flex flex-col items-center justify-center relative overflow-hidden">
-            <!-- Decorative circle -->
-            <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-20 translate-x-20"></div>
+    <aside class="col-span-12 lg:col-span-4 space-y-8" aria-label="Dashboard overview">
+        <!-- Attendance -->
+        <div class="bg-primary text-bone-white p-8 rounded-[2.5rem] shadow-xl shadow-primary/10 flex flex-col items-center justify-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-20 translate-x-20" aria-hidden="true"></div>
             
-            <h4 class="text-[10px] font-bold uppercase tracking-[0.4em] text-[#F1F4E4]/60 mb-8 border-b border-white/10 pb-4 w-full text-center">Attendance Record</h4>
+            <h4 class="text-[10px] font-bold uppercase tracking-[0.4em] text-bone-white/60 mb-8 border-b border-white/10 pb-4 w-full text-center">Attendance Record</h4>
             
             <div class="relative w-56 h-56 flex items-center justify-center mb-6 mt-4">
-                <!-- Outer glow -->
-                <div class="absolute inset-0 rounded-full bg-white/5 blur-xl"></div>
+                <div class="absolute inset-0 rounded-full bg-white/5 blur-xl" aria-hidden="true"></div>
                 
-                <svg class="w-full h-full transform -rotate-90 relative z-10 drop-shadow-lg" viewBox="0 0 224 224">
-                    <!-- Background Track -->
+                <svg class="w-full h-full transform -rotate-90 relative z-10" viewBox="0 0 224 224" role="img" aria-label="Attendance: {{ attendance_pct|round|int }}%">
                     <circle cx="112" cy="112" r="100" fill="transparent" stroke="rgba(241, 244, 228, 0.05)" stroke-width="4"></circle>
-                    <!-- Progress Track -->
                     <circle cx="112" cy="112" r="100" fill="transparent" stroke="#F1F4E4" stroke-width="12" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="{{ 628 - (628 * attendance_pct / 100) }}"></circle>
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center z-20">
-                    <span class="text-6xl text-[#F1F4E4] drop-shadow-md" style="font-family: 'Playfair Display', serif;">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
+                    <span class="text-6xl text-bone-white font-serif">{{ attendance_pct|round|int }}<span class="text-3xl font-light">%</span></span>
                 </div>
             </div>
             
-            <div class="bg-[#F1F4E4]/10 backdrop-blur-md px-6 py-2.5 rounded-full border border-white/20 shadow-inner max-w-full text-center">
+            <div class="bg-bone-white/10 backdrop-blur-md px-6 py-2.5 rounded-full border border-white/20 max-w-full text-center">
                 <span class="text-xs font-bold tracking-widest uppercase">
                     Status: <strong class="{% if attendance_pct >= 85 %}text-green-400{% elif attendance_pct >= 75 %}text-yellow-400{% else %}text-red-400{% endif %} ml-1">{% if attendance_pct >= 85 %}Excellent{% elif attendance_pct >= 75 %}Good{% else %}Needs Improvement{% endif %}</strong>
                 </span>
             </div>
         </div>
 
-        <!-- Library Status - Premium Checklist Style -->
+        <!-- Library Status -->
         <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
             <div class="flex items-center justify-between mb-8">
-                <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0f4c81]">Library Loans</h4>
-                <div class="w-8 h-8 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81]">
-                    <span class="material-symbols-outlined text-sm">auto_stories</span>
+                <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-primary">Library Loans</h4>
+                <div class="w-8 h-8 rounded-full bg-bone-white flex items-center justify-center text-primary" aria-hidden="true">
+                    <span class="material-symbols-outlined text-sm" aria-hidden="true">auto_stories</span>
                 </div>
             </div>
             
             {% if borrowed_books %}
             <div class="space-y-4">
                 {% for book in borrowed_books[:3] %}
-                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm group hover:border-[#0f4c81]/30 hover:shadow-md transition-all">
-                    <div class="w-12 h-12 bg-[#F1F4E4] rounded-xl flex items-center justify-center text-[#0f4c81] flex-shrink-0 group-hover:scale-105 transition-transform">
-                        <span class="material-symbols-outlined">menu_book</span>
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm group hover:border-primary/30 hover:shadow-md transition-all">
+                    <div class="w-12 h-12 bg-bone-white rounded-xl flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform" aria-hidden="true">
+                        <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
                     </div>
                     <div class="flex-1 min-w-0 pt-1">
                         <p class="text-sm font-bold text-slate-800 truncate" title="{{ book.title }}">{{ book.title }}</p>
-                        <p class="text-xs font-medium mt-1 uppercase tracking-widest {% if book.due_date and (book.due_date - today).days < 0 %}text-red-500{% elif book.due_date and (book.due_date - today).days <= 2 %}text-[#8B3A3A]{% else %}text-slate-400{% endif %}">
+                        <p class="text-xs font-medium mt-1 uppercase tracking-widest {% if book.due_date and (book.due_date - today).days < 0 %}text-status-danger{% elif book.due_date and (book.due_date - today).days <= 2 %}text-accent-maroon{% else %}text-slate-400{% endif %}">
                             Due: {{ book.due_date.strftime('%d %b') if book.due_date else 'N/A' }}
                         </p>
                     </div>
@@ -292,31 +272,31 @@
             </div>
             {% else %}
             <div class="py-10 text-center bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
-                <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">menu_book</span>
+                <span class="material-symbols-outlined text-4xl text-slate-300 mb-2" aria-hidden="true">menu_book</span>
                 <p class="text-sm text-slate-500 font-medium">No books currently borrowed.</p>
             </div>
             {% endif %}
         </div>
 
-        <!-- Ticker List purely for school notices -->
+        <!-- Notice Board -->
         <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
             <div class="flex items-center justify-between mb-8">
-                <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0f4c81]">Notice Board</h4>
-                <div class="w-8 h-8 rounded-full bg-[#F1F4E4] flex items-center justify-center text-[#0f4c81]">
-                    <span class="material-symbols-outlined text-sm">campaign</span>
+                <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-primary">Notice Board</h4>
+                <div class="w-8 h-8 rounded-full bg-bone-white flex items-center justify-center text-primary" aria-hidden="true">
+                    <span class="material-symbols-outlined text-sm" aria-hidden="true">campaign</span>
                 </div>
             </div>
 
-            <div class="space-y-5">
+            <div class="space-y-3">
                 {% if notices %}
                     {% for notice in notices[:4] %}
-                    <div class="group cursor-pointer flex gap-4 p-3 rounded-xl hover:bg-[#F1F4E4] transition-colors -mx-3">
-                        <div class="w-1.5 rounded-full bg-[#0f4c81] opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0"></div>
+                    <button type="button" class="group w-full flex gap-4 p-3 rounded-xl hover:bg-bone-white transition-colors -mx-3 text-left min-h-[44px]" aria-label="Read notice: {{ notice.title }}">
+                        <div class="w-1.5 rounded-full bg-primary opacity-20 group-hover:opacity-100 transition-opacity flex-shrink-0" aria-hidden="true"></div>
                         <div class="min-w-0">
                             <p class="text-[10px] font-bold text-slate-400 mb-1 tracking-[0.2em] uppercase">{{ notice.posted_at.strftime('%d %b') if notice.posted_at else 'Active' }}</p>
-                            <h5 class="text-sm font-bold text-slate-800 group-hover:text-[#0f4c81] transition-colors line-clamp-2 leading-snug truncate" title="{{ notice.title }}">{{ notice.title }}</h5>
+                            <h5 class="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors line-clamp-2 leading-snug" title="{{ notice.title }}">{{ notice.title }}</h5>
                         </div>
-                    </div>
+                    </button>
                     {% endfor %}
                 {% else %}
                     <div class="text-center text-sm font-medium text-slate-500 italic py-6 bg-slate-50 rounded-2xl">No recent notices.</div>
