@@ -126,7 +126,7 @@
                             <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white" aria-label="Cancel" onclick="event.stopPropagation(); toggleCompletionState(this.closest('article'))">
                                 <span class="material-symbols-outlined text-xl">close</span>
                             </button>
-                            <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-status-success text-white hover:bg-green-600 flex items-center justify-center transition-all shadow-lg shadow-status-success/30 hover:scale-105 hover:shadow-status-success/50 confirm-btn" aria-label="Confirm done" onclick="event.stopPropagation(); markTaskComplete({{ hw.id }}, 'homework', this.closest('article'))">
+                            <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-status-success text-white hover:bg-green-600 flex items-center justify-center transition-all shadow-lg shadow-status-success/30 hover:scale-105 hover:shadow-status-success/50 confirm-btn" aria-label="Confirm done" data-item-id="{{ hw.id }}" data-item-type="homework" onclick="event.stopPropagation(); markTaskComplete(this)">
                                 <span class="material-symbols-outlined text-2xl">check</span>
                             </button>
                         </div>
@@ -354,11 +354,14 @@
         }
     }
 
-    async function markTaskComplete(itemId, itemType, article) {
+    async function markTaskComplete(btn) {
+        const article = btn.closest('article');
+        const itemId = btn.dataset.itemId;
+        const itemType = btn.dataset.itemType;
+        
         if (article.classList.contains('task-loading')) return;
         article.classList.add('task-loading');
 
-        const btn = article.querySelector('.confirm-btn');
         btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-white pr-0">progress_activity</span>';
         
         try {
