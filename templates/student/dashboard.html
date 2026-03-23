@@ -76,22 +76,23 @@
             </div>
             
             {% if upcoming_homework %}
-            <div class="space-y-4">
-                {% for hw in upcoming_homework[:4] %}
+            <div class="space-y-4" id="action-items-list">
+                <!-- Preload up to 8 tasks, but only show 4 initially so they can slide in smoothly -->
+                {% for hw in upcoming_homework[:8] %}
                 {% set days_left = (hw.deadline - today).days %}
                 {% set is_done = hw.submission_status == 'Submitted' %}
                 
-                <article class="bg-white p-6 md:px-8 md:py-6 rounded-[2.5rem] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center group relative overflow-hidden">
+                <article class="hw-item bg-white p-6 md:px-8 md:py-6 rounded-[2.5rem] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center group relative overflow-hidden cursor-pointer isolate ring-0 {% if loop.index > 4 %}hidden{% endif %}" data-id="{{ hw.id }}" onclick="toggleCompletionState(this)">
                     <!-- Solid vertical accent inside the card -->
                     <div class="w-2.5 h-full absolute left-0 top-0 bottom-0 {% if is_done %}bg-status-success{% elif days_left < 0 %}bg-status-danger{% elif days_left <= 1 %}bg-accent-maroon{% else %}bg-accent-maroon{% endif %}" aria-hidden="true"></div>
                     
-                    <div class="flex-1 flex flex-col md:flex-row md:items-center justify-between gap-6 pl-4 relative z-10 w-full">
+                    <div class="flex-1 flex flex-col md:flex-row md:items-center justify-between gap-6 pl-4 relative z-10 w-full transition-opacity duration-300 main-content">
                         <!-- Left Subject and Title -->
                         <div class="flex flex-col gap-2.5 flex-1 min-w-0">
                             <span class="inline-block px-3 py-1 bg-slate-50 text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] rounded-full self-start">
                                 {{ hw.subject_name }}
                             </span>
-                            <h4 class="text-2xl font-serif italic text-primary leading-tight font-bold truncate pr-4" title="Complete {{ hw.title|lower }} given.">
+                            <h4 class="text-2xl text-primary leading-tight font-bold truncate pr-4 transition-colors" title="Complete {{ hw.title|lower }} given.">
                                 Complete {{ hw.title|lower }} given.
                             </h4>
                         </div>
@@ -106,16 +107,38 @@
                             </div>
                             
                             {% if not is_done %}
-                            <a href="{{ url_for('student.assignments') }}" aria-label="Submit {{ hw.title }}" class="w-12 h-12 min-w-[48px] rounded-full bg-slate-50 text-primary flex items-center justify-center hover:bg-primary hover:text-bone-white transition-all duration-300 shrink-0">
+                            <div class="w-12 h-12 min-w-[48px] rounded-full bg-slate-50 text-primary flex items-center justify-center transition-all duration-300 shrink-0 pointer-events-none group-hover:bg-primary group-hover:text-bone-white group-hover:shadow-md group-hover:scale-105">
                                 <span class="material-symbols-outlined text-[20px] transform -rotate-45" aria-hidden="true">arrow_forward</span>
-                            </a>
+                            </div>
                             {% else %}
-                            <div class="w-12 h-12 min-w-[48px] rounded-full bg-status-success-bg text-status-success flex items-center justify-center border border-green-100 shrink-0" aria-hidden="true">
+                            <div class="w-12 h-12 min-w-[48px] rounded-full bg-status-success-bg text-status-success flex items-center justify-center border border-green-100 shrink-0 pointer-events-none" aria-hidden="true">
                                 <span class="material-symbols-outlined" aria-hidden="true">done_all</span>
                             </div>
                             {% endif %}
                         </div>
                     </div>
+
+                    <!-- Interactive Overlays -->
+                    {% if not is_done %}
+                    <div class="absolute inset-0 bg-background-dark/95 backdrop-blur-md z-20 flex items-center justify-between px-6 md:px-10 text-bone-white translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] completion-overlay">
+                        <span class="font-serif italic text-2xl md:text-3xl tracking-tight text-white shadow-sm">Mark as done?</span>
+                        <div class="flex items-center gap-3 md:gap-4">
+                            <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white" aria-label="Cancel" onclick="event.stopPropagation(); toggleCompletionState(this.closest('article'))">
+                                <span class="material-symbols-outlined text-xl">close</span>
+                            </button>
+                            <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-status-success text-white hover:bg-green-600 flex items-center justify-center transition-all shadow-lg shadow-status-success/30 hover:scale-105 hover:shadow-status-success/50 confirm-btn" aria-label="Confirm done" onclick="event.stopPropagation(); markTaskComplete({{ hw.id }}, 'homework', this.closest('article'))">
+                                <span class="material-symbols-outlined text-2xl">check</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute inset-0 bg-status-success z-30 flex items-center justify-center text-white opacity-0 pointer-events-none transition-opacity duration-300 success-overlay">
+                        <div class="flex items-center gap-3 transform scale-90 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] success-content">
+                            <span class="material-symbols-outlined text-4xl">task_alt</span>
+                            <span class="font-bold tracking-widest uppercase text-lg">Completed</span>
+                        </div>
+                    </div>
+                    {% endif %}
                 </article>
                 {% endfor %}
             </div>
@@ -128,13 +151,13 @@
         </section>
 
         <!-- Assessments & Teacher Remarks -->
-        <section class="bg-background-dark rounded-[2.5rem] p-8 md:p-12 mb-16 shadow-lg border border-primary/10" aria-label="Academic insights">
+        <section class="mb-16" aria-label="Academic insights">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
                 
                 <!-- Upcoming Assessments -->
                 <div class="flex flex-col">
-                    <h3 class="text-white/80 font-black tracking-widest uppercase text-[10px] mb-6 flex items-center gap-3">
-                        <span class="w-0.5 h-3 bg-blue-400" aria-hidden="true"></span>
+                    <h3 class="text-primary/70 font-black tracking-widest uppercase text-[10px] mb-6 flex items-center gap-3">
+                        <span class="w-0.5 h-3 bg-primary/30" aria-hidden="true"></span>
                         Upcoming Assessments
                     </h3>
                     {% if upcoming_tests %}
@@ -174,8 +197,8 @@
 
                 <!-- Teacher Remarks -->
                 <div class="flex flex-col">
-                    <h3 class="text-white/80 font-black tracking-widest uppercase text-[10px] mb-6 flex items-center gap-3">
-                        <span class="w-0.5 h-3 bg-emerald-400" aria-hidden="true"></span>
+                    <h3 class="text-primary/70 font-black tracking-widest uppercase text-[10px] mb-6 flex items-center gap-3">
+                        <span class="w-0.5 h-3 bg-emerald-400/40" aria-hidden="true"></span>
                         Teacher Remarks
                     </h3>
                     {% if remarks %}
@@ -306,5 +329,110 @@
 </div>
 
 {% endif %}
+
+<script>
+    function toggleCompletionState(article) {
+        if (article.classList.contains('task-completed')) return;
+        
+        const overlay = article.querySelector('.completion-overlay');
+        const mainContent = article.querySelector('.main-content');
+        
+        if (!overlay) return; // Happens if task is already permanently completed
+
+        if (overlay.classList.contains('translate-y-full')) {
+            // Show overlay beautifully
+            overlay.classList.remove('translate-y-full');
+            overlay.classList.add('translate-y-0');
+            article.classList.add('ring-4', 'ring-background-dark/10', 'shadow-[0_8px_30px_rgb(0,0,0,0.12)]');
+            mainContent.classList.add('opacity-40', 'scale-[0.98]');
+        } else {
+            // Hide overlay beautifully
+            overlay.classList.remove('translate-y-0');
+            overlay.classList.add('translate-y-full');
+            article.classList.remove('ring-4', 'ring-background-dark/10', 'shadow-[0_8px_30px_rgb(0,0,0,0.12)]');
+            mainContent.classList.remove('opacity-40', 'scale-[0.98]');
+        }
+    }
+
+    async function markTaskComplete(itemId, itemType, article) {
+        if (article.classList.contains('task-loading')) return;
+        article.classList.add('task-loading');
+
+        const btn = article.querySelector('.confirm-btn');
+        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-white pr-0">progress_activity</span>';
+        
+        try {
+            const res = await fetch('{{ url_for("student.mark_complete") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id: itemId, item_type: itemType })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                // Show Success Animation immediately!
+                article.classList.add('task-completed');
+                const successOverlay = article.querySelector('.success-overlay');
+                const successContent = article.querySelector('.success-content');
+                
+                successOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                successOverlay.classList.add('opacity-100');
+                successContent.classList.remove('scale-90');
+                successContent.classList.add('scale-100');
+                article.classList.remove('ring-4', 'ring-background-dark/10', 'shadow-[0_8px_30px_rgb(0,0,0,0.12)]');
+                
+                // Keep the celebration active for a moment, then slide the card out to remove it
+                setTimeout(() => {
+                    // Lock height for explicit collapsing animation
+                    article.style.height = article.offsetHeight + 'px';
+                    article.style.overflow = 'hidden';
+                    
+                    // Force browser reflow to accept height locking
+                    article.offsetHeight;
+                    
+                    article.style.transition = 'all 0.6s cubic-bezier(0.5, 0, 0, 1)';
+                    article.style.height = '0px';
+                    article.style.marginTop = '0px';
+                    article.style.marginBottom = '0px';
+                    article.style.paddingTop = '0px';
+                    article.style.paddingBottom = '0px';
+                    article.style.opacity = '0';
+                    article.style.border = 'none';
+                    
+                    setTimeout(() => {
+                        article.remove();
+                        // Un-Hide the next available assignment automatically
+                        const nextHidden = document.querySelector('.hw-item.hidden');
+                        if (nextHidden) {
+                            nextHidden.style.opacity = '0';
+                            nextHidden.style.transform = 'translateY(15px)';
+                            nextHidden.classList.remove('hidden');
+                            
+                            nextHidden.offsetHeight; // force reflow
+                            
+                            nextHidden.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                            nextHidden.style.opacity = '1';
+                            nextHidden.style.transform = 'translateY(0)';
+                            
+                            setTimeout(() => {
+                                // reset inline styles to use css classes purely
+                                nextHidden.style.opacity = '';
+                                nextHidden.style.transform = '';
+                                nextHidden.style.transition = '';
+                            }, 600);
+                        }
+                    }, 600); // Equal to height collapse transition time
+                    
+                }, 800); // Show "Completed!" panel for 800ms
+            } else {
+                throw new Error(data.error || 'Failed to complete task.');
+            }
+        } catch (e) {
+            article.classList.remove('task-loading');
+            btn.innerHTML = '<span class="material-symbols-outlined text-2xl pr-0">check</span>';
+            alert('A network error occurred while updating status. Please try again.');
+        }
+    }
+</script>
 
 {% endblock %}
