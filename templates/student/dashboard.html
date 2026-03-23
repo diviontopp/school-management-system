@@ -120,22 +120,24 @@
 
                     <!-- Interactive Overlays -->
                     {% if not is_done %}
-                    <div class="absolute inset-0 bg-background-dark/95 backdrop-blur-md z-20 flex items-center justify-between px-6 md:px-10 text-bone-white translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] completion-overlay">
-                        <span class="font-serif italic text-2xl md:text-3xl tracking-tight text-white shadow-sm">Mark as done?</span>
-                        <div class="flex items-center gap-3 md:gap-4">
-                            <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-white" aria-label="Cancel" onclick="event.stopPropagation(); toggleCompletionState(this.closest('article'))">
-                                <span class="material-symbols-outlined text-xl">close</span>
+                    <div class="absolute inset-0 bg-primary/95 backdrop-blur-md z-20 flex items-center justify-between px-6 md:px-10 text-bone-white translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] completion-overlay">
+                        <span class="font-serif italic text-2xl md:text-3xl tracking-tight text-white">Mark as done?</span>
+                        <div class="flex items-center gap-4">
+                            <button class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 flex items-center gap-2 transition-colors text-white font-bold text-xs uppercase tracking-widest border border-white/10" aria-label="Cancel" onclick="event.stopPropagation(); toggleCompletionState(this.closest('article'))">
+                                <span class="material-symbols-outlined text-lg">close</span>
+                                <span>Cancel</span>
                             </button>
-                            <button class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-status-success text-white hover:bg-green-600 flex items-center justify-center transition-all shadow-lg shadow-status-success/30 hover:scale-105 hover:shadow-status-success/50 confirm-btn" aria-label="Confirm done" data-item-id="{{ hw.id }}" data-item-type="homework" onclick="event.stopPropagation(); markTaskComplete(this)">
-                                <span class="material-symbols-outlined text-2xl">check</span>
+                            <button class="px-5 py-2.5 rounded-xl bg-bone-white text-primary hover:bg-white flex items-center gap-2 transition-all shadow-lg hover:translate-y-[-1px] confirm-btn font-bold text-xs uppercase tracking-widest" aria-label="Confirm done" data-item-id="{{ hw.id }}" data-item-type="homework" onclick="event.stopPropagation(); markTaskComplete(this)">
+                                <span class="material-symbols-outlined text-lg">check</span>
+                                <span>Confirm</span>
                             </button>
                         </div>
                     </div>
                     
-                    <div class="absolute inset-0 bg-status-success z-30 flex items-center justify-center text-white opacity-0 pointer-events-none transition-opacity duration-300 success-overlay">
-                        <div class="flex items-center gap-3 transform scale-90 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] success-content">
-                            <span class="material-symbols-outlined text-4xl">task_alt</span>
-                            <span class="font-bold tracking-widest uppercase text-lg">Completed</span>
+                    <div class="absolute inset-0 bg-primary z-30 flex items-center justify-center text-white opacity-0 pointer-events-none transition-opacity duration-300 success-overlay">
+                        <div class="flex items-center gap-4 transform transition-all duration-500 ease-out success-content">
+                            <span class="material-symbols-outlined text-3xl">done_all</span>
+                            <span class="font-bold tracking-[0.2em] uppercase text-sm">Status Updated</span>
                         </div>
                     </div>
                     {% endif %}
@@ -362,7 +364,7 @@
         if (article.classList.contains('task-loading')) return;
         article.classList.add('task-loading');
 
-        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-white pr-0">progress_activity</span>';
+        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-primary pr-0">progress_activity</span><span class="ml-2">Updating...</span>';
         
         try {
             const res = await fetch('{{ url_for("student.mark_complete") }}', {
