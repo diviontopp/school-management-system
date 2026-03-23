@@ -67,54 +67,50 @@
 
         <!-- Action Items -->
         <section class="mb-16" aria-label="Action items">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
-                <div>
-                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-primary/50 mb-2">Priority Queue</h3>
-                    <h2 class="text-4xl md:text-5xl text-primary font-black tracking-tight font-serif">Action Items</h2>
-                </div>
-                <a href="{{ url_for('student.assignments') }}" aria-label="View all assignments" class="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-primary px-6 py-3 text-bone-white transition-all shadow-lg hover:shadow-xl hover:shadow-primary/20 min-h-[44px] min-w-[44px]">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-4xl md:text-5xl text-primary font-bold italic font-serif">Action Items</h2>
+                <a href="{{ url_for('student.assignments') }}" aria-label="View all tasks" class="group relative inline-flex items-center gap-3 rounded-full bg-primary px-6 py-2.5 text-bone-white transition-all shadow-md hover:shadow-lg min-h-[44px]">
                     <span class="text-xs font-bold uppercase tracking-widest z-10">All Tasks</span>
-                    <span class="material-symbols-outlined z-10 text-white transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">arrow_forward</span>
+                    <span class="material-symbols-outlined text-sm transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">arrow_forward</span>
                 </a>
             </div>
             
             {% if upcoming_homework %}
-            <div class="space-y-6">
+            <div class="space-y-4">
                 {% for hw in upcoming_homework[:4] %}
                 {% set days_left = (hw.deadline - today).days %}
                 {% set is_done = hw.submission_status == 'Submitted' %}
                 
-                <article class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
-                    <!-- Status accent -->
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-[2rem] {% if is_done %}bg-status-success{% elif days_left < 0 %}bg-status-danger{% elif days_left <= 1 %}bg-accent-maroon{% else %}bg-primary{% endif %}" aria-hidden="true"></div>
-
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pl-4">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-3 mb-3">
-                                <span class="inline-block px-3 py-1 bg-slate-50 text-slate-500 text-[10px] font-black uppercase tracking-[0.15em] rounded-full border border-slate-100">
-                                    {{ hw.subject_name }}
-                                </span>
-                                {% if is_done %}
-                                <span class="text-status-success material-symbols-outlined text-xl" aria-label="Completed">verified</span>
-                                {% endif %}
-                            </div>
-                            <h4 class="text-xl md:text-2xl font-black text-slate-800 leading-tight group-hover:text-primary transition-colors line-clamp-2 font-serif" title="{{ hw.title }}">{{ hw.title }}</h4>
+                <article class="bg-white p-6 md:px-8 md:py-6 rounded-[2.5rem] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center group relative overflow-hidden">
+                    <!-- Solid vertical accent inside the card -->
+                    <div class="w-2.5 h-full absolute left-0 top-0 bottom-0 {% if is_done %}bg-status-success{% elif days_left < 0 %}bg-status-danger{% elif days_left <= 1 %}bg-accent-maroon{% else %}bg-accent-maroon{% endif %}" aria-hidden="true"></div>
+                    
+                    <div class="flex-1 flex flex-col md:flex-row md:items-center justify-between gap-6 pl-4 relative z-10 w-full">
+                        <!-- Left Subject and Title -->
+                        <div class="flex flex-col gap-2.5 flex-1 min-w-0">
+                            <span class="inline-block px-3 py-1 bg-slate-50 text-slate-500 text-[9px] font-black uppercase tracking-[0.2em] rounded-full self-start">
+                                {{ hw.subject_name }}
+                            </span>
+                            <h4 class="text-2xl font-serif italic text-primary leading-tight font-bold truncate pr-4" title="Complete {{ hw.title|lower }} given.">
+                                Complete {{ hw.title|lower }} given.
+                            </h4>
                         </div>
                         
-                        <div class="flex items-center gap-5 sm:flex-shrink-0">
-                            <div class="flex flex-col items-start sm:items-end">
-                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1">Deadline</span>
-                                <span class="text-sm font-bold {% if is_done %}text-status-success{% elif days_left < 0 %}text-status-danger{% elif days_left <= 1 %}text-accent-maroon{% else %}text-slate-700{% endif %}">
+                        <!-- Right Deadline and Button -->
+                        <div class="flex items-center justify-between md:justify-end gap-10 sm:flex-shrink-0 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-0 border-slate-50">
+                            <div class="flex flex-col items-start md:items-end">
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Deadline</span>
+                                <span class="text-sm font-bold {% if is_done %}text-status-success{% elif days_left < 0 %}text-status-danger{% elif days_left <= 1 %}text-accent-maroon{% else %}text-accent-maroon{% endif %}">
                                     {% if is_done %}Completed{% elif days_left < 0 %}Overdue{% elif days_left == 0 %}Today{% elif days_left == 1 %}Tomorrow{% else %}{{ hw.deadline.strftime('%b %d') }}{% endif %}
                                 </span>
                             </div>
                             
                             {% if not is_done %}
-                            <a href="{{ url_for('student.assignments') }}" aria-label="Submit {{ hw.title }}" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-bone-white text-primary flex items-center justify-center hover:bg-primary hover:text-bone-white transition-all duration-300 border border-primary/10">
-                                <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                            <a href="{{ url_for('student.assignments') }}" aria-label="Submit {{ hw.title }}" class="w-12 h-12 min-w-[48px] rounded-full bg-slate-50 text-primary flex items-center justify-center hover:bg-primary hover:text-bone-white transition-all duration-300 shrink-0">
+                                <span class="material-symbols-outlined text-[20px] transform -rotate-45" aria-hidden="true">arrow_forward</span>
                             </a>
                             {% else %}
-                            <div class="w-11 h-11 rounded-full bg-status-success-bg text-status-success flex items-center justify-center border border-green-100" aria-hidden="true">
+                            <div class="w-12 h-12 min-w-[48px] rounded-full bg-status-success-bg text-status-success flex items-center justify-center border border-green-100 shrink-0" aria-hidden="true">
                                 <span class="material-symbols-outlined" aria-hidden="true">done_all</span>
                             </div>
                             {% endif %}
@@ -124,95 +120,98 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="relative bg-gradient-to-r from-slate-50 to-white p-16 rounded-[2rem] border border-slate-100 text-center overflow-hidden">
-                <h4 class="text-3xl text-slate-300 font-bold mb-4 font-serif">No Pending Tasks</h4>
+            <div class="relative bg-white p-16 rounded-[2.5rem] shadow-sm text-center">
+                <h4 class="text-3xl text-slate-300 font-bold mb-4 font-serif italic">No Pending Tasks</h4>
                 <p class="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">You're completely caught up. Go rest.</p>
             </div>
             {% endif %}
         </section>
 
         <!-- Assessments & Teacher Remarks -->
-        <section class="relative rounded-[2rem] p-6 md:p-10 overflow-hidden mb-16" aria-label="Academic insights">
-            <!-- Controlled dark background -->
-            <div class="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 pointer-events-none" aria-hidden="true"></div>
-            <!-- Subtle gradient accents (reduced from audit) -->
-            <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-50" style="background: radial-gradient(ellipse at 20% 20%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.25) 0%, transparent 50%);" aria-hidden="true"></div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
+        <section class="bg-[#0b192c] rounded-[2.5rem] p-8 md:p-12 mb-16 shadow-lg" aria-label="Academic insights">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+                
                 <!-- Upcoming Assessments -->
-                <div class="flex flex-col pt-2">
-                    <h3 class="text-white/90 font-black tracking-[0.2em] uppercase text-xs mb-6 pl-4 border-l-2 border-blue-400">
+                <div class="flex flex-col">
+                    <h3 class="text-white/80 font-black tracking-widest uppercase text-[10px] mb-6 flex items-center gap-3">
+                        <span class="w-0.5 h-3 bg-blue-400" aria-hidden="true"></span>
                         Upcoming Assessments
                     </h3>
                     {% if upcoming_tests %}
-                    <div class="flex-1 bg-blue-500/15 backdrop-blur-xl p-8 md:p-10 rounded-[2rem] border border-white/15 shadow-lg group hover:bg-blue-500/20 hover:border-white/25 transition-all duration-500 relative overflow-hidden flex flex-col justify-between">
-                        {% set test = upcoming_tests[0] %}
-                        <div class="relative z-10 space-y-6 flex-1">
-                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-black/20 backdrop-blur-sm text-white font-bold text-[10px] uppercase tracking-widest rounded-full border border-white/10">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-300" aria-hidden="true"></span>
+                    {% set test = upcoming_tests[0] %}
+                    <!-- Dark Navy Card -->
+                    <div class="flex-1 bg-[#142845] p-8 md:px-10 md:py-8 rounded-[2rem] flex flex-col justify-between">
+                        <div class="space-y-6 flex-1">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-black/20 text-white font-bold text-[9px] uppercase tracking-widest rounded-full border border-white/5">
+                                <span class="w-1 h-1 rounded-full bg-blue-300" aria-hidden="true"></span>
                                 {{ test.test_type }}
                             </div>
-                            <div class="mt-6">
-                                <h4 class="text-3xl md:text-4xl text-white font-black mb-3 leading-tight font-serif">{{ test.subject_name }}</h4>
-                                <p class="text-white/70 text-base font-medium">{{ test.name }}</p>
+                            <div class="mt-4">
+                                <h4 class="text-5xl text-white font-serif italic font-bold mb-3 tracking-tight">{{ test.subject_name }}</h4>
+                                <p class="text-slate-400 text-sm font-medium">{{ test.name }}</p>
                             </div>
                         </div>
 
-                        <div class="relative z-10 mt-10 flex items-center justify-between bg-black/20 backdrop-blur-sm border border-white/10 p-5 rounded-2xl transition-colors">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold mb-1">Scheduled Date</span>
-                                <span class="text-lg font-black text-white">{{ test.test_date.strftime('%B %d, %Y') if test.test_date else '' }}</span>
+                        <!-- Date Pill -->
+                        <div class="mt-12 flex items-center justify-between border border-white/5 bg-black/20 p-4 rounded-xl">
+                            <div class="flex flex-col pl-2">
+                                <span class="text-[8px] uppercase tracking-widest text-[#64748b] font-bold mb-1">Scheduled Date</span>
+                                <span class="text-white font-bold text-sm">{{ test.test_date.strftime('%B %d, %Y') if test.test_date else '' }}</span>
                             </div>
-                            <a href="{{ url_for('student.grades') }}" aria-label="View assessment details for {{ test.subject_name }}" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all duration-300">
-                                <span class="material-symbols-outlined" aria-hidden="true">east</span>
+                            <a href="{{ url_for('student.grades') }}" aria-label="View testing dates" class="w-10 h-10 min-w-[40px] rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-slate-900 transition-all">
+                                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">east</span>
                             </a>
                         </div>
                     </div>
                     {% else %}
-                    <div class="flex-1 bg-white/10 backdrop-blur-xl p-10 rounded-[2rem] border border-white/10 flex flex-col items-center justify-center text-center">
-                        <span class="material-symbols-outlined text-6xl text-white/20 mb-4" aria-hidden="true">check_circle</span>
-                        <h5 class="text-white font-bold text-xl mb-2">No Assessments</h5>
-                        <p class="text-white/40 text-[10px] font-black uppercase tracking-widest">You have a clear schedule.</p>
+                    <div class="flex-1 bg-[#142845] p-10 rounded-[2rem] flex flex-col items-center justify-center text-center">
+                        <span class="material-symbols-outlined text-5xl text-white/20 mb-4" aria-hidden="true">check_circle</span>
+                        <h5 class="text-white font-bold text-lg mb-2">No Assessments</h5>
+                        <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">You have a clear schedule.</p>
                     </div>
                     {% endif %}
                 </div>
 
                 <!-- Teacher Remarks -->
-                <div class="flex flex-col pt-2">
-                    <h3 class="text-white/90 font-black tracking-[0.2em] uppercase text-xs mb-6 pl-4 border-l-2 border-emerald-400">
+                <div class="flex flex-col">
+                    <h3 class="text-white/80 font-black tracking-widest uppercase text-[10px] mb-6 flex items-center gap-3">
+                        <span class="w-0.5 h-3 bg-emerald-400" aria-hidden="true"></span>
                         Teacher Remarks
                     </h3>
                     {% if remarks %}
                     {% set remark = remarks[0] %}
-                    <div class="flex-1 bg-white/10 backdrop-blur-xl p-8 md:p-10 rounded-[2rem] border border-white/15 group hover:bg-white/15 hover:border-white/25 transition-all duration-500 relative overflow-hidden flex flex-col justify-between">
-                        <span class="material-symbols-outlined absolute top-8 right-8 text-7xl text-white/5 pointer-events-none" aria-hidden="true">format_quote</span>
+                    <!-- Slate/Teal Card -->
+                    <div class="flex-1 bg-[#243542] p-8 md:px-10 md:py-8 rounded-[2rem] flex flex-col justify-between relative overflow-hidden">
+                        <!-- Big background quote mark -->
+                        <span class="material-symbols-outlined absolute top-4 right-8 text-8xl text-black/10 pointer-events-none transform -rotate-6 font-serif" aria-hidden="true">format_quote</span>
                         
-                        <div class="relative z-10 pt-4 flex-1">
-                            <p class="text-white text-xl md:text-2xl font-medium leading-relaxed italic font-serif">"{{ remark.remark }}"</p>
+                        <div class="relative z-10 flex-1 flex items-center py-4">
+                            <p class="text-white text-2xl md:text-[1.7rem] leading-[1.3] font-serif italic text-balance font-medium">"{{ remark.remark }}"</p>
                         </div>
                         
-                        <div class="relative z-10 mt-10 flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-lg border-2 border-white/20" aria-hidden="true">
+                        <div class="relative z-10 mt-10 md:mt-16 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-[#10b981] flex items-center justify-center text-white font-black text-xl flex-shrink-0" aria-hidden="true">
                                 {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
                             </div>
                             <div>
-                                <h5 class="font-black text-white text-lg tracking-tight">{{ remark.teacher_name }}</h5>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <p class="text-[10px] text-emerald-300 font-bold uppercase tracking-[0.15em]">{{ remark.remark_type }}</p>
-                                    <span class="w-1 h-1 rounded-full bg-emerald-400/50" aria-hidden="true"></span>
-                                    <p class="text-[10px] text-emerald-300 font-bold uppercase tracking-[0.15em]">{{ remark.date.strftime('%d %b') if remark.date else '' }}</p>
+                                <h5 class="font-bold text-white text-base">{{ remark.teacher_name }}</h5>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <p class="text-[9px] text-[#4ade80] font-black uppercase tracking-widest">{{ remark.remark_type }}</p>
+                                    <span class="w-1 h-1 rounded-full bg-[#4ade80]/50" aria-hidden="true"></span>
+                                    <p class="text-[9px] text-[#4ade80] font-black uppercase tracking-widest">{{ remark.date.strftime('%d %b') if remark.date else '' }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% else %}
-                    <div class="flex-1 bg-white/10 backdrop-blur-xl p-10 rounded-[2rem] border border-white/10 flex flex-col items-center justify-center text-center">
-                        <span class="material-symbols-outlined text-6xl text-white/20 mb-4" aria-hidden="true">chat_bubble</span>
-                        <h5 class="text-white font-bold text-xl mb-2">No Remarks</h5>
-                        <p class="text-white/40 text-[10px] font-black uppercase tracking-widest">Nothing to display at this time.</p>
+                    <div class="flex-1 bg-[#243542] p-10 rounded-[2rem] flex flex-col items-center justify-center text-center">
+                        <span class="material-symbols-outlined text-5xl text-white/20 mb-4" aria-hidden="true">chat_bubble</span>
+                        <h5 class="text-white font-bold text-lg mb-2">No Remarks</h5>
+                        <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">Nothing to display at this time.</p>
                     </div>
                     {% endif %}
                 </div>
+                
             </div>
         </section>
 
