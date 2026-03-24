@@ -209,27 +209,27 @@
                     </h3>
                     {% if remarks %}
                     {% set remark = remarks[0] %}
-                    <!-- Muted Bone-Slate Neutral Remark Card -->
-                    <div class="flex-1 bg-bone-white border border-primary/10 p-8 md:px-10 md:py-8 rounded-[2.5rem] shadow-sm flex flex-col justify-between relative overflow-hidden transition-all hover:shadow-md">
+                    <!-- Deep Midnight Navy Remark Card -->
+                    <div class="flex-1 bg-primary p-8 md:px-10 md:py-8 rounded-[2.5rem] border border-white/10 shadow-xl flex flex-col justify-between relative overflow-hidden transition-all hover:translate-y-[-4px] group">
                         <!-- Big background quote mark -->
-                        <span class="material-symbols-outlined absolute top-4 right-8 text-8xl text-primary/5 pointer-events-none transform -rotate-6 font-serif" aria-hidden="true">format_quote</span>
+                        <span class="material-symbols-outlined absolute top-4 right-8 text-8xl text-white/5 pointer-events-none transform -rotate-6 font-serif" aria-hidden="true">format_quote</span>
                         
                         <div class="relative z-10">
-                            <blockquote class="text-2xl md:text-3xl font-serif italic text-primary leading-snug tracking-tight">
+                            <blockquote class="text-2xl md:text-3xl font-serif italic text-white leading-snug tracking-tight">
                                 "{{ remark.remark }}"
                             </blockquote>
                         </div>
 
-                        <div class="mt-8 pt-8 border-t border-primary/10 flex items-center gap-4 relative z-10">
+                        <div class="mt-8 pt-8 border-t border-white/10 flex items-center gap-4 relative z-10">
                             <div class="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white font-black text-sm shadow-inner">
                                 {{ remark.teacher_name[0] if remark.teacher_name else 'T' }}
                             </div>
                             <div class="flex flex-col">
-                                <p class="font-bold text-primary leading-none">{{ remark.teacher_name }}</p>
+                                <p class="font-bold text-white leading-none">{{ remark.teacher_name }}</p>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[9px] font-black uppercase tracking-widest text-emerald-600">{{ remark.remark_type|upper }}</span>
-                                    <span class="w-1 h-1 rounded-full bg-primary/20"></span>
-                                    <span class="text-[9px] font-black uppercase tracking-widest text-primary/40">{{ remark.date.strftime('%d %b') if remark.date else '' }}</span>
+                                    <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400">{{ remark.remark_type|upper }}</span>
+                                    <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                                    <span class="text-[9px] font-black uppercase tracking-widest text-white/50">{{ remark.date.strftime('%d %b') if remark.date else '' }}</span>
                                 </div>
                             </div>
                         </div>
