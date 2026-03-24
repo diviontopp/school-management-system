@@ -20,112 +20,127 @@
 {% else %}
 
 <!-- Hero Title Section -->
-<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-primary/10 pb-8">
     <div class="max-w-2xl">
-        <span class="text-accent-gold font-black tracking-widest uppercase text-xs">Homework & Tests</span>
-        <h1 class="shadcn-h1 text-primary mt-2">Assignments</h1>
-        <p class="text-slate-600 text-xl mt-4 font-light leading-relaxed italic">Manage your assignments, track your submissions, and prepare for upcoming evaluations.</p>
+        <span class="text-primary/50 font-black tracking-widest uppercase text-xs mb-4 block">Academics</span>
+        <h1 class="text-5xl md:text-6xl font-serif italic font-bold text-primary tracking-tight">Assignments</h1>
+        <p class="text-slate-600 text-lg mt-4 font-light leading-relaxed max-w-xl text-balance">Review active coursework, submit deliverables, and track your academic progression across all subjects.</p>
     </div>
-    <div class="flex gap-3">
-        <button class="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-full font-black shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-            <span class="material-symbols-outlined text-xl">file_download</span>
-            Download Syllabus
+    <div class="flex gap-4">
+        <button class="flex items-center gap-2 px-6 py-3 bg-bone-white text-primary border border-primary/10 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-md">
+            <span class="material-symbols-outlined text-lg">calendar_month</span>
+            Calendar
+        </button>
+        <button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300">
+            <span class="material-symbols-outlined text-lg">file_download</span>
+            Syllabus
         </button>
     </div>
 </div>
 
 <!-- Filter Bar (Used as Tabs) -->
-<div class="mb-10 flex flex-wrap items-center gap-4 p-2 bg-white/50 rounded-2xl border border-slate-200 shadow-sm">
-    <div class="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary text-lg">filter_list</span>
-        <span class="text-sm font-black text-primary">Views</span>
-    </div>
-    <div class="h-6 w-[1px] bg-primary/10 hidden md:block"></div>
-    <button id="hwTabBtn" onclick="switchTab('hw')" class="px-5 py-2 rounded-xl text-sm font-medium bg-primary text-white shadow-md transition-all">Assignments ({{ pending|length }})</button>
-    <button id="testsTabBtn" onclick="switchTab('tests')" class="px-5 py-2 rounded-xl text-sm font-medium bg-white/80 text-slate-600 hover:bg-white transition-all">Tests & Exams ({{ upcoming_tests|length }})</button>
+<div class="mb-10 flex flex-wrap items-center gap-2 p-2 bg-bone-white/50 rounded-2xl border border-primary/5 shadow-inner w-fit">
+    <!-- Active styling: bg-primary text-white shadow-md -->
+    <button id="hwTabBtn" onclick="switchTab('hw')" class="px-6 py-3 rounded-xl text-sm font-bold bg-primary text-white shadow-md transition-all duration-300 flex items-center gap-3">
+        Assignments
+        <span class="bg-white/20 text-white px-2 py-0.5 rounded-md text-[10px]">{{ pending|length }}</span>
+    </button>
+    <button id="testsTabBtn" onclick="switchTab('tests')" class="px-6 py-3 rounded-xl text-sm font-bold text-primary/60 hover:text-primary hover:bg-white transition-all duration-300 flex items-center gap-3">
+        Tests & Exams
+        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-md text-[10px]">{{ upcoming_tests|length }}</span>
+    </button>
 </div>
 
-<!-- Subject Folders Grid (Visual Placeholder / Motivation) -->
+<!-- Academic Overview (Subject Cards) -->
 <section class="mb-16">
-    <h3 class="shadcn-h3 text-primary mb-8 border-l-4 border-accent-gold pl-6">Academic Overview</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Physics Card -->
-        <div class="group relative flex flex-col bg-white p-8 rounded-xl border border-slate-200 hover:border-primary/20 transition-all hover:shadow-xl">
-            <div class="mb-6 flex items-center justify-between">
-                <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-3xl">bolt</span>
-                </div>
-                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Term 1</span>
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+        <h3 class="text-3xl font-serif italic font-bold text-primary">Academic Overview</h3>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Physics: Midnight Navy Theme -->
+        <div class="group flex flex-col bg-primary p-6 rounded-[2rem] border border-white/10 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-6 opacity-5 pointer-events-none transform translate-x-4 -translate-y-4">
+                <span class="material-symbols-outlined text-8xl text-white">bolt</span>
             </div>
-            <h4 class="text-xl font-black text-slate-900 mb-1">Physics</h4>
-            <p class="text-sm text-slate-500 mb-6 italic">Quantum & Electrodynamics</p>
-            <div class="mt-auto">
-                <div class="flex justify-between text-xs font-black mb-2">
-                    <span class="secondary-label text-slate-500 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
-                    <span class="text-primary">68%</span>
-                </div>
-                <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
-                    <div class="h-full bg-primary rounded-full" style="width: 68%"></div>
-                </div>
+            <div class="mb-4">
+                <span class="text-[9px] text-white/50 font-black uppercase tracking-widest border border-white/10 px-2 py-1 rounded">Term 1</span>
             </div>
-        </div>
-        <!-- Chemistry Card -->
-        <div class="group relative flex flex-col bg-white p-8 rounded-xl border border-slate-200 hover:border-primary/20 transition-all hover:shadow-xl">
-            <div class="mb-6 flex items-center justify-between">
-                <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-3xl">science</span>
+            <h4 class="text-3xl font-serif italic text-white mb-1">Physics</h4>
+            <p class="text-xs text-white/60 mb-8 font-medium">Quantum & Electrodynamics</p>
+            
+            <div class="mt-auto relative z-10 w-full">
+                <div class="flex justify-between text-[10px] font-black mb-2 uppercase tracking-widest text-white/50">
+                    <span>Syllabus</span>
+                    <span class="text-emerald-400">68%</span>
                 </div>
-                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Term 1</span>
-            </div>
-            <h4 class="text-xl font-black text-slate-900 mb-1">Chemistry</h4>
-            <p class="text-sm text-slate-500 mb-6 italic">Organic & Physical Chem</p>
-            <div class="mt-auto">
-                <div class="flex justify-between text-xs font-black mb-2">
-                    <span class="secondary-label text-slate-500 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
-                    <span class="text-accent-gold">45%</span>
-                </div>
-                <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
-                    <div class="h-full bg-accent-gold rounded-full" style="width: 45%"></div>
+                <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-400 rounded-full" style="width: 68%"></div>
                 </div>
             </div>
         </div>
-        <!-- Mathematics Card -->
-        <div class="group relative flex flex-col bg-white p-8 rounded-xl border border-slate-200 hover:border-primary/20 transition-all hover:shadow-xl">
-            <div class="mb-6 flex items-center justify-between">
-                <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-3xl">functions</span>
-                </div>
-                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Annual</span>
+
+        <!-- Chemistry: Bone White Theme -->
+        <div class="group flex flex-col bg-bone-white p-6 rounded-[2rem] border border-primary/10 hover:border-primary/20 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-6 opacity-5 pointer-events-none transform translate-x-4 -translate-y-4">
+                <span class="material-symbols-outlined text-8xl text-primary">science</span>
             </div>
-            <h4 class="text-xl font-black text-slate-900 mb-1">Mathematics</h4>
-            <p class="text-sm text-slate-500 mb-6 italic">Calculus & Geometry</p>
-            <div class="mt-auto">
-                <div class="flex justify-between text-xs font-black mb-2">
-                    <span class="secondary-label text-slate-400 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
-                    <span class="text-primary">82%</span>
+            <div class="mb-4">
+                <span class="text-[9px] text-primary/40 font-black uppercase tracking-widest border border-primary/10 px-2 py-1 rounded bg-white">Term 1</span>
+            </div>
+            <h4 class="text-3xl font-serif italic text-primary mb-1">Chemistry</h4>
+            <p class="text-xs text-slate-500 mb-8 font-medium">Organic & Physical Chem</p>
+            
+            <div class="mt-auto relative z-10 w-full">
+                <div class="flex justify-between text-[10px] font-black mb-2 uppercase tracking-widest text-primary/40">
+                    <span>Syllabus</span>
+                    <span class="text-primary">45%</span>
                 </div>
-                <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
-                    <div class="h-full bg-primary rounded-full" style="width: 82%"></div>
+                <div class="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 45%"></div>
                 </div>
             </div>
         </div>
-        <!-- English Card -->
-        <div class="group relative flex flex-col bg-white p-8 rounded-xl border border-primary/5 hover:border-primary/20 transition-all hover:shadow-xl">
-            <div class="mb-6 flex items-center justify-between">
-                <div class="size-14 bg-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                    <span class="material-symbols-outlined text-3xl">auto_stories</span>
-                </div>
-                <span class="secondary-label text-[10px] text-accent-gold tracking-[0.2em]">Annual</span>
+        
+        <!-- Math: Midnight Navy Theme -->
+        <div class="group flex flex-col bg-primary p-6 rounded-[2rem] border border-white/10 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-6 opacity-5 pointer-events-none transform translate-x-4 -translate-y-4">
+                <span class="material-symbols-outlined text-8xl text-white">functions</span>
             </div>
-            <h4 class="text-xl font-black text-slate-900 mb-1">English</h4>
-            <p class="text-sm text-slate-500 mb-6 italic">Literature & Composition</p>
-            <div class="mt-auto">
-                <div class="flex justify-between text-xs font-black mb-2">
-                    <span class="secondary-label text-slate-400 tracking-[0.2em] text-[10px]">Syllabus Progress</span>
-                    <span class="text-slate-400">30%</span>
+            <div class="mb-4">
+                <span class="text-[9px] text-white/50 font-black uppercase tracking-widest border border-white/10 px-2 py-1 rounded">Annual</span>
+            </div>
+            <h4 class="text-3xl font-serif italic text-white mb-1">Mathematics</h4>
+            <p class="text-xs text-white/60 mb-8 font-medium">Calculus & Geometry</p>
+            
+            <div class="mt-auto relative z-10 w-full">
+                <div class="flex justify-between text-[10px] font-black mb-2 uppercase tracking-widest text-white/50">
+                    <span>Syllabus</span>
+                    <span class="text-white">82%</span>
                 </div>
-                <div class="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
-                    <div class="h-full bg-slate-300 rounded-full" style="width: 30%"></div>
+                <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-white rounded-full transition-all duration-1000" style="width: 82%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- English: Solid White Theme -->
+        <div class="group flex flex-col bg-white p-6 rounded-[2rem] border border-primary/10 hover:border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-6 opacity-[0.03] pointer-events-none transform translate-x-4 -translate-y-4">
+                <span class="material-symbols-outlined text-8xl text-black">auto_stories</span>
+            </div>
+            <div class="mb-4">
+                <span class="text-[9px] text-primary/40 font-black uppercase tracking-widest border border-primary/10 px-2 py-1 rounded bg-bone-white">Annual</span>
+            </div>
+            <h4 class="text-3xl font-serif italic text-black mb-1">English</h4>
+            <p class="text-xs text-slate-500 mb-8 font-medium">Literature & Composition</p>
+            
+            <div class="mt-auto relative z-10 w-full">
+                <div class="flex justify-between text-[10px] font-black mb-2 uppercase tracking-widest text-primary/40">
+                    <span>Syllabus</span>
+                    <span class="text-black">30%</span>
+                </div>
+                <div class="h-1.5 w-full bg-primary/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-black rounded-full transition-all duration-1000" style="width: 30%"></div>
                 </div>
             </div>
         </div>
@@ -135,222 +150,199 @@
 <!-- ═══════════ TAB VIEWS ═══════════ -->
 
 <div id="hwPanel" class="tab-panel">
-    <!-- Secondary Content Split -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <!-- Left Column: Pending & Completed -->
-        <div class="lg:col-span-2 space-y-12">
-            <!-- Pending Assignments (Styled like Class Notes) -->
-            <section>
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="shadcn-h3 text-primary">Pending Tasks</h3>
-                </div>
-                {% if pending %}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {% for hw in pending %}
-                    {% set days_left = (hw.deadline - today).days %}
-                    <div class="flex items-center gap-4 p-4 bg-white rounded-xl border {% if days_left <= 1 %}border-red-200{% elif days_left <= 3 %}border-amber-200{% else %}border-primary/5{% endif %} hover:shadow-md transition-shadow cursor-pointer group relative overflow-hidden">
-                        <div class="size-12 rounded-lg flex items-center justify-center {% if days_left <= 1 %}bg-red-50 text-red-600{% elif days_left <= 3 %}bg-amber-50 text-amber-600{% else %}bg-primary/5 text-primary{% endif %}">
-                            <span class="material-symbols-outlined">description</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h5 class="font-black text-slate-800 text-sm truncate" title="{{ hw.title }}">{{ hw.title }}</h5>
-                            <p class="text-xs text-slate-400">{{ hw.subject_name }} • Due: {{ hw.deadline.strftime('%b %d') }}</p>
-                        </div>
-                        <span class="material-symbols-outlined ml-auto text-slate-300 group-hover:text-primary transition-colors">upload_file</span>
-                        {% if days_left <= 1 %}
-                        <div class="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="p-8 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
-                    <span class="material-symbols-outlined text-5xl text-green-400 mb-3">task_alt</span>
-                    <p class="text-slate-600 font-medium">All caught up! No pending assignments.</p>
-                </div>
-                {% endif %}
-            </section>
-
-            <!-- Completed Assignments (Styled like Syllabus Tracker) -->
-            <section>
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="shadcn-h3 text-primary">Recent Submissions</h3>
-                    <div class="flex gap-2">
-                        <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-full uppercase tracking-tighter">{{ completed|length }} Completed</span>
-                    </div>
-                </div>
-                {% if completed %}
-                <div class="bg-white rounded-xl border border-primary/10 overflow-x-auto shadow-sm">
-                    <table class="w-full text-left text-sm min-w-[600px]">
-                        <thead class="bg-primary/5 border-b border-primary/10 uppercase text-[10px] font-black tracking-widest text-primary/60">
-                            <tr>
-                                <th class="px-6 py-4">Title</th>
-                                <th class="px-6 py-4">Subject</th>
-                                <th class="px-6 py-4 text-center">Status</th>
-                                <th class="px-6 py-4 text-center">Grade</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-primary/5">
-                            {% for hw in completed[:5] %}
-                            <tr class="hover:bg-primary/5 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-slate-800 max-w-xs truncate" title="{{ hw.title }}">{{ hw.title }}</td>
-                                <td class="px-6 py-4 text-slate-500 italic">{{ hw.subject_name }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center gap-2 text-green-600 font-black">
-                                        <span class="material-symbols-outlined text-lg">check_circle</span>
-                                        {{ hw.submission_status }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-center font-black text-primary">{{ hw.grade or '—' }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% else %}
-                <p class="text-sm text-slate-500 italic">No completed assignments to show yet.</p>
-                {% endif %}
-            </section>
+    <!-- Pending Assignments -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+            <h3 class="text-3xl font-serif italic font-bold text-primary">Pending Deliverables</h3>
         </div>
-
-        <!-- Right Column: Quick Stats or Projects styling -->
-        <div class="space-y-12">
-            <!-- Project Guidelines styling -->
-            <section>
-                <div class="p-8 bg-primary text-white rounded-xl relative overflow-hidden shadow-xl">
-                    <div class="relative z-10">
-                        <h4 class="shadcn-h3 text-white mb-4">Task Analytics</h4>
-                        <p class="text-white/70 mb-6 text-sm leading-relaxed">You have {{ pending|length }} tasks pending and {{ completed|length }} tasks completed this term.</p>
-                        
-                        <div class="mb-4">
-                            <div class="flex justify-between text-xs font-black mb-2">
-                                <span class="text-white/60 uppercase tracking-widest text-[10px]">Completion Rate</span>
-                                {% set total = pending|length + completed|length %}
-                                {% set pct = (completed|length / total * 100) if total > 0 else 0 %}
-                                <span class="text-accent-gold">{{ pct|round|int }}%</span>
-                            </div>
-                            <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                <div class="h-full bg-accent-gold rounded-full" style="width: {{ pct }}%"></div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- Abstract Background Decoration -->
-                    <div class="absolute -bottom-8 -right-8 size-32 bg-accent-gold/20 rounded-full blur-3xl"></div>
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <span class="material-symbols-outlined text-8xl">analytics</span>
+        {% if pending %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for hw in pending %}
+            {% set days_left = (hw.deadline - today).days %}
+            <div class="group relative flex flex-col bg-white p-6 rounded-[2rem] border border-primary/10 hover:border-primary hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer">
+                <!-- Urgent Indicator -->
+                {% if days_left <= 1 %}
+                <div class="absolute top-0 right-0 w-3 h-full bg-red-500"></div>
+                {% endif %}
+                
+                <div class="flex justify-between items-start mb-6">
+                    <!-- Subject Tag -->
+                    <span class="px-3 py-1 bg-bone-white text-primary text-[9px] font-black uppercase tracking-widest rounded-lg border border-primary/5 group-hover:bg-primary/5 transition-colors">{{ hw.subject_name }}</span>
+                    <!-- Due Token -->
+                    <div class="flex flex-col items-end">
+                        <span class="text-[10px] font-bold uppercase tracking-widest {% if days_left <= 1 %}text-red-500{% else %}text-slate-400{% endif %}">Due Date</span>
+                        <span class="text-sm font-black text-primary">{{ hw.deadline.strftime('%b %d') }}</span>
                     </div>
                 </div>
-            </section>
+                
+                <h4 class="text-xl font-bold text-black mb-2 line-clamp-2" title="{{ hw.title }}">{{ hw.title }}</h4>
+                <p class="text-xs text-slate-500 font-medium mb-6 line-clamp-2">Complete the required assignment and submit your responses via the portal.</p>
+                
+                <div class="mt-auto flex items-center justify-between pt-4 border-t border-primary/5 group-hover:border-primary/20">
+                    <span class="text-xs font-bold {% if days_left <= 1 %}text-red-500{% else %}text-emerald-500{% endif %} flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">schedule</span>
+                        {% if days_left == 0 %}Due Today!{% elif days_left < 0 %}Overdue{% else %}{{ days_left }} Days Left{% endif %}
+                    </span>
+                    <div class="w-8 h-8 rounded-full bg-bone-white flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300 shadow-sm">
+                        <span class="material-symbols-outlined text-sm font-black">arrow_forward</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-    </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="p-16 bg-bone-white rounded-[2.5rem] border border-primary/5 flex flex-col items-center justify-center text-center shadow-inner">
+            <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center text-emerald-500 shadow-md mb-6 transform -rotate-6">
+                <span class="material-symbols-outlined text-4xl">task_alt</span>
+            </div>
+            <h3 class="text-2xl font-serif italic text-primary font-bold mb-2">No pending assignments!</h3>
+            <p class="text-slate-500 text-sm max-w-md">You're fully caught up. Use this time to review material or focus on upcoming exams.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Recent Submissions -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+            <h3 class="text-3xl font-serif italic font-bold text-primary">Recent Submissions</h3>
+            <span class="px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-black rounded-lg uppercase tracking-widest">{{ completed|length }} Completed</span>
+        </div>
+        {% if completed %}
+        <div class="bg-white rounded-[2rem] border border-primary/10 overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left String min-w-[700px]">
+                    <thead class="bg-bone-white border-b border-primary/10">
+                        <tr>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50">Assignment Title</th>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50">Subject</th>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50 text-center">Status</th>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50 text-right">Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/5">
+                        {% for hw in completed[:6] %}
+                        <tr class="group hover:bg-bone-white/50 transition-colors cursor-pointer">
+                            <td class="px-8 py-5">
+                                <p class="font-bold text-black max-w-sm truncate group-hover:text-primary transition-colors">{{ hw.title }}</p>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="text-xs font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded border border-slate-100">{{ hw.subject_name }}</span>
+                            </td>
+                            <td class="px-8 py-5">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-emerald-500 text-lg">verified</span>
+                                    <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">{{ hw.submission_status }}</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5 text-right">
+                                <span class="text-lg font-serif italic font-bold text-primary">{{ hw.grade or '—' }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <!-- Empty state -->
+        <div class="p-8 text-center text-sm font-medium text-slate-500 italic">No recent submissions to display.</div>
+        {% endif %}
+    </section>
 </div>
 
 <div id="testsPanel" class="tab-panel hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <!-- Left Column: Upcoming Tests & Recent Results -->
-        <div class="lg:col-span-2 space-y-12">
-            <!-- Upcoming Tests (Styled like Class Notes) -->
-            <section>
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="shadcn-h3 text-primary">Upcoming Tests</h3>
+    <!-- Academic Overview -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+            <h3 class="text-3xl font-serif italic font-bold text-primary">Evaluation Schedule</h3>
+        </div>
+        {% if upcoming_tests %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for test in upcoming_tests %}
+            {% set days_until = (test.test_date - today).days %}
+            <!-- Test Card -->
+            <div class="group relative flex flex-col bg-primary p-6 rounded-[2rem] border border-white/10 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden cursor-pointer">
+                <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none transform translate-x-2 -translate-y-2">
+                    <span class="material-symbols-outlined text-8xl text-white">quiz</span>
                 </div>
-                {% if upcoming_tests %}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {% for test in upcoming_tests %}
-                    {% set days_until = (test.test_date - today).days %}
-                    <div class="flex flex-col p-6 bg-white rounded-xl border {% if days_until <= 2 %}border-red-200 shadow-md shadow-red-500/5{% else %}border-primary/5 hover:border-primary/20{% endif %} hover:shadow-md transition-shadow cursor-pointer group relative overflow-hidden">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="size-12 rounded-lg flex items-center justify-center {% if days_until <= 2 %}bg-red-50 text-red-600{% else %}bg-primary/5 text-primary{% endif %}">
-                                <span class="material-symbols-outlined">quiz</span>
-                            </div>
-                            <span class="text-xs font-black text-slate-400 uppercase tracking-widest px-2 py-1 bg-slate-50 rounded">{{ test.test_type }}</span>
-                        </div>
-                        <h5 class="font-black text-slate-800 text-lg mb-1">{{ test.name }}</h5>
-                        <p class="text-sm text-slate-500 mb-4">{{ test.subject_name }}</p>
-                        <div class="mt-auto flex items-center justify-between">
-                            <span class="text-xs font-black {% if days_until <= 2 %}text-red-500{% else %}text-primary{% endif %}">
-                                {% if days_until == 0 %}Today{% elif days_until == 1 %}Tomorrow{% else %}In {{ days_until }} days{% endif %}
-                            </span>
-                            <span class="text-xs font-medium text-slate-400">{{ test.test_date.strftime('%b %d') }}</span>
-                        </div>
+                
+                <div class="flex justify-between items-start mb-6 z-10">
+                    <span class="px-3 py-1 bg-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg border border-white/10 backdrop-blur-sm">{{ test.test_type }}</span>
+                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm group-hover:bg-white group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-sm font-black">edit_calendar</span>
                     </div>
-                    {% endfor %}
                 </div>
-                {% else %}
-                <div class="p-8 bg-white border border-primary/5 rounded-xl text-center shadow-sm">
-                    <span class="material-symbols-outlined text-5xl text-blue-300 mb-3">event_available</span>
-                    <p class="text-slate-600 font-medium">No upcoming tests scheduled.</p>
+                
+                <h4 class="text-2xl font-serif italic text-white mb-1 relative z-10">{{ test.name }}</h4>
+                <p class="text-xs text-white/60 font-bold uppercase tracking-widest mb-6 relative z-10">{{ test.subject_name }}</p>
+                
+                <div class="mt-auto pt-4 border-t border-white/10 flex items-center justify-between relative z-10">
+                    <span class="text-sm font-black text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base">event</span>
+                        {{ test.test_date.strftime('%d %B, %Y') }}
+                    </span>
+                    <span class="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-white/10 text-white">
+                        {% if days_until == 0 %}Today{% elif days_until == 1 %}Tmw{% else %}{{ days_until }} Days{% endif %}
+                    </span>
                 </div>
-                {% endif %}
-            </section>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="p-16 bg-bone-white rounded-[2.5rem] border border-primary/5 flex flex-col items-center justify-center text-center shadow-inner">
+            <span class="material-symbols-outlined text-5xl text-primary/30 mb-4 transform -rotate-6">event_available</span>
+            <h3 class="text-2xl font-serif italic text-primary font-bold mb-2">No upcoming tests!</h3>
+            <p class="text-slate-500 text-sm">You have no scheduled exams. Keep up with your daily coursework.</p>
+        </div>
+        {% endif %}
+    </section>
 
-            <!-- Recent Results (Styled like Syllabus Tracker) -->
-            <section>
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="shadcn-h3 text-primary">Recent Results</h3>
-                </div>
-                {% if scores %}
-                <div class="bg-white rounded-xl border border-primary/10 overflow-x-auto shadow-sm">
-                    <table class="w-full text-left text-sm min-w-[600px]">
-                        <thead class="bg-primary/5 border-b border-primary/10 uppercase text-[10px] font-black tracking-widest text-primary/60">
-                            <tr>
-                                <th class="px-6 py-4">Test Name</th>
-                                <th class="px-6 py-4">Subject</th>
-                                <th class="px-6 py-4 text-center">Score</th>
-                                <th class="px-6 py-4 text-center">Grade</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-primary/5">
-                            {% for s in scores %}
-                            <tr class="hover:bg-primary/5 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-slate-800">{{ s.test_name }}</td>
-                                <td class="px-6 py-4 text-slate-500 italic">{{ s.subject_name }}</td>
-                                <td class="px-6 py-4 text-center font-black text-primary">{{ s.marks_obtained }} / {{ s.max_marks }}</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center">
-                                        {% if s.grade %}
-                                        <span class="px-3 py-1 font-black rounded-full text-xs {% if s.grade in ['A+', 'A'] %}bg-green-100 text-green-700{% elif s.grade in ['B+', 'B'] %}bg-blue-100 text-blue-700{% elif s.grade in ['C+', 'C'] %}bg-amber-100 text-amber-700{% else %}bg-red-100 text-red-700{% endif %}">
-                                            {{ s.grade }}
-                                        </span>
-                                        {% else %}
-                                        —
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% else %}
-                <p class="text-sm text-slate-500 italic">No recent test results found.</p>
-                {% endif %}
-            </section>
+    <!-- Recent Results -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+            <h3 class="text-3xl font-serif italic font-bold text-primary">Recent Results</h3>
         </div>
-        
-        <div class="lg:col-span-1 border-t lg:border-t-0 pt-8 lg:pt-0 border-primary/10 space-y-8">
-            <!-- External Resources adapted for test prep -->
-            <section>
-                <h3 class="shadcn-h3 text-primary mb-6">Preparation Materials</h3>
-                <div class="space-y-4">
-                    <div class="p-6 bg-white rounded-xl border border-primary/10 hover:border-accent-gold/40 transition-all cursor-pointer shadow-sm">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="size-8 bg-primary/10 rounded flex items-center justify-center text-primary">
-                                <span class="material-symbols-outlined text-lg">folder_open</span>
-                            </div>
-                            <span class="text-xs font-black text-slate-400 uppercase tracking-widest">Shared Drive</span>
-                        </div>
-                        <h6 class="font-black text-slate-800 mb-2">Previous Year Papers</h6>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-4 italic">Access archive of past question papers for all subjects.</p>
-                        <div class="flex items-center gap-2 text-accent-gold font-black text-xs">
-                            View Archive <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        {% if scores %}
+        <div class="bg-white rounded-[2rem] border border-primary/10 overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left String min-w-[700px]">
+                    <thead class="bg-bone-white border-b border-primary/10">
+                        <tr>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50">Evaluation Title</th>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50">Subject</th>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50 text-center">Score</th>
+                            <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-primary/50 text-right">Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-primary/5">
+                        {% for s in scores %}
+                        <tr class="group hover:bg-bone-white/50 transition-colors cursor-pointer">
+                            <td class="px-8 py-5">
+                                <p class="font-bold text-black max-w-sm truncate group-hover:text-primary transition-colors">{{ s.test_name }}</p>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="text-xs font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded border border-slate-100">{{ s.subject_name }}</span>
+                            </td>
+                            <td class="px-8 py-5 text-center">
+                                <div class="inline-flex items-baseline gap-1">
+                                    <span class="font-black text-primary">{{ s.marks_obtained }}</span>
+                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">/ {{ s.max_marks }}</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5 text-right">
+                                <span class="text-2xl font-serif italic font-bold text-primary">{{ s.grade or '—' }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+        {% else %}
+        <div class="p-8 text-center text-sm font-medium text-slate-500 italic">No recent test results found.</div>
+        {% endif %}
+    </section>
 </div>
 
 {% endif %}
@@ -364,19 +356,32 @@ function switchTab(tabId) {
     const hwPanel = document.getElementById('hwPanel');
     const testsPanel = document.getElementById('testsPanel');
     
-    // Reset all
-    hwTabBtn.className = "px-5 py-2 rounded-xl text-sm font-medium bg-white/80 text-slate-600 hover:bg-white transition-all shadow-sm";
-    testsTabBtn.className = "px-5 py-2 rounded-xl text-sm font-medium bg-white/80 text-slate-600 hover:bg-white transition-all shadow-sm";
-    hwPanel.classList.add('hidden');
-    testsPanel.classList.add('hidden');
+    // Base classes
+    const activeClass = "px-6 py-3 rounded-xl text-sm font-bold bg-primary text-white shadow-md transition-all duration-300 flex items-center gap-3";
+    const inactiveClass = "px-6 py-3 rounded-xl text-sm font-bold text-primary/60 hover:text-primary hover:bg-white transition-all duration-300 flex items-center gap-3";
     
-    // Activate selected
+    // Reset contents
+    const hwCount = hwTabBtn.querySelector('span').innerText;
+    const testCount = testsTabBtn.querySelector('span').innerText;
+
     if(tabId === 'hw') {
-        hwTabBtn.className = "px-5 py-2 rounded-xl text-sm font-medium bg-primary text-white shadow-md transition-all";
+        hwTabBtn.className = activeClass;
+        hwTabBtn.innerHTML = `Assignments <span class="bg-white/20 text-white px-2 py-0.5 rounded-md text-[10px]">${hwCount}</span>`;
+        
+        testsTabBtn.className = inactiveClass;
+        testsTabBtn.innerHTML = `Tests & Exams <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-md text-[10px]">${testCount}</span>`;
+        
         hwPanel.classList.remove('hidden');
+        testsPanel.classList.add('hidden');
     } else {
-        testsTabBtn.className = "px-5 py-2 rounded-xl text-sm font-medium bg-primary text-white shadow-md transition-all";
+        testsTabBtn.className = activeClass;
+        testsTabBtn.innerHTML = `Tests & Exams <span class="bg-white/20 text-white px-2 py-0.5 rounded-md text-[10px]">${testCount}</span>`;
+        
+        hwTabBtn.className = inactiveClass;
+        hwTabBtn.innerHTML = `Assignments <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-md text-[10px]">${hwCount}</span>`;
+        
         testsPanel.classList.remove('hidden');
+        hwPanel.classList.add('hidden');
     }
 }
 </script>

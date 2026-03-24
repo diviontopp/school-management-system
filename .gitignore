@@ -38,6 +38,7 @@ static/uploads/
 # AI/Agent tools (not part of the project)
 .gemini/
 .gsd/
+.agents/
 skills/
 scripts/ralph/
 AGENTS.md

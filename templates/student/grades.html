@@ -1,28 +1,25 @@
 {% extends "student/student_base.html" %}
-{% block title %}Grades — Scholaris Student Portal{% endblock %}
-{% block page_title %}Grades & Analytics{% endblock %}
+{% block title %}Results — Scholaris Student Portal{% endblock %}
+{% block page_title %}Grades & Results{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Removed ad-hoc fonts */
-    .glass {
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(15, 76, 129, 0.1);
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .result-card-odd { background-color: #0a1f33; color: white; }
+    .result-card-even { background-color: #F1F4E4; color: #0a1f33; }
+
+    @keyframes countUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-    .spider-grid {
-        background-image: radial-gradient(circle, #0f4c81 1px, transparent 1px);
-        background-size: 20px 20px;
-        opacity: 0.1;
+    .stat-animate { animation: countUp 0.6s ease forwards; }
+
+    @keyframes barGrow {
+        from { width: 0%; }
     }
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
+    .bar-animate { animation: barGrow 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 </style>
 {% endblock %}
 
@@ -37,23 +34,28 @@
 </div>
 {% else %}
 
-<!-- Hero Section -->
-<section class="flex flex-col md:flex-row justify-between items-end gap-8 border-b border-slate-200 pb-12 mb-12">
-    <div class="space-y-4">
-        <div class="inline-block px-4 py-1 rounded-full bg-accent-gold/10 text-accent-gold text-xs font-black tracking-widest uppercase">Performance Hub</div>
-        <h1 class="shadcn-h1 text-primary">Exam <span class="text-accent-gold">Results</span></h1>
-        <p class="text-lg text-slate-600 max-w-xl font-light">Sophisticated academic tracking and preparation repository for your examinations and results.</p>
+<!-- ═══════ HERO ═══════ -->
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-primary/10 pb-8">
+    <div>
+        <span class="text-primary/50 font-black tracking-widest uppercase text-xs mb-4 block">Academic Record</span>
+        <h1 class="text-5xl md:text-6xl font-serif italic font-bold text-primary tracking-tight">Results</h1>
+        <p class="text-slate-600 text-lg mt-4 font-light leading-relaxed max-w-xl">
+            Your comprehensive academic performance record — track progress, analyse patterns, and excel.
+        </p>
     </div>
-    <div class="flex gap-4">
-        <button class="flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-black hover:bg-primary/90 transition-all shadow-xl shadow-primary/20">
-            <span class="material-symbols-outlined text-sm">download</span>
-            <span>Cumulative Transcript</span>
+    <div class="flex gap-4 shrink-0">
+        <button class="flex items-center gap-2 px-6 py-3 bg-bone-white text-primary border border-primary/10 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-300 shadow-sm">
+            <span class="material-symbols-outlined text-lg">trending_up</span>
+            Track Progress
+        </button>
+        <button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 hover:-translate-y-1 transition-all duration-300">
+            <span class="material-symbols-outlined text-lg">download</span>
+            Transcript
         </button>
     </div>
-</section>
+</div>
 
 {% if scores %}
-    <!-- Calculate overall average -->
     {% set total_pct = namespace(v=0, count=0) %}
     {% for s in scores %}
         {% if s.max_marks > 0 %}
@@ -64,156 +66,179 @@
     {% set avg_pct = (total_pct.v / total_pct.count)|round|int if total_pct.count > 0 else 0 %}
     {% set avg_grade = 'A+' if avg_pct >= 90 else ('A' if avg_pct >= 80 else ('B+' if avg_pct >= 75 else ('B' if avg_pct >= 65 else ('C+' if avg_pct >= 55 else 'C')))) %}
 
-    <!-- Overall Overview (Administrative Card Style) -->
-    <section class="mb-16 grid lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 relative overflow-hidden p-8 lg:p-12 rounded-2xl bg-primary text-white shadow-2xl shadow-primary/20 flex flex-col justify-center">
-            <div class="absolute top-0 right-0 -mr-10 -mt-10 w-64 h-64 bg-accent-gold rounded-full blur-3xl opacity-20"></div>
-            <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
-                <div class="w-32 h-32 rounded-full border-4 border-white/20 flex flex-col items-center justify-center bg-white/5 shrink-0 backdrop-blur-sm">
-                    <span class="shadcn-h1 text-accent-gold">{{ avg_grade }}</span>
-                    <span class="text-xs font-black uppercase tracking-widest text-white/60 mt-2">Overall Grade</span>
+    <!-- ═══════ PERFORMANCE DASHBOARD ═══════ -->
+    <section class="mb-16">
+        <div class="bg-primary rounded-[2rem] overflow-hidden shadow-2xl shadow-primary/30 relative">
+            <!-- Background Decorations -->
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3 pointer-events-none"></div>
+
+            <div class="relative z-10 p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10">
+                <!-- Overall Grade -->
+                <div class="stat-animate pr-8 flex flex-col items-start justify-center col-span-2 md:col-span-1">
+                    <span class="text-white/50 font-black uppercase tracking-widest text-xs mb-3">Overall Grade</span>
+                    <span class="text-8xl font-serif italic font-bold text-white leading-none tracking-tighter">{{ avg_grade }}</span>
                 </div>
-                <div class="text-center md:text-left">
-                    <h3 class="shadcn-h3 text-white mb-3">{{ student.first_name }}'s Academic Profile</h3>
-                    <p class="text-white/80 font-medium mb-6 text-lg">You have an aggregate percentage of <span class="text-accent-gold font-black">{{ avg_pct }}%</span> across all subjects.</p>
-                    <div class="flex flex-wrap justify-center md:justify-start gap-4">
-                        <div class="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
-                            <span class="block text-xs uppercase tracking-widest text-white/50 font-black mb-1">Total Tests</span>
-                            <span class="text-xl font-black">{{ scores|length }}</span>
-                        </div>
-                        <div class="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
-                            <span class="block text-xs uppercase tracking-widest text-white/50 font-black mb-1">Subjects Tracked</span>
-                            <span class="text-xl font-black">{{ by_subject.keys()|length }}</span>
-                        </div>
+
+                <!-- Aggregate % -->
+                <div class="stat-animate pl-8 flex flex-col justify-center" style="animation-delay: 0.1s;">
+                    <span class="text-white/50 font-black uppercase tracking-widest text-xs mb-2">Avg. Score</span>
+                    <span class="text-5xl font-bold text-white" data-count="{{ avg_pct }}">0%</span>
+                    <div class="mt-4 h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-400 rounded-full bar-animate" style="--bar-width: {{ avg_pct }}%;"></div>
                     </div>
                 </div>
+
+                <!-- Tests Taken -->
+                <div class="stat-animate pl-8 flex flex-col justify-center" style="animation-delay: 0.2s;">
+                    <span class="text-white/50 font-black uppercase tracking-widest text-xs mb-2">Tests Taken</span>
+                    <span class="text-5xl font-bold text-white" data-count="{{ scores|length }}">0</span>
+                    <p class="text-white/40 text-xs font-bold uppercase tracking-widest mt-2">evaluations</p>
+                </div>
+
+                <!-- Subjects -->
+                <div class="stat-animate pl-8 flex flex-col justify-center" style="animation-delay: 0.3s;">
+                    <span class="text-white/50 font-black uppercase tracking-widest text-xs mb-2">Subjects</span>
+                    <span class="text-5xl font-bold text-white" data-count="{{ by_subject.keys()|length }}">0</span>
+                    <p class="text-white/40 text-xs font-bold uppercase tracking-widest mt-2">disciplines</p>
+                </div>
             </div>
-        </div>
-        
-        <!-- Radar / Analytics Placeholder -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden flex flex-col items-center justify-center">
-            <div class="absolute inset-0 spider-grid rounded-2xl"></div>
-            <div class="relative w-48 h-48 border-2 border-slate-200 rounded-full flex items-center justify-center bg-white/50 backdrop-blur-sm">
-                <div class="absolute inset-0 bg-slate-50 rotate-45 transform scale-75 border-2 border-slate-200"></div>
-                <div class="absolute inset-0 bg-accent-gold/10 rotate-12 transform scale-90 border-2 border-accent-gold/30"></div>
-                <span class="material-symbols-outlined text-6xl text-primary/40">radar</span>
-                <span class="absolute top-0 -mt-2 font-black text-xs uppercase tracking-widest text-primary bg-white px-2 rounded-full">Excellence</span>
-                <span class="absolute bottom-0 -mb-2 font-black text-[10px] uppercase tracking-widest text-primary bg-white px-2 rounded-full">Foundation</span>
-            </div>
-            <p class="mt-6 text-xs text-center font-black text-primary/40 tracking-widest uppercase relative z-10">Competency Radar</p>
         </div>
     </section>
 
-    <!-- Results Feed (Horizontal Scroll) -->
-    <section class="space-y-8 mb-16 relative">
-        <h3 class="shadcn-h3 text-primary">Recent Results Feed</h3>
-        <div class="flex flex-nowrap overflow-x-auto gap-6 pb-6 no-scrollbar pt-2 px-2 -mx-2">
+    <!-- ═══════ RECENT RESULTS FEED ═══════ -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+            <h3 class="text-3xl font-serif italic font-bold text-primary">Recent Evaluations</h3>
+        </div>
+
+        <div class="flex flex-nowrap overflow-x-auto gap-5 pb-6 no-scrollbar pt-2 px-1 -mx-1">
             {% for s in scores[:10] %}
             {% set pct = (s.marks_obtained / s.max_marks * 100)|round|int if s.max_marks > 0 else 0 %}
-            <div class="min-w-[360px] bg-white p-8 rounded-xl border border-primary/5 shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between h-64 {% if loop.index0 % 2 == 0 %}border-l-4 border-l-accent-gold{% else %}border-l-4 border-l-primary{% endif %}">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h6 class="font-black text-primary text-lg truncate w-48" title="{{ s.test_name }}">{{ s.test_name }}</h6>
-                        <p class="text-xs text-slate-400 font-black uppercase tracking-tighter mt-1">{{ s.subject_name }}</p>
-                        <p class="text-xs text-slate-400 mt-1">{{ s.test_date.strftime('%d %b %Y') }}</p>
+            <!-- Alternating Navy / Bone White cards -->
+            <div class="min-w-[320px] max-w-[320px] {% if loop.index0 % 2 == 0 %}bg-primary text-white{% else %}bg-bone-white text-primary{% endif %} p-7 rounded-[2rem] border {% if loop.index0 % 2 == 0 %}border-white/10{% else %}border-primary/10{% endif %} flex flex-col justify-between hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden">
+
+                <!-- Background icon decoration -->
+                <div class="absolute bottom-0 right-0 p-4 opacity-[0.04] pointer-events-none">
+                    <span class="material-symbols-outlined text-8xl">quiz</span>
+                </div>
+
+                <!-- Top: name + grade -->
+                <div class="flex justify-between items-start mb-6 relative z-10">
+                    <div class="flex-1 pr-4">
+                        <h5 class="text-lg font-serif italic font-bold truncate leading-tight" title="{{ s.test_name }}">{{ s.test_name }}</h5>
+                        <p class="text-xs font-bold uppercase tracking-widest {% if loop.index0 % 2 == 0 %}text-white/50{% else %}text-primary/50{% endif %} mt-2">{{ s.subject_name }}</p>
                     </div>
-                    <div class="text-right">
-                        <div class="text-3xl font-serif-title {% if loop.index0 % 2 == 0 %}text-accent-gold{% else %}text-primary{% endif %}">{{ s.grade or '—' }}</div>
-                        <p class="text-[10px] font-black text-slate-400">GRADE</p>
+                    <div class="text-right shrink-0">
+                        <span class="text-4xl font-serif italic font-bold {% if loop.index0 % 2 == 0 %}text-white{% else %}text-primary{% endif %}">{{ s.grade or '—' }}</span>
+                        <p class="text-[9px] font-black uppercase tracking-widest {% if loop.index0 % 2 == 0 %}text-white/40{% else %}text-primary/40{% endif %} mt-1">Grade</p>
                     </div>
                 </div>
-                <div class="flex items-center justify-between border-t border-primary/5 pt-6 mt-auto">
-                    <div class="flex gap-8">
-                        <div>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Score</p>
-                            <p class="font-black text-lg {{ 'text-accent-gold' if loop.index0 % 2 == 0 else 'text-primary' }}">{{ s.marks_obtained }}<span class="text-sm font-normal text-slate-400">/{{ s.max_marks }}</span></p>
+
+                <!-- Bottom: score + date + progress -->
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-2xl font-black">{{ s.marks_obtained }}</span>
+                            <span class="text-sm {% if loop.index0 % 2 == 0 %}text-white/40{% else %}text-primary/40{% endif %} font-bold">/ {{ s.max_marks }}</span>
                         </div>
-                        <div>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Percentage</p>
-                            <p class="font-black text-lg {{ 'text-primary' if loop.index0 % 2 == 0 else 'text-accent-gold' }}">{{ pct }}%</p>
-                        </div>
+                        <span class="text-xs {% if loop.index0 % 2 == 0 %}text-white/50{% else %}text-primary/50{% endif %} font-bold">{{ s.test_date.strftime('%d %b %Y') }}</span>
                     </div>
+                    <div class="h-1.5 w-full {% if loop.index0 % 2 == 0 %}bg-white/10{% else %}bg-primary/10{% endif %} rounded-full overflow-hidden">
+                        <div class="h-full {% if loop.index0 % 2 == 0 %}bg-emerald-400{% else %}bg-primary{% endif %} rounded-full bar-animate" style="--bar-width: {{ pct }}%;"></div>
+                    </div>
+                    <p class="text-right text-xs font-bold mt-1 {% if loop.index0 % 2 == 0 %}text-emerald-400{% else %}text-emerald-600{% endif %}">{{ pct }}%</p>
                 </div>
             </div>
             {% endfor %}
-            <div class="min-w-[360px] bg-white/40 p-8 rounded-xl border-2 border-dashed border-primary/10 flex flex-col justify-center items-center h-64 opacity-60">
-                <span class="material-symbols-outlined text-4xl text-primary/20 mb-2">lock_clock</span>
-                <p class="font-black text-primary/40">Upcoming Results Pending</p>
-                <p class="text-xs text-primary/30 mt-1 uppercase tracking-widest font-black">Keep working hard</p>
+
+            <!-- Pending placeholder card -->
+            <div class="min-w-[280px] bg-white border-2 border-dashed border-primary/10 rounded-[2rem] flex flex-col justify-center items-center p-8 opacity-50 cursor-not-allowed">
+                <span class="material-symbols-outlined text-4xl text-primary/30 mb-3 transform -rotate-6">lock_clock</span>
+                <p class="font-bold text-primary/40 text-sm font-serif italic text-center">Upcoming results pending</p>
+                <p class="text-xs text-primary/30 mt-1 uppercase tracking-widest font-bold text-center">Keep working hard</p>
             </div>
         </div>
     </section>
 
-    <!-- Subject Breakdown (Vertical List) -->
-    <section class="space-y-8 mb-16">
-        <div class="flex flex-col gap-2">
-            <h3 class="shadcn-h3 text-primary">Performance Analytics</h3>
-            <p class="text-slate-500 font-medium">Comparative multi-dimensional analysis of subject-wise mastery.</p>
+    <!-- ═══════ PERFORMANCE BY SUBJECT ═══════ -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary/5">
+            <div>
+                <h3 class="text-3xl font-serif italic font-bold text-primary">Performance Analytics</h3>
+                <p class="text-slate-500 text-sm font-medium mt-1">Detailed subject-wise breakdown of all evaluations</p>
+            </div>
         </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {% for subject, subject_scores in by_subject.items() %}
-            <div class="bg-white rounded-xl shadow-sm border border-primary/5 overflow-hidden hover:shadow-lg transition-shadow">
+
+            {% set ns = namespace(total=0, max=0, count=0) %}
+            {% for s in subject_scores %}
+                {% if s.max_marks > 0 %}
+                    {% set ns.total = ns.total + s.marks_obtained %}
+                    {% set ns.max = ns.max + s.max_marks %}
+                    {% set ns.count = ns.count + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% set subj_avg = (ns.total / ns.max * 100)|round|int if ns.max > 0 else 0 %}
+
+            <div class="bg-white rounded-[2rem] border border-primary/10 overflow-hidden hover:shadow-xl hover:border-primary/30 transition-all duration-300 group">
                 <!-- Subject Header -->
-                <div class="bg-primary/5 px-8 py-6 border-b border-primary/5 flex items-center justify-between relative overflow-hidden">
-                    <div class="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-white/40 to-transparent"></div>
-                    <div class="flex items-center gap-4 relative z-10">
-                        <div class="w-2 h-10 rounded-full bg-accent-gold"></div>
-                        <h4 class="font-black text-xl text-primary">{{ subject }}</h4>
+                <div class="bg-primary px-8 py-6 flex items-center justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none translate-x-4 -translate-y-4">
+                        <span class="material-symbols-outlined text-7xl text-white">school</span>
                     </div>
-                    {% set ns = namespace(total=0, max=0, count=0) %}
-                    {% for s in subject_scores %}
-                        {% if s.max_marks > 0 %}
-                            {% set ns.total = ns.total + s.marks_obtained %}
-                            {% set ns.max = ns.max + s.max_marks %}
-                            {% set ns.count = ns.count + 1 %}
-                        {% endif %}
-                    {% endfor %}
+                    <div class="relative z-10">
+                        <span class="text-white/40 font-black uppercase tracking-widest text-[9px] block mb-1">Subject</span>
+                        <h4 class="text-2xl font-serif italic font-bold text-white">{{ subject }}</h4>
+                    </div>
                     {% if ns.max > 0 %}
-                    <div class="text-right relative z-10">
-                        <span class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Subject Avg</span>
-                        <span class="shadcn-h3 text-primary">{{ (ns.total / ns.max * 100)|round|int }}%</span>
+                    <div class="text-right relative z-10 shrink-0">
+                        <span class="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-1">Subject Avg</span>
+                        <span class="text-4xl font-serif italic font-bold {% if subj_avg >= 75 %}text-emerald-400{% elif subj_avg >= 55 %}text-amber-300{% else %}text-red-400{% endif %}">{{ subj_avg }}%</span>
                     </div>
                     {% endif %}
                 </div>
-                
-                <!-- Individual Test Scores list -->
-                <div class="p-8 space-y-6">
+
+                <!-- Score Rows -->
+                <div class="p-6 space-y-0 divide-y divide-primary/5">
                     {% for s in subject_scores %}
                     {% set pct = (s.marks_obtained / s.max_marks * 100)|round|int if s.max_marks > 0 else 0 %}
-                    <div class="group">
+                    <div class="group/row py-5 hover:bg-bone-white/50 rounded-2xl px-3 transition-all duration-200 hover:-translate-x-1 cursor-pointer">
                         <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h5 class="font-black text-slate-800 text-sm group-hover:text-primary transition-colors">{{ s.test_name }}</h5>
-                                <p class="text-xs text-slate-500 font-medium mt-1">{{ s.test_type }} • {{ s.test_date.strftime('%d %b %Y') }}</p>
+                            <div class="flex-1 pr-6">
+                                <h5 class="font-bold text-black text-sm group-hover/row:text-primary transition-colors">{{ s.test_name }}</h5>
+                                <p class="text-xs text-slate-400 font-medium mt-1">{{ s.test_type }} • {{ s.test_date.strftime('%d %b %Y') }}</p>
                             </div>
-                            <div class="text-right">
-                                <span class="font-black text-primary text-base">{{ s.marks_obtained }}</span>
-                                <span class="text-xs text-slate-400 font-medium">/ {{ s.max_marks }}</span>
+                            <div class="text-right shrink-0 flex items-center gap-3">
+                                <div class="text-right">
+                                    <span class="font-black text-primary text-lg">{{ s.marks_obtained }}</span>
+                                    <span class="text-xs text-slate-400 font-medium"> / {{ s.max_marks }}</span>
+                                </div>
+                                {% if s.grade %}
+                                <span class="w-10 h-10 rounded-xl bg-bone-white border border-primary/10 flex items-center justify-center text-lg font-serif italic font-bold text-primary">{{ s.grade }}</span>
+                                {% else %}
+                                <span class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 font-bold">—</span>
+                                {% endif %}
                             </div>
                         </div>
-                        
-                        <!-- Progress bar and Grade -->
-                        <div class="flex items-center gap-4">
-                            <div class="flex-1 bg-primary/5 h-2 rounded-full overflow-hidden">
-                                <div class="bg-accent-gold h-full rounded-full transition-all duration-1000 w-0" data-width="{{ pct }}"></div>
+
+                        <!-- Progress Bar -->
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1 bg-primary/5 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-primary h-full rounded-full bar-animate" style="--bar-width: {{ pct }}%;"></div>
                             </div>
-                            {% if s.grade %}
-                            <span class="px-3 py-1 shrink-0 rounded-full border border-primary/10 bg-white text-primary font-black text-xs shadow-sm">{{ s.grade }}</span>
-                            {% else %}
-                            <span class="px-3 py-1 shrink-0 rounded-full border border-slate-100 bg-slate-50 text-slate-400 font-black text-xs">—</span>
-                            {% endif %}
+                            <span class="text-[10px] font-bold text-primary/50 shrink-0 w-8 text-right">{{ pct }}%</span>
                         </div>
-                        
+
+                        <!-- Remarks Quote -->
                         {% if s.remarks %}
-                        <div class="mt-3 bg-slate-50 p-3 rounded-lg border border-slate-100 text-xs italic text-slate-600 font-medium font-serif-title">
+                        <div class="mt-3 bg-bone-white px-4 py-3 rounded-xl border border-primary/5 text-xs italic text-slate-600 font-medium leading-relaxed">
                             "{{ s.remarks }}"
                         </div>
                         {% endif %}
                     </div>
-                    {% if not loop.last %}
-                    <div class="h-[1px] w-full bg-primary/5"></div>
-                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -222,13 +247,13 @@
     </section>
 
 {% else %}
-<div class="p-16 bg-white border border-primary/5 rounded-2xl text-center shadow-lg relative overflow-hidden">
-    <div class="absolute inset-0 spider-grid rounded-2xl"></div>
-    <div class="relative z-10">
-        <span class="material-symbols-outlined text-8xl text-primary/20 mb-6 block">analytics</span>
-        <h3 class="font-serif-title text-4xl text-primary font-black mb-4">No Records Found</h3>
-        <p class="text-slate-500 font-medium text-lg">Your academic performance analytics will appear here once tests are graded.</p>
+<!-- ═══════ EMPTY STATE ═══════ -->
+<div class="p-16 bg-bone-white rounded-[2.5rem] border border-primary/5 flex flex-col items-center justify-center text-center shadow-inner">
+    <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center text-primary/20 shadow-md mb-6 transform -rotate-6">
+        <span class="material-symbols-outlined text-5xl">analytics</span>
     </div>
+    <h3 class="text-3xl font-serif italic font-bold text-primary mb-3">No Records Found</h3>
+    <p class="text-slate-500 text-base max-w-md">Your academic performance analytics will appear here once your tests are graded by faculty.</p>
 </div>
 {% endif %}
 
@@ -238,13 +263,33 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Animate progress bars
-    const bars = document.querySelectorAll('[data-width]');
+    // Animate progress bars using CSS variable --bar-width
+    const bars = document.querySelectorAll('.bar-animate');
     setTimeout(() => {
         bars.forEach(bar => {
-            bar.style.width = bar.dataset.width + '%';
+            const targetWidth = bar.style.getPropertyValue('--bar-width') ||
+                                bar.style.cssText.match(/--bar-width:\s*([\d.]+%)/)?.[1] || '0%';
+            bar.style.width = targetWidth;
         });
-    }, 100);
+    }, 120);
+
+    // Animated stat counters (data-count attribute)
+    const counters = document.querySelectorAll('[data-count]');
+    counters.forEach(el => {
+        const target = parseInt(el.dataset.count, 10);
+        const isPercent = el.innerText.includes('%');
+        const duration = 900;
+        const steps = 40;
+        const increment = target / steps;
+        let current = 0;
+        let step = 0;
+        const timer = setInterval(() => {
+            step++;
+            current = Math.min(Math.round(increment * step), target);
+            el.textContent = isPercent ? current + '%' : current;
+            if (step >= steps) clearInterval(timer);
+        }, duration / steps);
+    });
 });
 </script>
 {% endblock %}
